@@ -105,6 +105,7 @@ class Calibrate:
 
                 Listas.casillas[(i, j)] = [puntos[n], puntos[n+9], puntos[n+10], puntos[n+1]]
                 n += 1
+            n += 1
         # print Listas.casillas
 
     def get_image(self):
