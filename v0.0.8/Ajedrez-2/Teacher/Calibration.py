@@ -112,8 +112,3 @@ class Calibrate:
 
         retval, im = self.cam.read()
         return im
-
-    def mouse_click(self, event, x, y, flags, param):
-
-        if event == cv2.EVENT_LBUTTONDOWN:
-            pass
