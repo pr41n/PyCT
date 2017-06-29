@@ -12,7 +12,7 @@ from Cleaner import Clean
 
 # Set up
 
-camera = 0
+camera = 1
 
 # Calling the cleaner of cache
 

@@ -16,10 +16,6 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
 
     respuesta = u"La única pieza que puede saltar a otras es el caballo"
 
-    def sub_salto():        # Ni idea de cómo va, sólo he probado a definir una función dentro de otra
-        incorrecta()
-        print respuesta
-
     if abs(ahora_x - antes_x) == 1 or abs(ahora_y-antes_y) == 1:
         return False
 
@@ -30,7 +26,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
         for i in range(a, b):
             j = (antes_x, i)
             if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                sub_salto()
+                incorrecta(respuesta)
                 return True
 
     elif antes_y == ahora_y:
@@ -40,7 +36,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
         for i in range(a, b):
             j = (i, antes_y)
             if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                sub_salto()
+                incorrecta(respuesta)
                 return True
 
     elif abs(ahora_x-antes_x) == abs(ahora_y-antes_y):
@@ -53,7 +49,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
             for i in range(1, h):
                 j = (a-i, b+i)
                 if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                    sub_salto()
+                    incorrecta(respuesta)
                     return True
 
         else:
@@ -63,7 +59,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
             for i in range(1, h):
                 j = (a+i, b+i)
                 if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                    sub_salto()
+                    incorrecta(respuesta)
                     return True
 
 
@@ -100,7 +96,10 @@ class Pawn:
                 incorrecta(respuesta)
                 return False
         else:
-            incorrecta(respuesta)
+            if salto(antes_x, antes_y, ahora_x, ahora_y):
+                pass
+            else:
+                incorrecta(respuesta)
             return False
 
 
@@ -115,7 +114,10 @@ class Rock:
 
         else:
             respuesta = u"La torre se mueve en línea recta"
-            incorrecta(respuesta)
+            if salto(antes_x, antes_y, ahora_x, ahora_y):
+                pass
+            else:
+                incorrecta(respuesta)
             return False
 
 
@@ -145,7 +147,10 @@ class Bishop:
 
         else:
             respuesta = u"El alfil se mueve en diagonal"
-            incorrecta(respuesta)
+            if salto(antes_x, antes_y, ahora_x, ahora_y):
+                pass
+            else:
+                incorrecta(respuesta)
             return False
 
 
@@ -162,7 +167,10 @@ class Queen:
 
         else:
             respuesta = u"La reina se mueve como un alfil y una torre a la vez, es decir,\nrecto o en diagonal"
-            incorrecta(respuesta)
+            if salto(antes_x, antes_y, ahora_x, ahora_y):
+                pass
+            else:
+                incorrecta(respuesta)
             return False
 
 
@@ -215,10 +223,14 @@ class King:
 
             else:
                 respuesta = u"El rey solo puede enrocar si ni él ni la torre del lado en el que se va a enrocar" \
-                            u" se han movido antes,\npor lo que es en la misma fila. Existen dos enroques:\n" \
+                            u" se han movido antes,\npor lo que es en la misma fila. Además, no debe\n" \
+                            u"haber ninguna pieza entre la torre y el rey. Existen dos enroques:\n" \
                             u"   Enroque corto: el rey se mueve a la columna G y la torre a la F \n" \
                             u"   Enroque largo: el rey se mueve a la columna C y la torre a la D"
-                incorrecta(respuesta)
+                if salto(antes_x, antes_y, ahora_x, ahora_y):
+                    pass
+                else:
+                    incorrecta(respuesta)
                 return False
 
         else:
