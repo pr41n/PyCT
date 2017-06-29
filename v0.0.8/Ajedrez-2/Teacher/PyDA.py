@@ -9,14 +9,17 @@ import Detection
 from Listas import Listas
 import Ventana
 from Cleaner import Clean
+from Sintetizador import Sts
 
 # Set up
 
-camera = 1
+camera = 0
 
-# Calling the cleaner of cache
+# Calling modules
 
 clean = Clean()
+sts = Sts()
+sts.say('Empecemos.')
 
 
 # Definig functions
@@ -280,6 +283,9 @@ cam = cv2.VideoCapture(camera)
 
 # Calibrating the camera
 
+sts.say(u'Comencemos calibrando la cámara.')
+sts.say(u'Primero, coloca el tablero de modo que yo pueda '
+        u'ver las cuatro esquinas, cuando lo hayas hecho, presiona énter.')
 while True:
 
     k = cv2.waitKey(1) & 0xFF
@@ -289,6 +295,8 @@ while True:
     cv2.imshow('Coloca el tablero', frame)
 
     if k == 10:
+        sts.say(u'Muy bien. Ahora, señala las cuatro esquinas siguiendo mis instrucciones.')
+
         calibration.esquinas('Coloca el tablero')
         calibration.casillas()
         break
@@ -332,7 +340,10 @@ except OSError:
     definidas acontinuación (bien, mal y jaque_mate) evitan un futuro error.
     """
 
-    print u"No hay conexión con Arduino"
+    sts.say(u'Vaya, parece que no hay conexión con Arduino.')
+
+    sts.say(u'Si deseas que la haya, por favor, conecta la placa de Arduino al ordenador, '
+            u'sigue las instrucciones de conexión y reinicia el programa')
 
     def bien():
         pass
@@ -378,9 +389,7 @@ while partida:
 
     except TypeError or NameError:
         # Esto es una prueba, pero si ocurre permite introducir los movimientos por terminal.
-
         try:
-
             antes = raw_input("Antes: ")
             ahora = raw_input("Ahora: ")
 
@@ -515,8 +524,11 @@ while partida:
 
     #
 
-    except antes == ahora:
+    except KeyError or AttributeError or antes == ahora:
         print u"Error: Fallo de detección"
+        sts.say(u'Ha habido un error en la detección. Si por casualidad '
+                u'ha movido el tablero sin querer, tendrá que reiniciar el programa')
+        sts.say(u'Lo siento, pero me ha programado un chaval de 16 años, no soy perfecto (insertar carita triste)')
 
 
 jaque_mate()
