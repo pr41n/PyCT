@@ -14,11 +14,12 @@ from Sintetizador import Sts
 # Set up
 
 camera = 0
+inicio = True
 
 # Calling modules
 
 clean = Clean()
-sts = Sts()
+sts = Sts(inicio)
 sts.say('Empecemos.')
 
 
@@ -471,10 +472,12 @@ while partida:
                 if Listas.casillasOcupadas_B[(4, 1)] == "Rock" or Listas.casillasOcupadas_N[(4, 8)] == "Rock":
 
                     print "Turno%s  Jugador %s  Enroque largo" % (turno, jugador)
+                    sts.say('Enroque largo.')
 
                 elif Listas.casillasOcupadas_B[(6, 1)] == "Rock" or Listas.casillasOcupadas_N[(6, 8)] == "Rock":
 
                     print "Turno%s  Jugador %s  Enroque corto" % (turno, jugador)
+                sts.say('Enroque corto.')
 
             #
 
@@ -483,13 +486,14 @@ while partida:
 
                 print "Turno %s  Jugador %s  %s por %s" % \
                       (turno, jugador, cambio_ficha(ficha), cambio_posicion(ahora))
+                sts.say(u'%s por %s.' % (cambio_ficha(ficha), cambio_posicion(ahora)))
 
             #
 
             else:
-
                 print "Turno %s  Jugador %s  %s a %s" % \
                       (turno, jugador, cambio_ficha(ficha), cambio_posicion(ahora))
+                sts.say(u'%s a %s.' % (cambio_ficha(ficha), cambio_posicion(ahora)))
 
             #
             #
@@ -527,8 +531,8 @@ while partida:
     except KeyError or AttributeError or antes == ahora:
         print u"Error: Fallo de detección"
         sts.say(u'Ha habido un error en la detección. Si por casualidad '
-                u'ha movido el tablero sin querer, tendrá que reiniciar el programa')
-        sts.say(u'Lo siento, pero me ha programado un chaval de 16 años, no soy perfecto (insertar carita triste)')
+                u'ha movido el tablero sin querer, tendrá que reiniciar el programa.')
+        sts.say(u'Lo siento, pero me ha programado un chaval de 16 años, no soy perfecto (insertar carita triste).')
 
 
 jaque_mate()
@@ -541,6 +545,7 @@ elif jugador == 2:
     jugador = "negras"
 
 print "Jaque mate, ganan %s en el turno %s" % (jugador, turno)
+sts.say("Jaque mate, ganan %s en el turno %s. Felicidades." % (jugador, turno))
 
 clean.pyc()
 

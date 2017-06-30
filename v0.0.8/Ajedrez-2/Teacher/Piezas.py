@@ -3,18 +3,25 @@
 from time import sleep
 
 from Listas import Listas
+from Sintetizador import Sts
 
 jugador = int
+inicio = False
+
+sts = Sts(inicio)
 
 
 def incorrecta(respuesta):
+    print
     print "Jugada incorrecta:"
     print respuesta
+    sts.say("Jugada incorrecta")
+    sts.say(respuesta)
 
 
 def salto(antes_x, antes_y, ahora_x, ahora_y):
 
-    respuesta = u"La única pieza que puede saltar a otras es el caballo"
+    respuesta = u"La unica pieza que puede saltar a otras es el caballo"
 
     if abs(ahora_x - antes_x) == 1 or abs(ahora_y-antes_y) == 1:
         return False
@@ -132,7 +139,7 @@ class Knight:
             return True
         else:
             respuesta = u"El caballo se mueve formando una L, de modo que avance o retroceda\n" \
-                        u"dos casillas en la misma fila y avance o retroceda una columna y viceversa"
+                        u"dos casillas en la misma fila y avance o retroceda una columna o viceversa"
             incorrecta(respuesta)
             return False
 
@@ -147,10 +154,12 @@ class Bishop:
 
         else:
             respuesta = u"El alfil se mueve en diagonal"
+
             if salto(antes_x, antes_y, ahora_x, ahora_y):
                 pass
             else:
                 incorrecta(respuesta)
+
             return False
 
 
