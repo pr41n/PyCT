@@ -21,8 +21,6 @@ def incorrecta(respuesta):
 
 def salto(antes_x, antes_y, ahora_x, ahora_y):
 
-    respuesta = u"La unica pieza que puede saltar a otras es el caballo"
-
     if abs(ahora_x - antes_x) == 1 or abs(ahora_y-antes_y) == 1:
         return False
 
@@ -33,7 +31,6 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
         for i in range(a, b):
             j = (antes_x, i)
             if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                incorrecta(respuesta)
                 return True
 
     elif antes_y == ahora_y:
@@ -43,7 +40,6 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
         for i in range(a, b):
             j = (i, antes_y)
             if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                incorrecta(respuesta)
                 return True
 
     elif abs(ahora_x-antes_x) == abs(ahora_y-antes_y):
@@ -56,7 +52,6 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
             for i in range(1, h):
                 j = (a-i, b+i)
                 if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                    incorrecta(respuesta)
                     return True
 
         else:
@@ -66,7 +61,6 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
             for i in range(1, h):
                 j = (a+i, b+i)
                 if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
-                    incorrecta(respuesta)
                     return True
 
 
@@ -94,14 +88,17 @@ class Pawn:
                     u"come en diagonal y avanzando una fila. Si es la primera vez que\n" \
                     u"mueves al peón, este puede avanzar dos casillas en línea recta"
 
-        if (move_1 or move_2) and not salto(antes_x, antes_y, ahora_x, ahora_y):
+        if move_1 or move_2:
+            if not salto(antes_x, antes_y, ahora_x, ahora_y):
 
-            if avance_x == 0 and not comida() or abs(avance_x) == 1 and comida():
-                return True
+                if avance_x == 0 and not comida() or abs(avance_x) == 1 and comida():
+                    return True
 
+                else:
+                    incorrecta(respuesta)
+                    return False
             else:
-                incorrecta(respuesta)
-                return False
+                incorrecta(u"La única pieza que puede saltar a otras es el caballo")
         else:
             if salto(antes_x, antes_y, ahora_x, ahora_y):
                 pass
@@ -115,16 +112,16 @@ class Rock:
         move_1 = abs(ahora_y-antes_y) > 0 and ahora_x-antes_x == 0
         move_2 = abs(ahora_x-antes_x) > 0 and ahora_y-antes_y == 0
 
-        if (move_1 or move_2) and not salto(antes_x, antes_y, ahora_x, ahora_y):
+        if (move_1 or move_2):
+            if not salto(antes_x, antes_y, ahora_x, ahora_y):
 
-            return True
+                return True
+            else:
+                incorrecta(u"La única pieza que puede saltar a otras es el caballo")
 
         else:
             respuesta = u"La torre se mueve en línea recta"
-            if salto(antes_x, antes_y, ahora_x, ahora_y):
-                pass
-            else:
-                incorrecta(respuesta)
+            incorrecta(respuesta)
             return False
 
 
@@ -148,38 +145,35 @@ class Bishop:
     def movimiento(self, antes_x, antes_y, ahora_x, ahora_y):
         move = abs(ahora_x-antes_x) == abs(ahora_y-antes_y)
 
-        if move and not salto(antes_x, antes_y, ahora_x, ahora_y):
+        if move:
+            if not salto(antes_x, antes_y, ahora_x, ahora_y):
 
-            return True
+                return True
+            else:
+                incorrecta(u"La única pieza que puede saltar a otras es el caballo")
 
         else:
             respuesta = u"El alfil se mueve en diagonal"
-
-            if salto(antes_x, antes_y, ahora_x, ahora_y):
-                pass
-            else:
-                incorrecta(respuesta)
-
+            incorrecta(respuesta)
             return False
 
 
 class Queen:
     def movimiento(self, antes_x, antes_y, ahora_x, ahora_y):
-        move_1 = Bishop()
-        move_2 = Rock()
-        move_b = move_1.movimiento(antes_x, antes_y, ahora_x, ahora_y)
-        move_r = move_2.movimiento(antes_x, antes_y, ahora_x, ahora_y)
+        move_1 = abs(ahora_y - antes_y) > 0 and ahora_x - antes_x == 0
+        move_2 = abs(ahora_x - antes_x) > 0 and ahora_y - antes_y == 0
+        move_3 = abs(ahora_x - antes_x) == abs(ahora_y - antes_y)
 
-        if (move_b or move_r) and not salto(antes_x, antes_y, ahora_x, ahora_y):
+        if move_1 or move_2 or move_3:
+            if not salto(antes_x, antes_y, ahora_x, ahora_y):
 
-            return True
+                return True
+            else:
+                incorrecta(u"La única pieza que puede saltar a otras es el caballo")
 
         else:
             respuesta = u"La reina se mueve como un alfil y una torre a la vez, es decir,\nrecto o en diagonal"
-            if salto(antes_x, antes_y, ahora_x, ahora_y):
-                pass
-            else:
-                incorrecta(respuesta)
+            incorrecta(respuesta)
             return False
 
 

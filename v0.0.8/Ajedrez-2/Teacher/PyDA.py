@@ -314,6 +314,7 @@ except cv2.error:
     print u"Fallo de detección"
 
 clean.images()
+cv2.destroyWindow('Calibrate')
 
 
 # Proofing the connection with Arduino and setting it up
@@ -532,7 +533,7 @@ while partida:
         print u"Error: Fallo de detección"
         sts.say(u'Ha habido un error en la detección. Si por casualidad '
                 u'ha movido el tablero sin querer, tendrá que reiniciar el programa.')
-        sts.say(u'Lo siento, pero me ha programado un chaval de 16 años, no soy perfecto (insertar carita triste).')
+        sts.say(u'Lo siento, pero doy para lo que doy.')
 
 
 jaque_mate()
