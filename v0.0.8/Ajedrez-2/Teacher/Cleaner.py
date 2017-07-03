@@ -7,7 +7,7 @@ class Clean:
 		pass
 
 	def pyc(self):
-		pyc = glob.glob('*.pyc')
+		self.pyc = glob.glob('*.pyc')
 		for i in self.pyc:
 			os.remove(i)
 
