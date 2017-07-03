@@ -6,7 +6,7 @@ import pyttsx
 class Sts:
     def __init__(self, inicio):
         self.engine = pyttsx.init()
-        self.engine.setProperty('rate', 150)
+        self.engine.setProperty('rate', 140)
         self.engine.setProperty('voice', 'spanish')
 
         if inicio:
