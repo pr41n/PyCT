@@ -13,7 +13,7 @@ from Sintetizador import Sts
 
 # Set up
 
-camera = 0
+camera = 1
 inicio = True
 
 # Calling modules
@@ -362,6 +362,8 @@ except OSError:
 turno = 1
 jugador = 1
 partida = True
+mover_peones = 0
+mover_caballo = 0
 
 
 # Reading the play
@@ -428,6 +430,10 @@ while partida:
             from Piezas import Pawn
             movimiento = Pawn()
             ficha = "Pawn"
+            mover_peones += 1
+
+            if turno <= 15 and mover_peones == 10:
+                sts.say(u'No muevas tanto los peones, intenta mover más las piezas mayores')
 
         elif piece == "Rock":
             from Piezas import Rock
@@ -438,6 +444,14 @@ while partida:
             from Piezas import Knight
             movimiento = Knight()
             ficha = "Knight"
+
+            mal_1 = ahora_X == 1 or ahora_X == 8
+            mal_2 = ahora_Y == 1 or ahora_Y == 8
+
+            if mover_caballo == 0 and (mal_1 or mal_2):
+                sts.say(u'Intenta no mover los caballos a los lados, tienen menos movilidad.'
+                        u'Mejor, intenta que estén por el centro del tablero.')
+                mover_caballo += 1
 
         elif piece == "Bishop":
             from Piezas import Bishop
@@ -464,6 +478,7 @@ while partida:
             # Se reconoce si el movimiento es correcto
 
             bien()
+            print
 
             #
             #
@@ -532,7 +547,8 @@ while partida:
     except KeyError or AttributeError or antes == ahora:
         print u"Error: Fallo de detección"
         sts.say(u'Ha habido un error en la detección. Si por casualidad '
-                u'ha movido el tablero sin querer, tendrá que reiniciar el programa.')
+                u'ha movido el tablero sin querer, tendrá que reiniciar el programa.'
+                u'Si no ha sido así, por favor, vuelva a hacer el movimiento.')
         sts.say(u'Lo siento, pero doy para lo que doy.')
 
 
@@ -548,7 +564,7 @@ elif jugador == 2:
 print "Jaque mate, ganan %s en el turno %s" % (jugador, turno)
 sts.say("Jaque mate, ganan %s en el turno %s. Felicidades." % (jugador, turno))
 
-clean.pyc()
+# clean.pyc()
 
 if __name__ != '__main__':
     Ventana.Ventana()
