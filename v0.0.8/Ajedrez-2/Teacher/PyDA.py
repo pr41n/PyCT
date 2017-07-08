@@ -13,13 +13,14 @@ from Sintetizador import Sts
 
 # Set up
 
-camera = 1
+camera = 0
 inicio = True
 
 # Calling modules
 
 clean = Clean()
 sts = Sts(inicio)
+sts.say(u'Perdón por mi voz, pero estoy hecho con softwer libre.')
 sts.say('Empecemos.')
 
 
@@ -181,25 +182,40 @@ def cambio_listas(which, e0, ef):
                         break
 
             elif pieza_c == "Rock":
-                if ef[0] < 4:
+                if ef[0] < 4 and "Rock_2" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Rock_2")
 
-                elif ef[0] >= 4:
+                elif ef[0] >= 4 and "Rock_1" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Rock_1")
 
+                else:
+                    for i in range(1,3):
+                        if "Rock_%s" % i in Listas.PiezasMayores_N:
+                            Listas.PiezasMayores_N.remove("Rock_%s" % i)
+
             elif pieza_c == "Knight":
-                if ef[0] < 4:
+                if ef[0] < 4 and "Knight_2" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Knight_2")
 
-                elif ef[0] >= 4:
+                elif ef[0] >= 4 and "Knight_1" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Knight_1")
 
+                else:
+                    for i in range(1,3):
+                        if "Knight_%s" % i in Listas.PiezasMayores_N:
+                            Listas.PiezasMayores_N.remove("Knight_%s" % i)
+
             elif pieza_c == "Bishop":
-                if ef[0] < 4:
+                if ef[0] < 4 and "Bishop_2" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Bishop_2")
 
-                elif ef[0] >= 4:
+                elif ef[0] >= 4 and "Bishop_1" in Listas.PiezasMayores_N:
                     Listas.PiezasMayores_N.remove("Bishop_1")
+
+                else:
+                    for i in range(1,3):
+                        if "Bishop_%s" % i in Listas.PiezasMayores_N:
+                            Listas.PiezasMayores_N.remove("Bishop_%s" % i)
 
             elif pieza_c == "Queen":
                 Listas.PiezasMayores_N.remove("Queen")
@@ -248,25 +264,40 @@ def cambio_listas(which, e0, ef):
                         break
 
             elif pieza_c == "Rock":
-                if ef[0] > 4:
+                if ef[0] > 4 and "Rock_2" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Rock_2")
 
-                elif ef[0] < 4:
+                elif ef[0] < 4 and "Rock_1" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Rock_1")
 
+                else:
+                    for i in range(1,3):
+                        if "Rock_%s" % i in Listas.PiezasMayores_B:
+                            Listas.PiezasMayores_B.remove("Rock_%s" % i)
+
             elif pieza_c == "Knight":
-                if ef[0] > 4:
+                if ef[0] > 4 and "Knight_2" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Knight_2")
 
-                elif ef[0] < 4:
+                elif ef[0] < 4 and "Knight_1" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Knight_1")
 
+                else:
+                    for i in range(1,3):
+                        if "Knight_%s" % i in Listas.PiezasMayores_B:
+                            Listas.PiezasMayores_B.remove("Knight_%s" % i)
+
             elif pieza_c == "Bishop":
-                if ef[0] > 4:
+                if ef[0] > 4 and "Bishop_2" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Bishop_2")
 
-                elif ef[0] < 4:
+                elif ef[0] < 4 and "Bishop_1" in Listas.PiezasMayores_B:
                     Listas.PiezasMayores_B.remove("Bishop_1")
+
+                else:
+                    for i in range(1,3):
+                        if "Rock_%s" % i in Listas.PiezasMayores_B:
+                            Listas.PiezasMayores_B.remove("Rock_%s" % i)
 
             elif pieza_c == "Queen":
                 Listas.PiezasMayores_B.remove("Queen")
@@ -548,7 +579,7 @@ while partida:
         print u"Error: Fallo de detección"
         sts.say(u'Ha habido un error en la detección. Si por casualidad '
                 u'ha movido el tablero sin querer, tendrá que reiniciar el programa.'
-                u'Si no ha sido así, por favor, vuelva a hacer el movimiento.')
+                u'Si no ha sido así, por favor, vuelva a hacer el movimiento')
         sts.say(u'Lo siento, pero doy para lo que doy.')
 
 
@@ -564,7 +595,7 @@ elif jugador == 2:
 print "Jaque mate, ganan %s en el turno %s" % (jugador, turno)
 sts.say("Jaque mate, ganan %s en el turno %s. Felicidades." % (jugador, turno))
 
-# clean.pyc()
+clean.pyc()
 
 if __name__ != '__main__':
     Ventana.Ventana()
