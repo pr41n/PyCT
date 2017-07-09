@@ -515,16 +515,35 @@ while partida:
             #
 
             if ficha == "King" and antes_X == 5 and ahora_Y-antes_Y == 0 and abs(ahora_X-antes_X) == 2:
+                try:
+                    enroque_largo_blancas = Listas.casillasOcupadas_B[(4, 1)] == "Rock"
+                except KeyError:
+                    enroque_largo_blancas = False
 
-                if Listas.casillasOcupadas_B[(4, 1)] == "Rock" or Listas.casillasOcupadas_N[(4, 8)] == "Rock":
+                try:
+                    enroque_largo_negras = Listas.casillasOcupadas_N[(4, 8)] == "Rock"
+                except KeyError:
+                    enroque_largo_negras = False
 
-                    print "Turno%s  Jugador %s  Enroque largo" % (turno, jugador)
+                try:
+                    enroque_corto_blancas = Listas.casillasOcupadas_B[(6, 1)] == "Rock"
+                except KeyError:
+                    enroque_corto_blancas = False
+
+                try:
+                    enroque_corto_negras = Listas.casillasOcupadas_N[(6, 8)] == "Rock"
+                except KeyError:
+                    enroque_corto_negras = False
+
+                if enroque_largo_negras or enroque_largo_blancas:
+
+                    print "Turno %s  Jugador %s  Enroque largo" % (turno, jugador)
                     sts.say('Enroque largo.')
 
-                elif Listas.casillasOcupadas_B[(6, 1)] == "Rock" or Listas.casillasOcupadas_N[(6, 8)] == "Rock":
+                elif enroque_corto_negras or enroque_corto_blancas:
 
-                    print "Turno%s  Jugador %s  Enroque corto" % (turno, jugador)
-                sts.say('Enroque corto.')
+                    print "Turno %s  Jugador %s  Enroque corto" % (turno, jugador)
+                    sts.say('Enroque corto.')
 
             #
 
