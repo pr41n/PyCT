@@ -2,7 +2,7 @@
 
 from time import sleep
 
-from Listas import Listas
+import Listas
 from Sintetizador import Sts
 
 jugador = int
@@ -20,6 +20,7 @@ def incorrecta(respuesta):
 
 
 def salto(antes_x, antes_y, ahora_x, ahora_y):
+    casillas_ocupadas = Listas.casillas_ocupadas()
 
     if abs(ahora_x - antes_x) == 1 or abs(ahora_y-antes_y) == 1:
         return False
@@ -30,7 +31,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
 
         for i in range(a, b):
             j = (antes_x, i)
-            if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
+            if j in casillas_ocupadas:
                 return True
 
     elif antes_y == ahora_y:
@@ -39,7 +40,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
 
         for i in range(a, b):
             j = (i, antes_y)
-            if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
+            if j in casillas_ocupadas:
                 return True
 
     elif abs(ahora_x-antes_x) == abs(ahora_y-antes_y):
@@ -51,7 +52,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
 
             for i in range(1, h):
                 j = (a-i, b+i)
-                if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
+                if j in casillas_ocupadas:
                     return True
 
         else:
@@ -60,7 +61,7 @@ def salto(antes_x, antes_y, ahora_x, ahora_y):
 
             for i in range(1, h):
                 j = (a+i, b+i)
-                if j in Listas.casillasOcupadas_B or j in Listas.casillasOcupadas_N:
+                if j in casillas_ocupadas:
                     return True
 
 
@@ -68,8 +69,8 @@ class Pawn:
     def movimiento(self, antes_x, antes_y, ahora_x, ahora_y):
         ahora = (ahora_x, ahora_y)
 
-        lista_b = Listas.casillasOcupadas_B
-        lista_n = Listas.casillasOcupadas_N
+        lista_b = Listas.casillasOcupadas['Blancas']
+        lista_n = Listas.casillasOcupadas['Negras']
 
         avance_x = ahora_x-antes_x
         avance_y = ahora_y-antes_y
@@ -112,7 +113,7 @@ class Rock:
         move_1 = abs(ahora_y-antes_y) > 0 and ahora_x-antes_x == 0
         move_2 = abs(ahora_x-antes_x) > 0 and ahora_y-antes_y == 0
 
-        if (move_1 or move_2):
+        if move_1 or move_2:
             if not salto(antes_x, antes_y, ahora_x, ahora_y):
 
                 return True
@@ -135,8 +136,8 @@ class Knight:
 
             return True
         else:
-            respuesta = u"El caballo se mueve formando una L, de modo que avance o retroceda\n" \
-                        u"dos casillas en la misma fila y avance o retroceda una columna o viceversa"
+            respuesta = u"El caballo se mueve dos casillas horizontalmente y una vertical o viceversa, \n" \
+                        u"de modo que forme una L"
             incorrecta(respuesta)
             return False
 
@@ -196,29 +197,29 @@ class King:
 
                 if jugador == 1:
 
-                    if ahora_x == 7 and Listas.casillasOcupadas_B[(8, 1)] == "Rock":
+                    if ahora_x == 7 and Listas.casillasOcupadas['Blancas'][(8, 1)] == "Rock":
 
-                        del Listas.casillasOcupadas_B[(8, 1)]
-                        Listas.casillasOcupadas_B[(6, 1)] = "Rock"
+                        del Listas.casillasOcupadas['Blancas'][(8, 1)]
+                        Listas.casillasOcupadas['Blancas'][(6, 1)] = "Rock"
 
-                    elif ahora_x == 3 and Listas.casillasOcupadas_B[(1, 1)] == "Rock":
+                    elif ahora_x == 3 and Listas.casillasOcupadas['Blancas'][(1, 1)] == "Rock":
 
-                        del Listas.casillasOcupadas_B[(1, 1)]
-                        Listas.casillasOcupadas_B[(4, 1)] = "Rock"
+                        del Listas.casillasOcupadas['Blancas'][(1, 1)]
+                        Listas.casillasOcupadas['Blancas'][(4, 1)] = "Rock"
 
                 #
 
                 elif jugador == 2:
 
-                    if ahora_x == 7 and Listas.casillasOcupadas_N[(8, 8)] == "Rock":
+                    if ahora_x == 7 and Listas.casillasOcupadas['Negras'][(8, 8)] == "Rock":
 
-                        del Listas.casillasOcupadas_N[(8, 8)]
-                        Listas.casillasOcupadas_N[(6, 8)] = "Rock"
+                        del Listas.casillasOcupadas['Negras'][(8, 8)]
+                        Listas.casillasOcupadas['Negras'][(6, 8)] = "Rock"
 
-                    elif ahora_x == 3 and Listas.casillasOcupadas_N[(1, 8)] == "Rock":
+                    elif ahora_x == 3 and Listas.casillasOcupadas['Negras'][(1, 8)] == "Rock":
 
-                        del Listas.casillasOcupadas_N[(1, 8)]
-                        Listas.casillasOcupadas_N[(4, 8)] = "Rock"
+                        del Listas.casillasOcupadas['Negras'][(1, 8)]
+                        Listas.casillasOcupadas['Negras'][(4, 8)] = "Rock"
 
                 sleep(2)
 

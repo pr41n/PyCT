@@ -1,4 +1,5 @@
 import gtk
+import cv2
 
 
 class Ventana:
@@ -30,5 +31,13 @@ class Ventana:
         self.window.show_all()
         gtk.main()
 
-if __name__ == '__main__':
-    gui = Ventana()
+
+class OpenCV:
+    def __init__(self, cam):
+        pass
+
+    @staticmethod
+    def ventana(winName, x, y, width, height):
+        cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
+        cv2.moveWindow(winName, x, y)
+        cv2.resizeWindow(winName, width, height)
