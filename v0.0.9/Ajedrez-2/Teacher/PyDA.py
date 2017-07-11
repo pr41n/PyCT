@@ -113,7 +113,7 @@ while partida:
 
     try:
         move = False
-        OpenCV.ventana('PyCT', 1100, -100, 800, 400)
+        OpenCV.ventana('PyCT', 1100, -100, 400, 400)
         while True:
             k = cv2.waitKey(1)
 
@@ -141,6 +141,8 @@ while partida:
                 break
 
             if k == 227:
+                clean.images()
+                clean.pyc()
                 exit(11)
 
     except cv2.error:
@@ -163,6 +165,8 @@ while partida:
             ahora = raw_input("Ahora: ")
 
         except KeyboardInterrupt:
+            clean.images()
+            clean.pyc()
             sys.exit(11)
 
         antes = inv_cambio_posicion(antes)
@@ -318,6 +322,7 @@ elif jugador == 2:
 print "Jaque mate, ganan %s en el turno %s" % (jugador, turno - 1)
 audio.jaque_mate(jugador, turno - 1)
 
+clean.images()
 clean.pyc()
 
 if __name__ != '__main__':

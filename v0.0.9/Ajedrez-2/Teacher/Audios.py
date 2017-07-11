@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from Sintetizador import Sts
+import Instrucciones
 
 
 class Spanish:
@@ -20,11 +21,7 @@ class Spanish:
             self.say(u'Cuando lo hayas hecho, pulsa énter')
         elif moment == 2:
             self.say(u'Ahora haz click en las cuatro esquinas siguiendo las siguientes instrucciones.')
-            print "Instrucciones"
-            print u"Enter:  estás de acuerdo con los puntos que te marcan las casillas."
-            print u"Escape:  no estás de acuerdo con los puntos marcados."
-            print
-            print
+            Instrucciones.calibration()
 
     def arduino(self, signal):
         if signal:
