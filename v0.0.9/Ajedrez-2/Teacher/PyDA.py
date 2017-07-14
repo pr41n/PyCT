@@ -13,13 +13,6 @@ from Functions import cambio_listas, cambio_posicion, cambio_ficha, inv_cambio_p
 from Sintetizador import Sts
 
 
-# Choosing the camera
-
-camera = Camera()
-cam_chosen = camera.choose()
-cam = cv2.VideoCapture(cam_chosen)
-
-
 # Calling the cleaner of cache
 
 clean = Clean()
@@ -32,6 +25,14 @@ consejos = audio.Consejo()
 sts = Sts('spanish')
 
 audio.intro()
+
+
+# Choosing the camera
+
+camera = Camera()
+cam_chosen = camera.choose()
+cam = cv2.VideoCapture(cam_chosen)
+
 
 # Calibrating the camera
 

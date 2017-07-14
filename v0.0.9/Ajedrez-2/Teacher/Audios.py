@@ -12,7 +12,7 @@ class Spanish:
     def intro(self):
         self.say(u'Hola, soy Pict.')
         self.say(u'Perdón por mi voz, pero creéme, me molesta más a mi que a ti.')
-        self.say(u'Empecemos')
+        self.say(u'Haz click sobre la cámara que quieras usar.')
 
     def calibration(self, moment):
         if moment == 1:
