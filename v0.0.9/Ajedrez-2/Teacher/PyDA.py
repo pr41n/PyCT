@@ -6,16 +6,19 @@ import Listas
 import Piezas
 
 from Ventana import OpenCV, Ventana
-from Video import Calibration, Detection
+from Video import Calibration, Detection, Camera
 from Audios import Spanish
 from Cleaner import Clean
 from Functions import cambio_listas, cambio_posicion, cambio_ficha, inv_cambio_posicion
 from Sintetizador import Sts
 
-# Set up
 
-camera = 1
-cam = cv2.VideoCapture(camera)
+# Choosing the camera
+
+camera = Camera()
+cam_chosen = camera.choose()
+cam = cv2.VideoCapture(cam_chosen)
+
 
 # Calling the cleaner of cache
 

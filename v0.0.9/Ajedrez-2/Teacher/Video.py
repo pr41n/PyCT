@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import Listas
 from Functions import inv_cambio_posicion
+from Ventana import OpenCV
 
 puntos = []
 rectify_points = []
@@ -365,3 +366,57 @@ class Detection:
         im, contornos, hierarchy = cv2.findContours(contornos_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         return contornos, umbral, resta
+
+
+class Camera:
+    def __init__(self):
+        self.choosing = True
+        self.election = 0
+
+        OpenCV.ventana('camera 1', 200, 100, 500, 500)
+        self.cam_1 = cv2.VideoCapture(0)
+
+        self.second_camera = False
+        if cv2.VideoCapture(1).isOpened():
+            OpenCV.ventana('camera 2', 700, 100, 500, 500)
+            self.cam_2 = cv2.VideoCapture(1)
+            self.second_camera = True
+
+    def choose(self):
+        while True:
+            if self.choosing:
+                if self.second_camera:
+                    ret_1, frame_1 = self.cam_1.read()
+                    ret_2, frame_2 = self.cam_2.read()
+
+                    cv2.imshow('camera 1', frame_1)
+                    cv2.imshow('camera 2', frame_2)
+
+                    cv2.setMouseCallback('camera 1', self.election_1)
+                    cv2.setMouseCallback('camera 2', self.election_2)
+
+                    k = cv2.waitKey(1) & 0xFF
+
+                    if k == 27:
+                        cam = cv2.VideoCapture(1)
+                        cv2.destroyAllWindows()
+                        break
+                else:
+                    self.choosing = False
+            else:
+                cv2.destroyAllWindows()
+                self.cam_1.release()
+                return self.election
+
+    def election_1(self, event, x, y, flags, param):
+        self.sub_election(event, 0)
+
+    def election_2(self, event, x, y, flags, param):
+        self.sub_election(event, 1)
+
+    def sub_election(self, event, num):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            self.choosing = False
+            self.election = num
+            self.cam_1.release()
+            self.cam_2.release()
