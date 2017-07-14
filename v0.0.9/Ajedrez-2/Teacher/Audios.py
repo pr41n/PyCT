@@ -41,7 +41,8 @@ class Spanish:
 
     class Consejo:
         def __init__(self):
-            self.peones = u'No muevas tanto los peones, no tengas miedo a usar las figuras.'
+            self.peones_1 = u'No muevas tanto los peones, no tengas miedo a usar las figuras.'
+            self.peones_2 = u'Usa más los peones.'
             self.caballo = u'Para que los caballos tengan más movilidad, intenta mantenerlos en el \n' \
                            u'centro del tablero y no llevarlos a los lados.'
 

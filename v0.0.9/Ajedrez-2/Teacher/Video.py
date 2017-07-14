@@ -229,7 +229,19 @@ class Detection:
         img_2 = self.tablero.rectify_image(cv2.imread(self.patch2))
 
         contornos, umbral, resta = self.Resta(img_1, img_2)
+        """
+        cv2.imshow('umbral', umbral)
+        cv2.imshow('resta', resta)
 
+        k = cv2.waitKey(0)
+
+        if k == 27:
+            cv2.destroyAllWindows()
+            exit(11)
+
+        cv2.destroyWindow('umbral')
+        cv2.destroyWindow('resta')
+        """
         areas = []
 
         for c in contornos:

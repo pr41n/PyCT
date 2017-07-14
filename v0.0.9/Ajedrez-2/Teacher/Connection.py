@@ -9,7 +9,8 @@ class Arduino:
         # chmod('/dev/ttyACM0', 777)
         if os.path.exists('/dev/ttyACM0'):
             self.arduino = serial.Serial('/dev/ttyACM0', 9600)
-            self.write('s', time)
+            sleep(time)
+            self.write('s', 0)
         else:
             raise OSError
 

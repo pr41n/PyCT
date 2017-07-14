@@ -4,8 +4,8 @@ import sys, cv2, serial
 
 import Listas
 import Piezas
-from Ventana import OpenCV, Ventana
 
+from Ventana import OpenCV, Ventana
 from Video import Calibration, Detection
 from Audios import Spanish
 from Cleaner import Clean
@@ -27,9 +27,6 @@ clean = Clean()
 audio = Spanish()
 consejos = audio.Consejo()
 sts = Sts('spanish')
-
-
-# Start
 
 audio.intro()
 
@@ -63,7 +60,7 @@ clean.images()
 
 try:
     from Connection import Arduino
-    arduino = Arduino(1)
+    arduino = Arduino(2)
 
     audio.arduino(True)
     delay = 0
@@ -104,7 +101,8 @@ partida = True
 audio.partida()
 
 advice = False
-n_peones = 0
+n_peones_1 = 0
+n_peones_2 = 0
 n_caballo = 0
 
 # Reading the play
@@ -195,20 +193,22 @@ while partida:
             movimiento = Pawn()
             ficha = "Pawn"
 
-            n_peones += 1
-            if turno <= 15 and n_peones == 9:
+            n_peones_1 += 1
+            if turno <= 15 and n_peones_1 == 9:
                 advice = True
-                consejo = consejos.peones
+                consejo = consejos.peones_1
 
         elif piece == "Rock":
             from Piezas import Rock
             movimiento = Rock()
             ficha = "Rock"
+            n_peones_2 += 1
 
         elif piece == "Knight":
             from Piezas import Knight
             movimiento = Knight()
             ficha = "Knight"
+            n_peones_2 += 1
 
             if ahora_Y == 1 or ahora_Y == 8 or ahora_X == 1 or ahora_X == 8:
                 n_caballo += 1
@@ -220,16 +220,23 @@ while partida:
             from Piezas import Bishop
             movimiento = Bishop()
             ficha = "Bishop"
+            n_peones_2 += 1
 
         elif piece == "Queen":
             from Piezas import Queen
             movimiento = Queen()
             ficha = "Queen"
+            n_peones_2 += 1
 
         elif piece == "King":
             from Piezas import King
             movimiento = King()
             ficha = "King"
+            n_peones_2 += 1
+
+        if n_peones_2 == 6:
+            consejo = consejos.peones_2
+            n_peones_2 += 1
 
         #
         #
