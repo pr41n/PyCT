@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import cv2
 import numpy as np
 import Listas
@@ -136,7 +138,7 @@ class ChessBoard:
 
         points_image = np.zeros((2, self.patternSize * self.patternSize))
 
-        points_roi = [(800, 800), (0, 800), (0, 0), (800, 0)]
+        points_roi = [(0, 800), (800, 800), (800, 0), (0, 0)]
 
         transform = self.compute_warp(points_roi)
 
@@ -162,24 +164,30 @@ class ChessBoard:
         # cv2.waitKey(0)
         # cv2.imwrite('Cache/Image.jpg', image)
 
-        n = 80
+        n = 0
         for y in range(1, 9):
             for x in range(1, 9):
                 Listas.rectify_squares[(x, y)] = [list(rectify_points[n].astype(int)),
-                                                  list(rectify_points[n - 1].astype(int)),
-                                                  list(rectify_points[n - 9].astype(int)),
-                                                  list(rectify_points[n - 10].astype(int))]
-                n -= 1
-            n -= 1
+                                                  list(rectify_points[n + 1].astype(int)),
+                                                  list(rectify_points[n + 9].astype(int)),
+                                                  list(rectify_points[n + 10].astype(int))]
+                n += 1
+            n += 1
 
         # self.seleccionar(image)
-        # return image
 
     def rectify_image(self, img_src):
         status, trf = cv2.invert(self.transform)
         img_dst = cv2.warpPerspective(img_src, trf, (800, 800))
+
         # cv2.imshow('Warped', img_dst)
         # cv2.waitKey(0)
+
+        M = cv2.getRotationMatrix2D((400, 400), 180, 1)
+
+        img_dst = cv2.warpAffine(img_dst, M, (800, 800))
+        img_dst = cv2.flip(img_dst, 1)
+
         return img_dst
 
     def seleccionar(self, image):
@@ -291,8 +299,8 @@ class Detection:
                 for i in Listas.rectify_squares:
                     j = Listas.rectify_squares[i]
 
-                    inf_izq = tuple(j[0])
-                    sup_der = tuple(j[3])
+                    inf_izq = tuple(j[2])
+                    sup_der = tuple(j[1])
 
                     if inf_izq[0] < punto[0] and inf_izq[1] < punto[1] and \
                        sup_der[0] > punto[0] and sup_der[1] > punto[1]:
@@ -327,18 +335,21 @@ class Detection:
         if len(casillas) == 2:
             antes = tuple
             ahora = tuple
-
-            for casilla in casillas:
-                if casilla in lista:
-                    antes = casilla
-                elif casilla not in lista:
-                    ahora = casilla
-                else:
-                    print "Error"
-
             try:
-                return antes, ahora
-            except KeyError:
+                for casilla in casillas:
+                    if casilla in lista:
+                        antes = casilla
+                    elif casilla not in lista:
+                        ahora = casilla
+                    else:
+                        print "Error"
+
+                if antes == tuple or ahora == tuple:
+                    raise TypeError
+                else:
+                    return antes, ahora
+
+            except KeyError or TypeError:
                 print casillas
                 # exit(11)
 
@@ -346,7 +357,12 @@ class Detection:
             print len(casillas), casillas
 
     def Casillas(self):
-        pass
+        if True:
+            pass
+        else:
+            for y in range(1, 9):
+                for x in range(1, 9):
+                    casilla_1 = Listas.casillas[(x, y)]
 
     @staticmethod
     def Resta(img_1, img_2):
@@ -378,6 +394,9 @@ class Camera:
 
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
+            from Sintetizador import Sts
+            sts = Sts('spanish')
+            sts.say(u'Selecciona la cámara que vayas a usar.')
             OpenCV.ventana('camera 2', 700, 100, 500, 500)
             self.cam_2 = cv2.VideoCapture(1)
             self.second_camera = True
