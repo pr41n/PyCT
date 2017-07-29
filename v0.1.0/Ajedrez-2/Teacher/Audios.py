@@ -11,8 +11,8 @@ class Spanish:
 
     def intro(self):
         self.say(u'Hola, soy Pict.')
-        self.say(u'Perdón por mi voz, pero creéme, me molesta más a mi que a ti.')
-        self.say(u'Empecemos.')
+        # self.say(u'Perdón por mi voz, pero creéme, me molesta más a mi que a ti.')
+        # self.say(u'Empecemos.')
 
     def calibration(self, moment):
         if moment == 1:
@@ -20,7 +20,7 @@ class Spanish:
             self.say(u'Primero, coloca el tablero de modo que pueda ver las cuatro esquinas.')
             self.say(u'Cuando lo hayas hecho, pulsa énter')
         elif moment == 2:
-            self.say(u'Ahora haz click en las cuatro esquinas siguiendo las siguientes instrucciones.')
+            self.say(u'Ahora haz click en las cuatro esquinas siguiendo las instrucciones.')
             Instrucciones.calibration()
 
     def arduino(self, signal):
@@ -30,7 +30,7 @@ class Spanish:
             self.say(u'No hay conexión con Arduino.')
 
     def partida(self):
-        self.say(u'La partida puede comenzar.')
+        self.say(u'Recuerda que los reyes van en la columna E.')
         self.say(u'Comienzan las blancas.')
 
     def jugada(self, pieza, posicion, comida):

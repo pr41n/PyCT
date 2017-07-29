@@ -1,6 +1,20 @@
 # -*- coding: cp1252 -*-
 
+import threading, time
+
 import Listas
+from Sintetizador import Sts
+from Audios import Spanish
+from Cleaner import Clean
+import Memory
+
+audio = Spanish()
+consejos = audio.Consejo()
+sts = Sts('spanish')
+
+clean = Clean()
+
+f_win = int
 
 
 def cambio_ficha(a):
@@ -34,13 +48,13 @@ def inv_cambio_ficha(a):
     :param a: pieza en español
     :return: pieza en inglés
     """
-    if a == "Torre":
+    if a.lower() == "torre":
         a = "Rock"
-    elif a == "Caballo":
+    elif a.lower() == "caballo":
         a = "Knight"
-    elif a == "Alfil":
+    elif a.lower() == "alfil":
         a = "Bishop"
-    elif a == "Reina":
+    elif a.lower() == "reina":
         a = "Queen"
 
     return a
@@ -231,3 +245,30 @@ def cambio_listas(which, e0, ef, jugador):
             print "error"
             print pieza_comida
             print lista_2
+
+
+def thread_starter(to_thread, args=()):
+    thread = threading.Thread(target=to_thread, args=args)
+    thread.start()
+    return thread
+
+
+def video_exit(k):
+    if k == ord('m'):
+        MemoryScript.main()
+
+    elif k == 227:
+        clean.images()
+        clean.pyc()
+        exit(11)
+
+    elif k == ord('t'):
+        print threading.activeCount()
+
+
+def prevent_auido_error(texto):
+    try:
+        sts.say(texto)
+    except RuntimeError:
+        time.sleep(0.1)
+        prevent_auido_error(texto)

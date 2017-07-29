@@ -2,17 +2,21 @@
 
 import cv2
 import numpy as np
-import Listas
-from Functions import inv_cambio_posicion
+from Functions import *
 from Ventana import OpenCV
 
 puntos = []
 rectify_points = []
 esquinas = list
 
+calibrated = False
+sts = Sts('spanish')
+
 
 class ChessBoard:
+
     def __init__(self, img, calibrate=True, esq=list, size=8):
+        global calibrated
         self.patternSize = size + 1
 
         self.points_chessboard = np.ones((self.patternSize * self.patternSize, 3))
@@ -58,7 +62,16 @@ class ChessBoard:
             #
 
             cv2.imshow('Calibrate', self.image)
-            cv2.waitKey(0)
+            thread_starter(sts.say, [u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'])
+            k = cv2.waitKey(0) & 0xFF
+            if k == 10:
+                calibrated = True
+
+            elif k == 27:
+                calibrated = False
+
+            if not calibrated:
+                return
 
             n = 0
             for y in range(1, 9):
@@ -159,11 +172,6 @@ class ChessBoard:
             # n += 1
         #
 
-        # cv2.namedWindow('Calibrate', cv2.WINDOW_NORMAL)
-        # cv2.imshow('Calibrate', image)
-        # cv2.waitKey(0)
-        # cv2.imwrite('Cache/Image.jpg', image)
-
         n = 0
         for y in range(1, 9):
             for x in range(1, 9):
@@ -179,9 +187,6 @@ class ChessBoard:
     def rectify_image(self, img_src):
         status, trf = cv2.invert(self.transform)
         img_dst = cv2.warpPerspective(img_src, trf, (800, 800))
-
-        # cv2.imshow('Warped', img_dst)
-        # cv2.waitKey(0)
 
         M = cv2.getRotationMatrix2D((400, 400), 180, 1)
 
@@ -220,6 +225,9 @@ class Calibration:
     def rectify_image(self, img):       # Image is not a file
         self.rectified_image = self.tablero.rectify_image(img)
         return self.rectified_image
+
+    def value(self):
+        return calibrated
 
 
 class Detection:
@@ -344,7 +352,7 @@ class Detection:
                     else:
                         print "Error"
 
-                if antes == tuple or ahora == tuple:
+                if False:
                     raise TypeError
                 else:
                     return antes, ahora
@@ -389,14 +397,17 @@ class Camera:
         self.choosing = True
         self.election = 0
 
-        OpenCV.ventana('camera 1', 200, 100, 500, 500)
         self.cam_1 = cv2.VideoCapture(0)
 
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
+
             from Sintetizador import Sts
             sts = Sts('spanish')
-            sts.say(u'Selecciona la cámara que vayas a usar.')
+
+            thread_starter(prevent_auido_error, (u'Selecciona la cámara que vayas a usar.',))
+
+            OpenCV.ventana('camera 1', 200, 100, 500, 500)
             OpenCV.ventana('camera 2', 700, 100, 500, 500)
             self.cam_2 = cv2.VideoCapture(1)
             self.second_camera = True
@@ -420,6 +431,9 @@ class Camera:
                         cam = cv2.VideoCapture(1)
                         cv2.destroyAllWindows()
                         break
+
+                    video_exit(k)
+
                 else:
                     self.choosing = False
             else:
@@ -439,3 +453,9 @@ class Camera:
             self.election = num
             self.cam_1.release()
             self.cam_2.release()
+
+
+if __name__ == '__main__':
+    global calibrated
+    calibration = Calibration('DSCN9031.JPG')
+    print calibrated
