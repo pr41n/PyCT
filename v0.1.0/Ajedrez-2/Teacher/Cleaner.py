@@ -14,7 +14,7 @@ class Clean:
 
     @staticmethod
     def pyc():
-        pyc_files = glob('*.pyc') + glob('Instrucciones/*.pyc')
+        pyc_files = glob('*.pyc') + glob('Instructions/*.pyc')
         for pyc in pyc_files:
             remove(pyc)
 
