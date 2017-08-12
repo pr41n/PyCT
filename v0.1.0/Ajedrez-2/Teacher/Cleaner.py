@@ -14,6 +14,10 @@ class Clean:
 
     @staticmethod
     def pyc():
-        pyc_files = glob('*.pyc')
+        pyc_files = glob('*.pyc') + glob('Instrucciones/*.pyc')
         for pyc in pyc_files:
             remove(pyc)
+
+if __name__ == '__main__':
+    Clean.images()
+    Clean.pyc()

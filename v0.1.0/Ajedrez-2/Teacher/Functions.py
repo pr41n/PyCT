@@ -1,20 +1,17 @@
 # -*- coding: cp1252 -*-
 
-import threading, time
+import threading
+import time
 
-import Listas
-from Sintetizador import Sts
+import Lists
+import Memory
 from Audios import Spanish
 from Cleaner import Clean
-import Memory
+from Synthesizer import Sts
 
 audio = Spanish()
 consejos = audio.Consejo()
 sts = Sts('spanish')
-
-clean = Clean()
-
-f_win = int
 
 
 def cambio_ficha(a):
@@ -124,7 +121,7 @@ def inv_cambio_posicion(position):
     return tuple([x, y])
 
 
-def cambio_listas(which, e0, ef, jugador):
+def cambio_listas(which, e0, ef, jugador, p):
     """
     Se llama cuando la jugada es correcta.
 
@@ -132,42 +129,38 @@ def cambio_listas(which, e0, ef, jugador):
     :param which: pieza que se ha movido
     :param e0: posición inicial de la pieza
     :param ef: posición final de la pieza
+    :param p: en caso de coronación la pieza que se escoge
     :return: cambio de listas
     """
 
-    lista_1 = dict
-    lista_2 = dict
-    mayores_1 = list
-    menores_1 = list
-    mayores_2 = list
-    menores_2 = list
-    compar_1 = str
-    compar_2 = str
+    mayores_1, menores_1, mayores_2, menores_2 = give_values(list, 4)
+    lista_1, lista_2 = give_values(dict, 2)
+    compar_1, compar_2 = give_values(str, 2)
 
     #
 
     if jugador == 1:
-        lista_1 = Listas.casillasOcupadas['Blancas']
-        lista_2 = Listas.casillasOcupadas['Negras']
+        lista_1 = Lists.casillasOcupadas['Blancas']
+        lista_2 = Lists.casillasOcupadas['Negras']
 
-        mayores_1 = Listas.PiezasMayores_B
-        menores_1 = Listas.PiezasMenores_B
+        mayores_1 = Lists.PiezasMayores_B
+        menores_1 = Lists.PiezasMenores_B
 
-        mayores_2 = Listas.PiezasMayores_N
-        menores_2 = Listas.PiezasMenores_N
+        mayores_2 = Lists.PiezasMayores_N
+        menores_2 = Lists.PiezasMenores_N
 
         compar_1 = "ef[0] <= 4"
         compar_2 = "ef[0] > 4"
 
     elif jugador == 2:
-        lista_1 = Listas.casillasOcupadas['Negras']
-        lista_2 = Listas.casillasOcupadas['Blancas']
+        lista_1 = Lists.casillasOcupadas['Negras']
+        lista_2 = Lists.casillasOcupadas['Blancas']
 
-        mayores_1 = Listas.PiezasMayores_N
-        menores_1 = Listas.PiezasMenores_N
+        mayores_1 = Lists.PiezasMayores_N
+        menores_1 = Lists.PiezasMenores_N
 
-        mayores_2 = Listas.PiezasMayores_B
-        menores_2 = Listas.PiezasMenores_B
+        mayores_2 = Lists.PiezasMayores_B
+        menores_2 = Lists.PiezasMenores_B
 
         compar_1 = "ef[0] >= 4"
         compar_2 = "ef[0] < 4"
@@ -177,8 +170,7 @@ def cambio_listas(which, e0, ef, jugador):
     del lista_1[e0]
 
     if which == "Pawn" and (ef[1] == 1 or ef[1] == 8):
-        p = raw_input("Pieza: ")
-        p = inv_cambio_ficha(p[0].upper() + p[1:].lower())
+        p = inv_cambio_ficha(p)
 
         lista_1[ef] = p
         mayores_1.append(p)
@@ -249,17 +241,18 @@ def cambio_listas(which, e0, ef, jugador):
 
 def thread_starter(to_thread, args=()):
     thread = threading.Thread(target=to_thread, args=args)
+    thread.setDaemon(True)
     thread.start()
     return thread
 
 
 def video_exit(k):
     if k == ord('m'):
-        MemoryScript.main()
+        Memory.main()
 
     elif k == 227:
-        clean.images()
-        clean.pyc()
+        Clean.images()
+        Clean.pyc()
         exit(11)
 
     elif k == ord('t'):
@@ -272,3 +265,10 @@ def prevent_auido_error(texto):
     except RuntimeError:
         time.sleep(0.1)
         prevent_auido_error(texto)
+
+
+def give_values(value, num):
+    A = []
+    for x in range(num):
+        A.append(value)
+    return A

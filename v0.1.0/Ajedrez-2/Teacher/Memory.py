@@ -1,5 +1,4 @@
 import os
-import cv2
 
 _proc_status = '/proc/%d/status' % os.getpid()
 _scale = {
@@ -16,7 +15,7 @@ def _VmB(VmKey):
         v = t.read()
         t.close()
 
-    except:
+    except OSError:
         return 0.0      # non Linux?
 
     i = v.index(VmKey)
@@ -48,16 +47,3 @@ def main():
     print 'Resident memory: {} Mb'.format(resident(since_resident)/1000000)
     print 'Stack size: {} Mb'.format(stackSize(since_stackSize)/1000000)
     print
-
-if __name__ == '__main__':
-    cam = cv2.VideoCapture(0)
-    while True:
-        ret, frame = cam.read()
-        cv2.imshow('cam', frame)
-
-        k = cv2.waitKey(1) & 0xFF
-        if k == 10:
-            main()
-        if k == ord('q') or k == 27:
-            cv2.destroyAllWindows()
-            exit(11)

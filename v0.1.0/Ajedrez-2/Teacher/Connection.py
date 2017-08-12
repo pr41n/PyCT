@@ -4,7 +4,6 @@ from time import sleep
 
 
 class Arduino:
-
     def __init__(self, time):
         # chmod('/dev/ttyACM0', 777)
         try:

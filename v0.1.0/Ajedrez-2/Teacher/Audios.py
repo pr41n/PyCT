@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Sintetizador import Sts
-import Instrucciones
+from Synthesizer import Sts
 
 
 class Spanish:
@@ -17,11 +16,12 @@ class Spanish:
     def calibration(self, moment):
         if moment == 1:
             self.say(u'Comencemos calibrando la cámara.')
-            self.say(u'Primero, coloca el tablero de modo que pueda ver las cuatro esquinas.')
+            self.say(u'Coloca el tablero de juego interior de modo que pueda ver las cuatro esquinas.')
+            self.say(u'Te recomiendo avanzar las torres más alejadas para que pueda ver las esquinas.')
             self.say(u'Cuando lo hayas hecho, pulsa énter')
         elif moment == 2:
             self.say(u'Ahora haz click en las cuatro esquinas siguiendo las instrucciones.')
-            Instrucciones.calibration()
+            self.say(u'Puedes ampliar la ventana si lo necesitas.')
 
     def arduino(self, signal):
         if signal:
@@ -30,6 +30,7 @@ class Spanish:
             self.say(u'No hay conexión con Arduino.')
 
     def partida(self):
+        self.say(u'El orden es torre, caballo y alfil.')
         self.say(u'Recuerda que los reyes van en la columna E.')
         self.say(u'Comienzan las blancas.')
 
@@ -44,7 +45,4 @@ class Spanish:
             self.peones_1 = u'No muevas tanto los peones, no tengas miedo a usar las figuras.'
             self.peones_2 = u'Usa más los peones.'
             self.caballo = u'Para que los caballos tengan más movilidad, intenta mantenerlos en el \n' \
-                           u'centro del tablero y no llevarlos a los lados.'
-
-    def jaque_mate(self, jugador, turno):
-        self.say('Jaque mate, ganan %s en el turno %s, felicidades.' % (jugador, turno))
+                           u'centro del tablero.'

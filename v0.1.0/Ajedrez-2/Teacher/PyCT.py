@@ -2,19 +2,19 @@
 
 import cv2
 
-import Piezas
+import Pieces
 from Functions import *
-from Sintetizador import Sts
-from Ventana import OpenCV, Ventana
+from Synthesizer import Sts
+from Window import OpenCV, Ventana
 from Video import Detection, Calibration, Camera
 
 clean = Clean()
-calibration = 0
+calibration, pos0, pos1 = give_values(None, 3)
+rectified = False
+z = True
 
 
 class PyCT:
-    global calibration
-
     def __init__(self, probando=False):
 
         self.win = Ventana()
@@ -22,6 +22,7 @@ class PyCT:
 
         if probando:
             self.prueba()
+            exit(12)
 
         self.audio = Spanish()
         self.consejos = self.audio.Consejo()
@@ -42,6 +43,8 @@ class PyCT:
                 break
             attempt1 = False
 
+        self.win.label.set_text("")
+
         clean.images()
 
         self.bien, self.mal, self.jaque_mate = self.arduino_conection()
@@ -58,29 +61,60 @@ class PyCT:
 
         thread_starter(self.audio.partida)
 
-        global antes, ahora
+        global pos0, pos1, rectified
 
         while self.partida:
-            antes, ahora = self.detect_move()
+            pos0, pos1 = self.detect_move()
 
             try:
-                ficha, movimiento, casillasOcupadas = self.detect_piece(antes, ahora)
+                ficha, movimiento, casillasOcupadas = self.detect_piece()
                 self.check_move(ficha, movimiento, casillasOcupadas)
 
-            except KeyError or AttributeError as err:
+            except KeyError as err:
                 print u"Error en la detección: {}".format(err)
-                self.sts.say(u"Ha habido un error en la detección")
+                self.sts.say(u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas.")
+                self.sts.say(u"Si prefieres introducir el movimiento manualmente, pulsa escape.")
+                if cv2.waitKey(0) & 0xFF == 27:
+                    pos0, pos1 = self.win.movimiento(None)
+                    ficha, movimiento, casillasOcupadas = self.detect_piece()
+                    self.check_move(ficha, movimiento, casillasOcupadas)
+
+            except AttributeError as err:
+                print u"Error en la detección: {}".format(err)
+                self.sts.say(u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas")
+                self.sts.say(u"Si prefieres introducir el movimiento manualmente, pulsa escape.")
+                if cv2.waitKey(0) & 0xFF == 27:
+                    pos0, pos1 = self.win.movimiento(None)
+                    ficha, movimiento, casillasOcupadas = self.detect_piece()
+                    self.check_move(ficha, movimiento, casillasOcupadas)
+
+            except TypeError as err:
+                print u"Error en la detección: {}".format(err)
+                self.sts.say(u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas")
+                self.sts.say(u"Si prefieres introducir el movimiento manualmente, pulsa escape.")
+                if cv2.waitKey(0) & 0xFF == 27:
+                    pos0, pos1 = self.win.movimiento(None)
+                    ficha, movimiento, casillasOcupadas = self.detect_piece()
+                    self.check_move(ficha, movimiento, casillasOcupadas)
+        if self.jugador == 1: jugador = 'blancas'
+        else: jugador = 'negras'
+
+        thread_starter(prevent_auido_error, ['Jaque mate, ganan %s en el turno %s, felicidades.' %
+                                             (jugador, self.turno - 1)])
+        time.sleep(2)
+        prevent_auido_error(" ")
+
+        video_exit(227)
 
     def calibrated(self, first_attempt=True):
         global calibration
-        ventana = OpenCV.ventana('Coloca el tablero', 1100, -100, 440, 350)
+        OpenCV('Coloca el tablero', 1100, -100, 440, 350)
 
         while True:
             k = cv2.waitKey(1) & 0xFF
 
             ret, frame = self.cam.read()
             cv2.imshow('Coloca el tablero', frame)
-            # cv2.imshow('Coloca el tablero', cv2.imread('foto.jpg'))
             cv2.imwrite('PythonCache/frame.jpg', frame)
             self.win.video('PythonCache/frame.jpg')
 
@@ -115,22 +149,33 @@ class PyCT:
             return 'None', 'None', 'None'
 
     def detect_move(self):
-        global antes, ahora, calibration
+        global pos0, pos1, calibration, rectified
+        instructions = cv2.imread('Instructions/Video.png')
         try:
             move = False
-            OpenCV.ventana('PyCT', 1100, -100, 440, 350)
+            OpenCV('Sobre esta ventana pulsa:', 490, 485, 435, 170)
             while True:
                 k = cv2.waitKey(1)
 
                 ret, frame = self.cam.read()
-                img = calibration.rectify_image(frame)
-                cv2.imshow('PyCT', img)
+                if k == ord('r'):
+                    if rectified:
+                        rectified = False
+                    else:
+                        rectified = True
+
+                if rectified:
+                    img = calibration.rectify_image(frame)
+                else:
+                    img = frame
+
+                cv2.imshow('Sobre esta ventana pulsa:', instructions)
                 cv2.imwrite('PythonCache/frame.jpg', img)
                 self.win.video('PythonCache/frame.jpg')
 
                 video_exit(k)
 
-                if k == 32 and not move:
+                if not move:
                     move = True
                     cv2.imwrite('PythonCache/origin.jpg', frame)
                     original = 'PythonCache/origin.jpg'
@@ -140,19 +185,24 @@ class PyCT:
                     now = 'PythonCache/now.jpg'
 
                     detection = Detection(original, now, self.jugador)
-                    antes, ahora = detection.Tablero()
-                    return antes, ahora
+                    pos0, pos1 = detection.Tablero()
+                    return pos0, pos1
 
                 elif k == 27:
-                    antes, ahora = self.win.movimiento(None)
-                    return antes, ahora
+                    pos0, pos1 = self.win.movimiento(None)
+                    return pos0, pos1
 
         except cv2.error:
             thread_starter(sts.say, [u"Error de detección, introduzca el movimiento manulamente"])
-            antes, ahora = self.win.movimiento(None)
-            return antes, ahora
+            pos0, pos1 = self.win.movimiento(None)
+            return pos0, pos1
 
-    def detect_piece(self, antes, ahora):
+        except IndexError:
+            thread_starter(sts.say, [u"Error de detección, introduzca el movimiento manulamente"])
+            pos0, pos1 = self.win.movimiento(None)
+            return pos0, pos1
+
+    def detect_piece(self):
         movimiento = bool
         ficha = str
 
@@ -160,12 +210,12 @@ class PyCT:
             """Se compara la posición inicial con las casillas ocupadas
             para reconocer qué pieza se ha movido.
             """
-            casillas_ocupadas = Listas.casillas_ocupadas()
-            piece = casillas_ocupadas[antes]
+            casillas_ocupadas = Lists.casillas_ocupadas()
+            piece = casillas_ocupadas[pos0]
             #
 
             if piece == "Pawn":
-                from Piezas import Pawn
+                from Pieces import Pawn
                 movimiento = Pawn()
                 ficha = "Pawn"
 
@@ -175,37 +225,37 @@ class PyCT:
                     self.consejo = consejos.peones_1
 
             elif piece == "Rock":
-                from Piezas import Rock
+                from Pieces import Rock
                 movimiento = Rock()
                 ficha = "Rock"
                 self.n_peones_2 += 1
 
             elif piece == "Knight":
-                from Piezas import Knight
+                from Pieces import Knight
                 movimiento = Knight()
                 ficha = "Knight"
                 self.n_peones_2 += 1
 
-                if ahora[0] == 1 or ahora[0] == 8or ahora[1] == 1 or ahora[1] == 8:
+                if pos1[0] == 1 or pos1[0] == 8or pos1[1] == 1 or pos1[1] == 8:
                     self.n_caballo += 1
                     if self.n_caballo < 3:
                         self.advice = True
                         self.consejo = consejos.caballo
 
             elif piece == "Bishop":
-                from Piezas import Bishop
+                from Pieces import Bishop
                 movimiento = Bishop()
                 ficha = "Bishop"
                 self.n_peones_2 += 1
 
             elif piece == "Queen":
-                from Piezas import Queen
+                from Pieces import Queen
                 movimiento = Queen()
                 ficha = "Queen"
                 self.n_peones_2 += 1
 
             elif piece == "King":
-                from Piezas import King
+                from Pieces import King
                 movimiento = King()
                 ficha = "King"
                 self.n_peones_2 += 1
@@ -218,59 +268,63 @@ class PyCT:
 
         except KeyError or AttributeError:
             print u"Error: Fallo de detección"
-            self.sts.say(u'Ha habido un error en la detección')
 
     def check_move(self, ficha, movimiento, casillas_ocupadas):
-        global antes, ahora
-        Piezas.jugador = self.jugador
+        global pos0, pos1
+        Pieces.jugador = self.jugador
 
-        if movimiento.movimiento(antes[0], antes[1], ahora[0], ahora[1]):
+        if movimiento.movimiento_correcto(pos0[0], pos0[1], pos1[0], pos1[1]):
 
-            H = str
+            H = "Turno %s" % self.turno, "Jugador %s" % self.jugador
             J = int
+            K = None
 
-            if ficha == "King" and antes[0] == 5 and ahora[1] - antes[1] == 0 and abs(ahora[0] - antes[0]) == 2:
-                if ahora[0] == 3:
+            if ficha == "King" and pos0[0] == 5 and pos1[1] - pos0[1] == 0 and abs(pos1[0] - pos0[0]) == 2:
+                if pos1[0] == 3:
                     J = thread_starter(self.sts.say, ['Enroque largo.'])
-                    H = u"Turno %s          Jugador %s          Enroque largo" % (self.turno, self.jugador)
+                    H = H, u"Enroque largo"
 
-                elif ahora[0] == 7:
+                elif pos1[0] == 7:
                     J = thread_starter(self.sts.say, ['Enroque corto.'])
-                    H = u"Turno %s          Jugador %s          Enroque corto" % (self.turno, self.jugador)
+                    H = H, u"Enroque corto"
 
-            elif ahora in casillas_ocupadas:
-                J = thread_starter(audio.jugada, [cambio_ficha(ficha), cambio_posicion(ahora), True])
-                H = u"Turno %s          Jugador %s          %s por %s" % \
-                    (self.turno, self.jugador, cambio_ficha(ficha), cambio_posicion(ahora))
+            elif ficha == "Pawn" and (pos1[1] == 8 or pos1[1] == 1):
+                K = self.win.corona()
+                K = K.capitalize()
+                J = thread_starter(self.sts.say, [u"%s corona" % cambio_ficha(K)])
+                H = H, u"%s corona" % cambio_ficha(K)
+
+            elif pos1 in casillas_ocupadas:
+                J = thread_starter(audio.jugada, [cambio_ficha(ficha), cambio_posicion(pos1), True])
+                H = H, u"%s por %s" % (cambio_ficha(ficha), cambio_posicion(pos1))
 
             else:
-                J = thread_starter(self.audio.jugada, [cambio_ficha(ficha), cambio_posicion(ahora), False])
-                H = u"Turno %s          Jugador %s          %s a %s" % \
-                    (self.turno, self.jugador, cambio_ficha(ficha), cambio_posicion(ahora))
+                J = thread_starter(self.audio.jugada, [cambio_ficha(ficha), cambio_posicion(pos1), False])
+                H = H, u"%s a %s" % (cambio_ficha(ficha), cambio_posicion(pos1))
 
-            self.win.print_move(H)
+            self.win.print_move(H[0][0], H[0][1], H[1])
 
-            # J.join()
             if self.advice:
-                self.sts.say(self.consejo)
+                J.join()
+                thread_starter(self.sts.say, [self.consejo])
                 self.advice = False
 
             #
 
-            cambio_listas(ficha, antes, ahora, self.jugador)
-            self.win.refresh_playing()
+            cambio_listas(ficha, pos0, pos1, self.jugador, K)
+            self.win.refresh_playing(K, self.jugador)
             self.turno += 1
 
             #
 
             if self.jugador == 1:
-                if "King" not in Listas.PiezasMayores_N:
+                if "King" not in Lists.PiezasMayores_N:
                     self.partida = False
                 else:
                     self.jugador = 2
 
             elif self.jugador == 2:
-                if "King" not in Listas.PiezasMayores_B:
+                if "King" not in Lists.PiezasMayores_B:
                     self.partida = False
                 else:
                     self.jugador = 1
@@ -278,20 +332,22 @@ class PyCT:
             eval(self.bien)
 
         else:
-            self.sts.say(u'Repite el movimiento')
+            global z
+            self.win.print_incorrect_move()
+            thread_starter(sts.say, [u'Repite el movimiento'])
+            if z:
+                z = False
+                thread_starter(sts.say, [u'Cuando hayas devuelto las piezas a su posición inicial, '
+                                         u'pulsa cualquier tecla para continuar'])
+            cv2.waitKey(0)
             eval(self.mal)
 
     def prueba(self):
-        camera = Camera()
-        cam_chosen = camera.choose()
-        self.cam = cv2.VideoCapture(cam_chosen)
-        self.jugador = 1
-
-        self.calibrated(False)
-
-        antes, ahora = self.detect_move()
-        print antes, ahora
-        exit(11)
+        import Pieces
+        for i in range(4):
+            Pieces.answer = "Prueba\n\n"
+            self.win.print_incorrect_move()
+            self.win.main()
 
 if __name__ == '__main__':
     pyct = PyCT()
