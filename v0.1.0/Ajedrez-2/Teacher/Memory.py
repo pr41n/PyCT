@@ -26,24 +26,24 @@ def _VmB(VmKey):
     return float(v[1]) * _scale[v[2]]
 
 
-def memory(since=0.0):
+def _memory(since=0.0):
     return _VmB('VmSize:') - since
 
 
-def resident(since=0.0):
+def _resident(since=0.0):
     return _VmB('VmRSS:') - since
 
 
-def stackSize(since=0.0):
+def _stackSize(since=0.0):
     return _VmB('VmStk:') - since
 
-since_memory = memory()
-since_resident = resident()
-since_stackSize = stackSize()
+since_memory = _memory()
+since_resident = _resident()
+since_stackSize = _stackSize()
 
 
 def main():
-    print 'Memory: {} Mb'.format(memory(since_memory)/1000000)
-    print 'Resident memory: {} Mb'.format(resident(since_resident)/1000000)
-    print 'Stack size: {} Mb'.format(stackSize(since_stackSize)/1000000)
+    print 'Memory: {} Mb'.format(_memory(since_memory)/1000000)
+    print 'Resident memory: {} Mb'.format(_resident(since_resident)/1000000)
+    print 'Stack size: {} Mb'.format(_stackSize(since_stackSize)/1000000)
     print

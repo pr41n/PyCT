@@ -1,5 +1,6 @@
 import turtle
 
+
 def print_new_line():
         turtle.forward(10)
 

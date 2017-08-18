@@ -7,55 +7,63 @@ import cv2
 
 import Pieces
 from Functions import *
-from Instructions import Calibration
+import Audio
 
-sts = Pieces.sts
+pos0, pos1, who_promote = give_values(None, 3)
 
 
-class Ventana:
-    global pos0, pos1, pieza_corona
+class Window:
+    global pos0, pos1, who_promote
 
-    def destroy(self, widget, data=None):
+    @staticmethod
+    def destroy(widget, data=None):
         gtk.main_quit()
 
-    def translate(self, lista, to):
+    @staticmethod
+    def translate(string, to):
         if to == 'spanish':
-            lista = re.sub("King", u"Rey", lista)
-            lista = re.sub("Queen", u"Reina", lista)
-            lista = re.sub("Bishop", u"Alfil", lista)
-            lista = re.sub("Knight", u"Caballo", lista)
-            lista = re.sub("Rock", u"Torre", lista)
-            lista = re.sub("Pawn", r"Peon", lista)
+            string = re.sub("King", u"Rey", string)
+            string = re.sub("Queen", u"Reina", string)
+            string = re.sub("Bishop", u"Alfil", string)
+            string = re.sub("Knight", u"Caballo", string)
+            string = re.sub("Rock", u"Torre", string)
+            string = re.sub("Pawn", u"Peon", string)
 
         elif to == 'english':
-            lista = re.sub(u"Rey", "King", lista)
-            lista = re.sub(u"Reina", "Queen", lista)
-            lista = re.sub(u"Alfil", "Bishop", lista)
-            lista = re.sub(u"Caballo", "Knight", lista)
-            lista = re.sub(u"Torre", "Rock", lista)
-            lista = re.sub(r"Peon", "Pawn", lista)
+            string = re.sub(u"Rey", "King", string)
+            string = re.sub(u"Reina", "Queen", string)
+            string = re.sub(u"Alfil", "Bishop", string)
+            string = re.sub(u"Caballo", "Knight", string)
+            string = re.sub(u"Torre", "Rock", string)
+            string = re.sub(r"Peon", "Pawn", string)
 
-        return lista
+        return string
 
-    def make_button(self, text, func, box):
+    @staticmethod
+    def make_button(text, func, box):
         new_button = gtk.Button(text)
         new_button.connect('clicked', func)
-        eval('self.%s.pack_start(new_button)' % box)
+        box.pack_start(new_button)
         return new_button
 
-    def jugando_B(self, widget):
-        lista = "Blancas\n\n"
-        for i in Lists.PiezasMayores_B + Lists.PiezasMenores_B:
-            lista = lista + "%s\n" % i
+    def playing(self, player, lists):
+        string = "%s\n\n" % player
+        for i in lists[0] + lists[1]:
+            string = string + "%s\n" % i
 
-        return self.translate(lista, 'spanish') # re.sub("Peon", u"Peón", self.translate(lista, 'spanish'))
+        return self.translate(string, 'spanish')
 
-    def jugando_N(self, widget):
-        lista = "Negras\n\n"
-        for i in Lists.PiezasMayores_N + Lists.PiezasMenores_N:
-            lista = lista + "%s\n" % i
+    def change_idiom(self, idiom):
+        if idiom == 'spanish':
+            Audio.selected_idiom = Audio.Spanish()
 
-        return self.translate(lista, 'spanish') # re.sub("Peon", u"Peón", self.translate(lista, 'spanish'))
+        elif idiom == 'english':
+            Audio.selected_idiom = Audio.English()
+
+        elif idiom == 'italian':
+            Audio.selected_idiom = Audio.Italian()
+
+        Audio.selected_idiom.main()
 
     def __init__(self):
         self.window = gtk.Window()
@@ -71,6 +79,7 @@ class Ventana:
         self.box5 = gtk.VBox()
         self.box6 = gtk.HBox()
         self.box7 = gtk.HBox()
+        self.box8 = gtk.HBox()
 
         self.main_box.pack_start(self.box1)
         self.main_box.pack_start(self.box2)
@@ -79,19 +88,20 @@ class Ventana:
         self.box2.pack_start(self.box5)
         self.box3.pack_start(self.box6)
         self.box3.pack_start(self.box7)
+        self.box5.pack_start(self.box8)
 
         self.main_box.set_homogeneous(10)
         self.box3.set_homogeneous(10)
         self.box2.set_homogeneous(10)
 
-        self.jugando_b = gtk.Label(self.jugando_B(None))
-        self.jugando_n = gtk.Label(self.jugando_N(None))
+        self.playing_w = gtk.Label(self.playing("Blancas", [Lists.WhiteHighPieces, Lists.WhiteLowPieces]))
+        self.playing_b = gtk.Label(self.playing("Negras", [Lists.BlackHighPieces, Lists.BlackLowPieces]))
         self.label = gtk.Label()
 
         self.image = gtk.Image()
 
-        self.box4.pack_start(self.jugando_b)
-        self.box4.pack_start(self.jugando_n)
+        self.box4.pack_start(self.playing_w)
+        self.box4.pack_start(self.playing_b)
 
         self.turn = gtk.Label("")
         self.player = gtk.Label("")
@@ -103,63 +113,67 @@ class Ventana:
 
         self.box7.set_homogeneous(10)
 
-        self.button1 = self.make_button('Empezar', self.destroy, 'box5')
+        self.start = self.make_button('Empezar', lambda (widget): gtk.main_quit(), self.box5)
 
-        self.button4 = self.make_button('Movmiento Manual', self.movimiento, 'box5')
-        self.button3 = self.make_button('Comer', lambda (widget): exit(11), 'box5')
+        self.spanish = self.make_button(u'Español', lambda (widget): self.change_idiom('spanish'), self.box8)
+        self.english = self.make_button('English', lambda (widget): self.change_idiom('english'), self.box8)
+        self.italian = self.make_button('Italiano', lambda (widget): self.change_idiom('italian'), self.box8)
 
-        self.button2 = self.make_button('Salir', lambda (widget): exit(11), 'box5')
+        self.record = self.make_button('Grabar partida\n(no disponible)', lambda (widget): None, self.box5)
+
+        self.exit = self.make_button('Salir', lambda (widget): exit(11), self.box5)
 
         self.window.add(self.main_box)
 
         self.window.show_all()
         self.window.connect('delete-event', self.destroy)
 
-    def main(self):
+    @staticmethod
+    def main():
         gtk.main()
 
-    def refresh_playing(self, K, jugador):
-        text_b = self.jugando_b.get_text()
-        text_n = self.jugando_n.get_text()
+    def refresh_playing(self, K, player):
+        text_w = self.playing_w.get_text()
+        text_b = self.playing_b.get_text()
 
+        text_w = self.translate(text_w, 'english')
         text_b = self.translate(text_b, 'english')
-        text_n = self.translate(text_n, 'english')
 
-        for i in text_b[7:].split("\n"):
+        for i in text_w[7:].split("\n"):
             if i != "":
-                if i not in (Lists.PiezasMayores_B + Lists.PiezasMenores_B):
-                    if type(K) == str and jugador == 1:
-                        text_b = re.sub(i, cambio_ficha(K), text_b)
+                if i not in (Lists.WhiteHighPieces + Lists.WhiteLowPieces):
+                    if type(K) == str and player == 1:
+                        text_w = re.sub(i, change_piece(K), text_w)
                         K = None
                     else:
-                        text_b = re.sub(i, "", text_b)
+                        text_w = re.sub(i, "", text_w)
 
-                elif len(re.findall(i, text_b)) > len(re.findall(i, str(Lists.PiezasMayores_B + Lists.PiezasMenores_B))):
+                elif len(re.findall(i, text_w)) > len(re.findall(i, str(Lists.WhiteHighPieces + Lists.WhiteLowPieces))):
+                    text_w = re.sub(i, "", text_w, 1)
+
+                else:
+                    continue
+
+        for j in text_b[6:].split("\n"):
+            if j != "":
+                if j not in (Lists.BlackLowPieces + Lists.BlackHighPieces):
+                    if type(K) == str and player == 2:
+                        text_b = re.sub(j, change_piece(K), text_b)
+                        K = None
+                    else:
+                        text_b = re.sub(j, "", text_b)
+
+                elif len(re.findall(i, text_b)) > len(re.findall(i, str(Lists.BlackHighPieces + Lists.BlackLowPieces))):
                     text_b = re.sub(i, "", text_b, 1)
 
                 else:
                     continue
 
-        for j in text_n[6:].split("\n"):
-            if j != "":
-                if j not in (Lists.PiezasMenores_N + Lists.PiezasMayores_N):
-                    if type(K) == str and jugador == 2:
-                        text_n = re.sub(j, cambio_ficha(K), text_n)
-                        K = None
-                    else:
-                        text_n = re.sub(j, "", text_n)
-
-                elif len(re.findall(i, text_n)) > len(re.findall(i, str(Lists.PiezasMayores_N + Lists.PiezasMenores_N))):
-                    text_n = re.sub(i, "", text_n, 1)
-
-                else:
-                    continue
-
+        # text_w = re.sub(r"Peon", u"Peón", self.translate(text_w, 'spanish'))
         # text_b = re.sub(r"Peon", u"Peón", self.translate(text_b, 'spanish'))
-        # text_n = re.sub(r"Peon", u"Peón", self.translate(text_n, 'spanish'))
 
-        self.jugando_b.set_text(self.translate(text_b, 'spanish'))
-        self.jugando_n.set_text(self.translate(text_n, 'spanish'))
+        self.playing_w.set_text(self.translate(text_w, 'spanish'))
+        self.playing_b.set_text(self.translate(text_b, 'spanish'))
 
     def video(self, img):
         pix = gtk.gdk.pixbuf_new_from_file(img)
@@ -171,35 +185,35 @@ class Ventana:
         self.window.show_all()
 
     def calibration_instructions(self):
-        self.label.set_text(Calibration.calibration())
+        self.label.set_text(Audio.instructions.calibration_1())
         self.label.set_justify(0)
         self.box1.pack_start(self.label)
         self.label.set_alignment(0.5, 0.04)
         self.window.show_all()
 
-    def print_move(self, turno, jugador, mov):
+    def print_move(self, turn, player, mov):
         self.turn.set_alignment(0.1, 0.004)
         self.player.set_alignment(0.1, 0.004)
         self.move.set_alignment(0.1, 0.004)
 
-        texto_1 = self.turn.get_text()
-        texto_2 = self.player.get_text()
-        texto_3 = self.move.get_text()
+        text_1 = self.turn.get_text()
+        text_2 = self.player.get_text()
+        text_3 = self.move.get_text()
 
-        a = texto_1.split("\n")
+        a = text_1.split("\n")
 
         if len(a) >= 21:
-            texto_1 = ""
-            texto_2 = ""
-            texto_3 = ""
+            text_1 = ""
+            text_2 = ""
+            text_3 = ""
 
-        texto_1 = texto_1 + "%s\n" % turno
-        texto_2 = texto_2 + "%s\n" % jugador
-        texto_3 = texto_3 + "%s\n" % mov
+        text_1 = text_1 + "%s\n" % turn
+        text_2 = text_2 + "%s\n" % player
+        text_3 = text_3 + "%s\n" % mov
 
-        self.turn.set_text(texto_1)
-        self.player.set_text(texto_2)
-        self.move.set_text(texto_3)
+        self.turn.set_text(text_1)
+        self.player.set_text(text_2)
+        self.move.set_text(text_3)
 
         self.window.show_all()
 
@@ -210,12 +224,12 @@ class Ventana:
         self.window.show_all()
 
     @staticmethod
-    def corona():
-        global pieza_corona
+    def promote():
+        global who_promote
 
         def end(widget):
-            global pieza_corona
-            pieza_corona = text.get_text()
+            global who_promote
+            who_promote = text.get_text()
             win.hide()
             gtk.main_quit()
 
@@ -238,10 +252,10 @@ class Ventana:
         win.show_all()
         gtk.main()
 
-        return inv_cambio_ficha(pieza_corona)
+        return inv_change_piece(who_promote)
 
     @staticmethod
-    def movimiento(widget):
+    def movement(widget):
         def end(w):
             global pos0, pos1
             pos0 = text1.get_text()
@@ -273,17 +287,10 @@ class Ventana:
         gtk.main()
 
         global pos0, pos1
-        return inv_cambio_posicion(pos0), inv_cambio_posicion(pos1)
+        return inv_change_position(pos0), inv_change_position(pos1)
 
 
 def OpenCV(winName, x, y, width, height):
         cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
         cv2.moveWindow(winName, x, y)
         cv2.resizeWindow(winName, width, height)
-
-if __name__ == '__main__':
-    ventana = Ventana()
-    ventana.main()
-    Lists.PiezasMenores_B.remove("Pawn_1")
-    ventana.refresh_playing("Torre")
-    ventana.main()

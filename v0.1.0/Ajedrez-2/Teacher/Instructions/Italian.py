@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def calibration():
+def calibration_1():
     return u"Marca los puntos siguiendo este orden y desde el punto\n" \
            u"de vista del jugador blanco:\n\n" \
            u"     1- Casilla A1: esquina inferior izquierda\n" \
@@ -11,3 +11,11 @@ def calibration():
            u"Mi recomendación es que marques las esquinas interiores en\n" \
            u"vez de las líneas. Al acabar, pulsa enter y aparecerán el resto\n" \
            u"de puntos del tablero."
+
+
+def camera_choosing():
+    return u'Selecciona la cámara que vayas a usar.'
+
+
+def calibration_2():
+    return u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'

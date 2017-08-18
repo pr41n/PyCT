@@ -2,19 +2,17 @@
 
 import cv2
 import numpy as np
+
 from Functions import *
 from Window import OpenCV
+import Audio
 
-puntos = []
-rectify_points = []
-esquinas = list
+sts = Audio.sts
 
 calibrated = False
-sts = Sts('spanish')
 
 
 class ChessBoard:
-
     def __init__(self, img, calibrate=True, esq=list, size=8):
         global calibrated
         self.patternSize = size + 1
@@ -28,7 +26,6 @@ class ChessBoard:
 
         if not calibrate:
             self.points_roi = esq
-
             self.transform = self.compute_warp(self.points_roi)
 
         else:
@@ -54,7 +51,7 @@ class ChessBoard:
             # n = 0
             for point in self.points_image:
                 cv2.circle(self.image, tuple(point.astype(int)), 5, (0, 255, 0), -1)
-                puntos.append(point)
+                Lists.points.append(point)
                 # cv2.putText(self.image, str(n), tuple(point.astype(int)),
                 #             fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=1)
                 # n += 1
@@ -62,13 +59,11 @@ class ChessBoard:
             #
 
             cv2.imshow('Calibrate', self.image)
-            thread_starter(sts.say, [u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'])
-            k = cv2.waitKey(0) & 0xFF
-            if k == 10:
-                calibrated = True
+            thread_starter(sts.say, [Audio.instructions.calibration_2()])
 
-            elif k == 27:
-                calibrated = False
+            k = cv2.waitKey(0) & 0xFF
+
+            calibrated = True if k == 10 else False
 
             if not calibrated:
                 return
@@ -76,10 +71,10 @@ class ChessBoard:
             n = 0
             for y in range(1, 9):
                 for x in range(1, 9):
-                    Lists.casillas[(x, y)] = [list(puntos[n].astype(int)),
-                                              list(puntos[n + 1].astype(int)),
-                                              list(puntos[n + 9].astype(int)),
-                                              list(puntos[n + 10].astype(int))]
+                    Lists.squares[(x, y)] = [list(Lists.points[n].astype(int)),
+                                             list(Lists.points[n + 1].astype(int)),
+                                             list(Lists.points[n + 9].astype(int)),
+                                             list(Lists.points[n + 10].astype(int))]
                     n += 1
                 n += 1
 
@@ -88,7 +83,7 @@ class ChessBoard:
         if event == cv2.EVENT_LBUTTONDOWN:
 
             self.points_roi.append((float(x), float(y)))
-            Lists.esquinas.append((float(x), float(y)))
+            Lists.corners.append((float(x), float(y)))
 
             cv2.circle(self.image, (x, y), 5, (255, 0, 0), -1)
             cv2.imshow('Calibrate', self.image)
@@ -164,7 +159,7 @@ class ChessBoard:
         # n = 0
         for point in points_image:
             cv2.circle(image, tuple(point.astype(int)), 5, (0, 255, 0), -1)
-            rectify_points.append(point)
+            Lists.rectify_points.append(point)
             # cv2.putText(image, str(n), tuple(point.astype(int)),
             #            fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=0.5)
             # n += 1
@@ -173,14 +168,14 @@ class ChessBoard:
         n = 0
         for y in range(1, 9):
             for x in range(1, 9):
-                Lists.rectify_squares[(x, y)] = [list(rectify_points[n].astype(int)),
-                                                 list(rectify_points[n + 1].astype(int)),
-                                                 list(rectify_points[n + 9].astype(int)),
-                                                 list(rectify_points[n + 10].astype(int))]
+                Lists.rectify_squares[(x, y)] = [list(Lists.rectify_points[n].astype(int)),
+                                                 list(Lists.rectify_points[n + 1].astype(int)),
+                                                 list(Lists.rectify_points[n + 9].astype(int)),
+                                                 list(Lists.rectify_points[n + 10].astype(int))]
                 n += 1
             n += 1
 
-        # self.seleccionar(image)
+        # self.select(image)
 
     def rectify_image(self, img_src):
         status, trf = cv2.invert(self.transform)
@@ -193,7 +188,8 @@ class ChessBoard:
 
         return img_dst
 
-    def seleccionar(self, image):
+    @staticmethod
+    def select(image):
         sub_img = image
         while True:
 
@@ -204,51 +200,47 @@ class ChessBoard:
                 break
 
             if k == ord('c'):
+                square = inv_change_position(raw_input("Casilla: "))
 
-                casilla = inv_cambio_posicion(raw_input("Casilla: "))
-
-                for j in Lists.rectify_squares[casilla]:
+                for j in Lists.rectify_squares[square]:
                     cv2.circle(sub_img, tuple(j), 5, (0, 0, 255), -1)
 
-            cv2.namedWindow('main',  cv2.WINDOW_NORMAL)
-            cv2.imshow('main', sub_img)
+            cv2.namedWindow('select',  cv2.WINDOW_NORMAL)
+            cv2.imshow('selct', sub_img)
 
 
 class Calibration:
     def __init__(self, img):        # Image is a file
-        self.tablero = ChessBoard(img)
-        self.rectified_image = self.tablero.rectify_image(cv2.imread(img))
-        self.tablero.rectify_chessboard(self.rectified_image)
+        self.chessboard = ChessBoard(img)
+        self.rectified_image = self.chessboard.rectify_image(cv2.imread(img))
+        self.chessboard.rectify_chessboard(self.rectified_image)
 
     def rectify_image(self, img):       # Image is not a file
-        self.rectified_image = self.tablero.rectify_image(img)
+        self.rectified_image = self.chessboard.rectify_image(img)
         return self.rectified_image
 
-    def value(self):
+    @staticmethod
+    def value():
         return calibrated
 
 
 class Detection:
-    def __init__(self, patch1, patch2, jugador):        # Images are files
-        self.tablero = ChessBoard(patch1, False, Lists.esquinas)
+    def __init__(self, patch1, patch2, player):        # Images are files
+        self.chessboard = ChessBoard(patch1, False, Lists.corners)
 
         self.patch1 = patch1
         self.patch2 = patch2
 
-        self.lista = []
-        if jugador == 1:
-            self.lista = Lists.casillasOcupadas['Blancas']
-        elif jugador == 2:
-            self.lista = Lists.casillasOcupadas['Negras']
+        self.lista = Lists.OccupiedSquares['White'] if player == 1 else Lists.OccupiedSquares['Black']
 
-    def Tablero(self):
-        img_1 = self.tablero.rectify_image(cv2.imread(self.patch1))
-        img_2 = self.tablero.rectify_image(cv2.imread(self.patch2))
+    def Board(self):
+        img_1 = self.chessboard.rectify_image(cv2.imread(self.patch1))
+        img_2 = self.chessboard.rectify_image(cv2.imread(self.patch2))
 
-        contornos, umbral, resta = self.Resta(img_1, img_2)
+        contours, threshold, diff = self.Diff(img_1, img_2)
         """
-        cv2.imshow('umbral', umbral)
-        cv2.imshow('resta', resta)
+        cv2.imshow('threshold', threshold)
+        cv2.imshow('diff', diff)
 
         k = cv2.waitKey(0)
 
@@ -256,12 +248,12 @@ class Detection:
             cv2.destroyAllWindows()
             exit(11)
 
-        cv2.destroyWindow('umbral')
-        cv2.destroyWindow('resta')
+        cv2.destroyWindow('threshold')
+        cv2.destroyWindow('diff')
         """
 
         areas = []
-        for c in contornos:
+        for c in contours:
             if cv2.contourArea(c) > 1000:
                 areas.append(cv2.contourArea(c))
 
@@ -269,52 +261,52 @@ class Detection:
             max_areas = areas
 
         elif len(areas) < 2:
-            return self.Casillas()
+            return self.Squares()
 
         else:
             areas.sort()
             max_areas = [areas[len(areas) - 1], areas[len(areas) - 2]]
 
-        max_contornos = []
-        for c in contornos:
+        max_contours = []
+        for c in contours:
             for a in max_areas:
                 if cv2.contourArea(c) == a:
-                    max_contornos.append(c)
+                    max_contours.append(c)
 
-        casillas = []
+        squares = []
         pts = []
 
-        for c in max_contornos:
+        for c in max_contours:
             x, y, w, h = cv2.boundingRect(c)
 
             cv2.rectangle(img_2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            centro = ((2 * x + w) / 2, (2 * y + h) / 2)
-            pts.append(centro)
+            center = ((2 * x + w) / 2, (2 * y + h) / 2)
 
-            cv2.circle(img_2, centro, 3, (255, 0, 0))
+            pts.append(center)
+            cv2.circle(img_2, center, 3, (255, 0, 0))
 
             k = cv2.waitKey(1)
             if k == 27:
                 cv2.destroyAllWindows()
                 exit(11)
 
-            for punto in pts:
+            for p in pts:
                 for i in Lists.rectify_squares:
                     j = Lists.rectify_squares[i]
 
-                    inf_izq = tuple(j[2])
-                    sup_der = tuple(j[1])
+                    left_bottom = tuple(j[2])
+                    right_top = tuple(j[1])
 
-                    if inf_izq[0] < punto[0] and inf_izq[1] < punto[1] and \
-                       sup_der[0] > punto[0] and sup_der[1] > punto[1]:
+                    if left_bottom[0] < p[0] and left_bottom[1] < p[1] and \
+                       right_top[0] > p[0] and right_top[1] > p[1]:
 
-                        if i not in casillas:
-                            casillas.append(i)
+                        if i not in squares:
+                            squares.append(i)
         """
         cv2.imshow('%s' % img_2, img_2)
-        cv2.imshow('umbral', umbral)
-        cv2.imshow('resta', resta)
+        cv2.imshow('threshold', threshold)
+        cv2.imshow('diff', diff)
 
         k = cv2.waitKey(0)
 
@@ -323,71 +315,71 @@ class Detection:
             exit(11)
 
         cv2.destroyWindow('%s' % img_2)
-        cv2.destroyWindow('umbral')
-        cv2.destroyWindow('resta')
+        cv2.destroyWindow('threshold')
+        cv2.destroyWindow('diff')
         """
-        if len(casillas) == 2:
+        if len(squares) == 2:
             pos0, pos1 = give_values(tuple, 2)
 
-            for casilla in casillas:
-                if casilla in self.lista:
-                    pos0 = casilla
+            for square in squares:
+                if square in self.lista:
+                    pos0 = square
                 else:
-                    pos1 = casilla
+                    pos1 = square
 
             try:
                 print pos0[0], pos0[1], pos1[0], pos1[1]
                 return pos0, pos1
 
             except TypeError:
-                return self.Casillas()
+                return self.Squares()
 
         else:
-            return self.Casillas()
+            return self.Squares()
 
-    def Casillas(self):
-        print "casillas"
-        casillas = {}
+    def Squares(self):
+        print "squares"
+        squares = {}
         for y in range(1, 9):
             for x in range(1, 9):
-                thread = thread_starter(self.Sub_Casillas, [x, y, casillas])
+                thread = thread_starter(self.__squareProcess, [x, y, squares])
 
                 if (x, y) == (8, 8):
                     thread.join()
         areas = []
-        for casilla in casillas:
-            areas.append(casillas[casilla])
+        for square in squares:
+            areas.append(squares[square])
+
         areas.sort()
         max_areas = [areas[len(areas) - 1], areas[len(areas) - 2]]
 
-        pos0 = tuple
-        pos1 = tuple
+        pos0, pos1 = give_values(tuple, 2)
 
-        for casilla in casillas:
-            if casillas[casilla] in max_areas:
-                if casilla in self.lista:
-                    pos0 = casilla
+        for square in squares:
+            if squares[square] in max_areas:
+                if square in self.lista:
+                    pos0 = square
                 else:
-                    pos1 = casilla
+                    pos1 = square
 
         try:
             print pos0[0], pos0[1], pos1[0], pos1[1]
             return pos0, pos1
 
         except TypeError:
-            print casillas
+            print squares
             print pos0, pos1
             return None, None
 
-    def Sub_Casillas(self, x, y, dic):
-        corners = np.array(Lists.casillas[(x, y)], np.float32)
+    def __squareProcess(self, x, y, dic):
+        corners = np.array(Lists.squares[(x, y)], np.float32)
 
-        casilla_1 = self.tablero.rectify_crop(cv2.imread(self.patch1), corners)
-        casilla_2 = self.tablero.rectify_crop(cv2.imread(self.patch2), corners)
+        square_1 = self.chessboard.rectify_crop(cv2.imread(self.patch1), corners)
+        square_2 = self.chessboard.rectify_crop(cv2.imread(self.patch2), corners)
 
-        contornos, umbral, resta = self.Resta(casilla_1, casilla_2)
+        contours = self.Diff(square_1, square_2)[0]
 
-        for c in contornos:
+        for c in contours:
             if cv2.contourArea(c) > 400:
                 if (x, y) not in dic:
                     dic[(x, y)] = cv2.contourArea(c)
@@ -396,23 +388,23 @@ class Detection:
                     dic[(x, y)] = cv2.contourArea(c)
 
     @staticmethod
-    def Resta(img_1, img_2):
+    def Diff(img_1, img_2):
         kernel = np.ones((5, 5), np.uint8)
 
-        gris_1 = cv2.cvtColor(img_1, cv2.COLOR_BGR2GRAY)
-        gris_2 = cv2.cvtColor(img_2, cv2.COLOR_BGR2GRAY)
+        grey_1 = cv2.cvtColor(img_1, cv2.COLOR_BGR2GRAY)
+        grey_2 = cv2.cvtColor(img_2, cv2.COLOR_BGR2GRAY)
 
-        resta = cv2.absdiff(gris_1, gris_2)
+        diff = cv2.absdiff(grey_1, grey_2)
 
-        umbral = cv2.threshold(resta, 20, 255, cv2.THRESH_BINARY)[1]
-        umbral = cv2.morphologyEx(umbral, cv2.MORPH_OPEN, kernel)
-        umbral = cv2.dilate(umbral, kernel, iterations=2)
-        umbral = cv2.morphologyEx(umbral, cv2.MORPH_CLOSE, kernel)
+        threshold = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1]
+        threshold = cv2.morphologyEx(threshold, cv2.MORPH_OPEN, kernel)
+        threshold = cv2.dilate(threshold, kernel, iterations=2)
+        threshold = cv2.morphologyEx(threshold, cv2.MORPH_CLOSE, kernel)
 
-        contornos_img = umbral.copy()
-        im, contornos, hierarchy = cv2.findContours(contornos_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        img_contour = threshold.copy()
+        im, contours, hierarchy = cv2.findContours(img_contour, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        return contornos, umbral, resta
+        return contours, threshold, diff
 
 
 class Camera:
@@ -425,13 +417,11 @@ class Camera:
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
 
-            from Synthesizer import Sts
-            sts = Sts('spanish')
-
-            thread_starter(prevent_auido_error, (u'Selecciona la cámara que vayas a usar.',))
+            thread_starter(prevent_auido_error, [Audio.instructions.camera_choosing()])
 
             OpenCV('camera 1', 200, 100, 500, 500)
             OpenCV('camera 2', 700, 100, 500, 500)
+
             self.cam_2 = cv2.VideoCapture(1)
             self.second_camera = True
 
@@ -450,11 +440,6 @@ class Camera:
 
                     k = cv2.waitKey(1) & 0xFF
                     video_exit(k)
-
-                    if k == 27:
-                        cam = cv2.VideoCapture(1)
-                        cv2.destroyAllWindows()
-                        break
 
                 else:
                     self.choosing = False
@@ -475,9 +460,3 @@ class Camera:
             self.election = num
             self.cam_1.release()
             self.cam_2.release()
-
-
-if __name__ == '__main__':
-    global calibrated
-    calibration = Calibration('DSCN9031.JPG')
-    print calibrated

@@ -7,12 +7,9 @@ class Sts:
         self.engine.setProperty('rate', 143)
         self.engine.setProperty('voice', language)
 
-    def say(self, texto):
-        self.engine.say(texto)
+    def say(self, text):
+        """This is the only way I found to make engine.say works"""
+        self.engine.say(text)
         self.engine.say(' ')
         self.engine.runAndWait()
         self.engine.runAndWait()
-
-if __name__ == '__main__':
-    sts = Sts('english')
-    sts.say("Hello, my name is PiCT")
