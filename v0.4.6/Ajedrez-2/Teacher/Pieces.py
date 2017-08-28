@@ -107,7 +107,7 @@ class Pawn(Piece):
             return False
 
 
-class Rock(Piece):
+class Rook(Piece):
     def correct_move(self, Ax, Ay, Bx, By):
         move_1 = abs(By-Ay) > 0 and Bx-Ax == 0
         move_2 = abs(Bx-Ax) > 0 and By-Ay == 0
@@ -197,29 +197,29 @@ class King(Piece):
 
                 if player == 1:
 
-                    if Bx == 7 and Lists.OccupiedSquares['White'][(8, 1)] == "Rock":
+                    if Bx == 7 and Lists.OccupiedSquares['White'][(8, 1)] == "Rook":
 
                         del Lists.OccupiedSquares['White'][(8, 1)]
-                        Lists.OccupiedSquares['White'][(6, 1)] = "Rock"
+                        Lists.OccupiedSquares['White'][(6, 1)] = "Rook"
 
-                    elif Bx == 3 and Lists.OccupiedSquares['White'][(1, 1)] == "Rock":
+                    elif Bx == 3 and Lists.OccupiedSquares['White'][(1, 1)] == "Rook":
 
                         del Lists.OccupiedSquares['White'][(1, 1)]
-                        Lists.OccupiedSquares['White'][(4, 1)] = "Rock"
+                        Lists.OccupiedSquares['White'][(4, 1)] = "Rook"
 
                 #
 
                 elif player == 2:
 
-                    if Bx == 7 and Lists.OccupiedSquares['Black'][(8, 8)] == "Rock":
+                    if Bx == 7 and Lists.OccupiedSquares['Black'][(8, 8)] == "Rook":
 
                         del Lists.OccupiedSquares['Black'][(8, 8)]
-                        Lists.OccupiedSquares['Black'][(6, 8)] = "Rock"
+                        Lists.OccupiedSquares['Black'][(6, 8)] = "Rook"
 
-                    elif Bx == 3 and Lists.OccupiedSquares['Black'][(1, 8)] == "Rock":
+                    elif Bx == 3 and Lists.OccupiedSquares['Black'][(1, 8)] == "Rook":
 
                         del Lists.OccupiedSquares['Black'][(1, 8)]
-                        Lists.OccupiedSquares['Black'][(4, 8)] = "Rock"
+                        Lists.OccupiedSquares['Black'][(4, 8)] = "Rook"
 
                 sleep(2)
 

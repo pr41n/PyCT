@@ -13,7 +13,7 @@ def change_piece(a):
 
     if a == "Pawn":
         a = u"Peón"
-    elif a == "Rock":
+    elif a == "Rook":
         a = "Torre"
     elif a == "Knight":
         a = "Caballo"
@@ -32,7 +32,7 @@ def inv_change_piece(a):
     It is only used in the promotion, so there are no pawn nor king."""
 
     if a.capitalize() == "Torre":
-        a = "Rock"
+        a = "Rook"
     elif a.capitalize() == "Caballo":
         a = "Knight"
     elif a.capitalize() == "Alfil":
@@ -140,12 +140,12 @@ def change_lists(which, e0, ef, player, p):
                         low_2.remove(j)
                         break
 
-        elif eaten == "Rock":
+        elif eaten == "Rook":
             if eval(compar_1):
-                high_2.remove("Rock_2")
+                high_2.remove("Rook_2")
 
             elif eval(compar_2):
-                high_2.remove("Rock_1")
+                high_2.remove("Rook_1")
 
         elif eaten == "Knight":
             if eval(compar_1):

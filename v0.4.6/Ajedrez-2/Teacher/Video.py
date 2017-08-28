@@ -29,13 +29,13 @@ class ChessBoard:
             self.transform = self.compute_warp(self.points_roi)
 
         else:
-
-            cv2.namedWindow('Calibrate', cv2.WINDOW_NORMAL)
-            cv2.moveWindow('Calibrate', 1100, -100)
-            cv2.resizeWindow('Calibrate', 600, 500)
+            win_name = Audio.instructions.open_cv_2
+            cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
+            cv2.moveWindow(win_name, 1100, -100)
+            cv2.resizeWindow(win_name, 600, 500)
             self.points_roi = []
-            cv2.setMouseCallback('Calibrate', self.mouse_click, self)
-            cv2.imshow('Calibrate', self.image)
+            cv2.setMouseCallback(win_name, self.mouse_click, self)
+            cv2.imshow(win_name, self.image)
 
             cv2.waitKey(0)
 
@@ -58,8 +58,8 @@ class ChessBoard:
 
             #
 
-            cv2.imshow('Calibrate', self.image)
-            thread_starter(sts.say, [Audio.instructions.calibration_2()])
+            cv2.imshow(win_name, self.image)
+            thread_starter(sts.say, [Audio.instructions.calibration_2])
 
             k = cv2.waitKey(0) & 0xFF
 
@@ -86,7 +86,7 @@ class ChessBoard:
             Lists.corners.append((float(x), float(y)))
 
             cv2.circle(self.image, (x, y), 5, (255, 0, 0), -1)
-            cv2.imshow('Calibrate', self.image)
+            cv2.imshow(Audio.instructions.open_cv_2, self.image)
 
     def compute_warp(self, points_roi):
 
@@ -338,7 +338,7 @@ class Detection:
             return self.Squares()
 
     def Squares(self):
-        print "squares"
+        print "casillas"
         squares = {}
         for y in range(1, 9):
             for x in range(1, 9):
@@ -417,10 +417,10 @@ class Camera:
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
 
-            thread_starter(prevent_auido_error, [Audio.instructions.camera_choosing()])
+            thread_starter(prevent_auido_error, [Audio.instructions.camera_choosing])
 
-            OpenCV('camera 1', 200, 100, 500, 500)
-            OpenCV('camera 2', 700, 100, 500, 500)
+            OpenCV('cam 1', 200, 100, 500, 500)
+            OpenCV('cam 2', 700, 100, 500, 500)
 
             self.cam_2 = cv2.VideoCapture(1)
             self.second_camera = True
@@ -432,11 +432,11 @@ class Camera:
                     ret_1, frame_1 = self.cam_1.read()
                     ret_2, frame_2 = self.cam_2.read()
 
-                    cv2.imshow('camera 1', frame_1)
-                    cv2.imshow('camera 2', frame_2)
+                    cv2.imshow('cam 1', frame_1)
+                    cv2.imshow('cam 2', frame_2)
 
-                    cv2.setMouseCallback('camera 1', self.election_1)
-                    cv2.setMouseCallback('camera 2', self.election_2)
+                    cv2.setMouseCallback('cam 1', self.election_1)
+                    cv2.setMouseCallback('cam 2', self.election_2)
 
                     k = cv2.waitKey(1) & 0xFF
                     video_exit(k)

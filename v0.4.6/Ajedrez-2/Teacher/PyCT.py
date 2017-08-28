@@ -1,6 +1,7 @@
 # -*- coding: cp1252 -*-
 
 import cv2
+import numpy as np
 
 import Audio
 import Pieces
@@ -54,6 +55,9 @@ class PyCT:
 
         self.good, self.bad, self.checkmate = self.arduino_conection()
 
+        self.sort_of_detection = self.win.sort_of_detection()
+        print self.sort_of_detection
+
         self.player = 1
         self.turn = 1
         self.match = True
@@ -70,7 +74,10 @@ class PyCT:
 
         while self.match:
             error = False, None
-            pos0, pos1 = self.detect_move()
+            if self.sort_of_detection == 'automatic':
+                pos0, pos1 = self.detect_move_automatically()
+            else:
+                pos0, pos1 = self.detect_move()
 
             try:
                 piece, move = self.detect_piece()
@@ -101,25 +108,25 @@ class PyCT:
 
     def calibrated(self, first_attempt):
         global calibration
-        OpenCV('Coloca el tablero', 1100, -100, 440, 350)
+        OpenCV(Audio.instructions.open_cv_1, 1100, -100, 440, 350)
 
         while True:
             k = cv2.waitKey(1) & 0xFF
 
             ret, frame = self.cam.read()
-            cv2.imshow('Coloca el tablero', frame)
+            cv2.imshow(Audio.instructions.open_cv_1, frame)
             cv2.imwrite('PythonCache/frame.jpg', frame)
             self.win.video('PythonCache/frame.jpg')
 
             if k == 10:
-                cv2.destroyWindow('Coloca el tablero')
+                cv2.destroyWindow(Audio.instructions.open_cv_1)
                 if first_attempt:
                     thread_starter(self.audio.calibration, [2])
                     self.win.calibration_instructions()
 
                 cv2.imwrite('PythonCache/ChessBoard.jpg', frame)
                 calibration = Calibration('PythonCache/ChessBoard.jpg')
-                cv2.destroyWindow('Calibrate')
+                cv2.destroyWindow(Audio.instructions.open_cv_2)
                 break
 
             video_exit(k)
@@ -144,11 +151,15 @@ class PyCT:
             return 'None', 'None', 'None'
 
     def detect_move(self):
+        """Detects manual and semi-automatic moves,
+        because of the only difference between them
+        is press the space bar once or twice"""
+
         global pos0, pos1, calibration, rectified
         instructions = cv2.imread('Instructions/Video.png')
         try:
             move = False
-            OpenCV('Sobre esta ventana pulsa:', 490, 485, 435, 170)
+            OpenCV(Audio.instructions.open_cv_3, 490, 485, 435, 170)
             original = None
             while True:
                 k = cv2.waitKey(1)
@@ -165,13 +176,15 @@ class PyCT:
                 else:
                     img = frame
 
-                cv2.imshow('Sobre esta ventana pulsa:', instructions)
+                cv2.imshow(Audio.instructions.open_cv_3, instructions)
                 cv2.imwrite('PythonCache/frame.jpg', img)
                 self.win.video('PythonCache/frame.jpg')
 
                 video_exit(k)
 
-                if not move:
+                if (k == 32 and self.sort_of_detection == 'manual' or
+                   self.sort_of_detection == 'semi-automatic') and not move:
+
                     move = True
                     cv2.imwrite('PythonCache/origin.jpg', frame)
                     original = 'PythonCache/origin.jpg'
@@ -188,12 +201,99 @@ class PyCT:
                     pos0, pos1 = self.win.movement(None)
                     return pos0, pos1
 
-        except cv2.error:
+        except (cv2.error, IndexError):
             thread_starter(self.audio.error_2)
             pos0, pos1 = self.win.movement(None)
             return pos0, pos1
 
-        except IndexError:
+    def detect_move_automatically(self):
+        """Detects the move automatically using histograms"""
+
+        global pos0, pos1, calibration, rectified
+        instructions = cv2.imread('Instructions/Video.png')
+        try:
+            OpenCV(Audio.instructions.open_cv_3, 490, 485, 435, 170)
+            first_frame = True
+            moving, moved, show_diff = give_values(False, 3)
+            origin = None
+            original = None
+            while True:
+                k = cv2.waitKey(1)
+
+                ret, frame = self.cam.read()
+                if k == ord('r'):
+                    if rectified:
+                        rectified = False
+                    else:
+                        rectified = True
+
+                if rectified:
+                    img = calibration.rectify_image(frame)
+                else:
+                    img = frame
+
+                cv2.imshow(Audio.instructions.open_cv_3, instructions)
+                cv2.imwrite('PythonCache/frame.jpg', img)
+                self.win.video('PythonCache/frame.jpg')
+
+                video_exit(k)
+
+                if k == 27:
+                    pos0, pos1 = self.win.movement(None)
+                    return pos0, pos1
+
+                elif k == ord('s'):
+                    if not show_diff:
+                        show_diff = True
+                    else:
+                        show_diff = False
+                        cv2.destroyWindow('diff')
+                        cv2.destroyWindow('histogram')
+
+                if first_frame:
+                    origin = frame
+                    original = 'PythonCache/origin.jpg'
+                    cv2.imwrite(original, frame)
+                    first_frame = False
+
+                diff = cv2.absdiff(frame, origin)
+                im = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+
+                histogram = cv2.calcHist([im], [0], None, [256], [0, 256])
+
+                hist = np.ones((256, 256))
+                hist[:] = histogram
+
+                if show_diff:
+                    cv2.imshow('diff', diff)
+                    cv2.imshow('histogram', hist)
+
+                n = 0
+                for i in histogram:
+                    if i > 1000:
+                        n += 1
+
+                if moving and n < 15:
+                        time.sleep(1)
+                        now = 'PythonCache/now.jpg'
+                        cv2.imwrite(now, frame)
+                        """
+                        cv2.imshow('frame', frame)
+                        cv2.imshow('origin', origin)
+                        cv2.waitKey(0)
+                        """
+                        detection = Detection(original, now, self.player)
+                        pos0, pos1 = detection.Board()
+                        if show_diff:
+                            cv2.destroyWindow('diff')
+                            cv2.destroyWindow('histogram')
+                        return pos0, pos1
+
+                if n > 20:
+                    print n
+                    moving = True
+
+        except (cv2.error, IndexError):
             thread_starter(self.audio.error_2)
             pos0, pos1 = self.win.movement(None)
             return pos0, pos1
@@ -213,10 +313,10 @@ class PyCT:
                 self.lets_advice = True
                 self.advice = self.advices.pawn_1
 
-        elif occupied_squares[pos0] == "Rock":
-            from Pieces import Rock
-            who = Rock()
-            which = "Rock"
+        elif occupied_squares[pos0] == "Rook":
+            from Pieces import Rook
+            who = Rook()
+            which = "Rook"
             self.n_pawns_2 += 1
 
         elif occupied_squares[pos0] == "Knight":
@@ -263,7 +363,7 @@ class PyCT:
 
         if who.correct_move(pos0[0], pos0[1], pos1[0], pos1[1]):
 
-            H = "Turno %s" % self.turn, "Jugador %s" % self.player
+            H = "%s %d" % (Audio.instructions.turn, self.turn), "%s %d" % (Audio.instructions.player, self.player)
             J = int
             K = None
 

@@ -26,7 +26,7 @@ class Window:
             string = re.sub("Queen", u"Reina", string)
             string = re.sub("Bishop", u"Alfil", string)
             string = re.sub("Knight", u"Caballo", string)
-            string = re.sub("Rock", u"Torre", string)
+            string = re.sub("Rook", u"Torre", string)
             string = re.sub("Pawn", u"Peon", string)
 
         elif to == 'english':
@@ -34,8 +34,11 @@ class Window:
             string = re.sub(u"Reina", "Queen", string)
             string = re.sub(u"Alfil", "Bishop", string)
             string = re.sub(u"Caballo", "Knight", string)
-            string = re.sub(u"Torre", "Rock", string)
+            string = re.sub(u"Torre", "Rook", string)
             string = re.sub(r"Peon", "Pawn", string)
+
+        elif to == 'italian':
+            pass
 
         return string
 
@@ -51,7 +54,7 @@ class Window:
         for i in lists[0] + lists[1]:
             string = string + "%s\n" % i
 
-        return self.translate(string, 'spanish')
+        return self.translate(string, Audio.language)
 
     def change_idiom(self, idiom):
         if idiom == 'spanish':
@@ -64,6 +67,7 @@ class Window:
             Audio.selected_idiom = Audio.Italian()
 
         Audio.selected_idiom.main()
+        self.refresh_gui()
 
     def __init__(self):
         self.window = gtk.Window()
@@ -94,8 +98,10 @@ class Window:
         self.box3.set_homogeneous(10)
         self.box2.set_homogeneous(10)
 
-        self.playing_w = gtk.Label(self.playing("Blancas", [Lists.WhiteHighPieces, Lists.WhiteLowPieces]))
-        self.playing_b = gtk.Label(self.playing("Negras", [Lists.BlackHighPieces, Lists.BlackLowPieces]))
+        self.playing_w = gtk.Label(self.playing(Audio.instructions.player_1,
+                                                [Lists.WhiteHighPieces, Lists.WhiteLowPieces]))
+        self.playing_b = gtk.Label(self.playing(Audio.instructions.player_2,
+                                                [Lists.BlackHighPieces, Lists.BlackLowPieces]))
         self.label = gtk.Label()
 
         self.image = gtk.Image()
@@ -119,7 +125,7 @@ class Window:
         self.english = self.make_button('English', lambda (widget): self.change_idiom('english'), self.box8)
         self.italian = self.make_button('Italiano', lambda (widget): self.change_idiom('italian'), self.box8)
 
-        self.record = self.make_button('Grabar partida\n(no disponible)', lambda (widget): None, self.box5)
+        self.record = self.make_button('Salvar partida', lambda (widget): None, self.box5)
 
         self.exit = self.make_button('Salir', lambda (widget): exit(11), self.box5)
 
@@ -169,11 +175,20 @@ class Window:
                 else:
                     continue
 
-        # text_w = re.sub(r"Peon", u"Peón", self.translate(text_w, 'spanish'))
-        # text_b = re.sub(r"Peon", u"Peón", self.translate(text_b, 'spanish'))
+        self.playing_w.set_text(self.translate(text_w, Audio.language))
+        self.playing_b.set_text(self.translate(text_b, Audio.language))
 
-        self.playing_w.set_text(self.translate(text_w, 'spanish'))
-        self.playing_b.set_text(self.translate(text_b, 'spanish'))
+    def refresh_gui(self):
+        self.playing_w.set_text(self.playing(Audio.instructions.player_1,
+                                                [Lists.WhiteHighPieces, Lists.WhiteLowPieces]))
+        self.playing_b.set_text(self.playing(Audio.instructions.player_2,
+                                                [Lists.BlackHighPieces, Lists.BlackLowPieces]))
+
+        self.refresh_playing(None, None)
+
+        self.start.set_label(Audio.instructions.start)
+        self.record.set_label(Audio.instructions.record)
+        self.exit.set_label(Audio.instructions.out)
 
     def video(self, img):
         pix = gtk.gdk.pixbuf_new_from_file(img)
@@ -185,7 +200,7 @@ class Window:
         self.window.show_all()
 
     def calibration_instructions(self):
-        self.label.set_text(Audio.instructions.calibration_1())
+        self.label.set_text(Audio.instructions.calibration_1)
         self.label.set_justify(0)
         self.box1.pack_start(self.label)
         self.label.set_alignment(0.5, 0.04)
@@ -236,10 +251,10 @@ class Window:
         win = gtk.Window()
         win.set_size_request(500, 40)
         win.set_position(gtk.WIN_POS_CENTER)
-        win.set_title('Pieza en la que corona')
+        win.set_title(Audio.instructions.promote_1())
 
         box = gtk.HBox()
-        label = gtk.Label('Pieza: ')
+        label = gtk.Label(Audio.instructions.promote_2())
         text = gtk.Entry()
 
         button = gtk.Button('OK')
@@ -266,11 +281,11 @@ class Window:
         win = gtk.Window()
         win.set_size_request(500, 40)
         win.set_position(gtk.WIN_POS_CENTER)
-        win.set_title('Escriba las casillas respectivas')
+        win.set_title(Audio.instructions.move_1)
 
         box = gtk.HBox()
-        label1 = gtk.Label('Antes: ')
-        label2 = gtk.Label('Ahora: ')
+        label1 = gtk.Label(Audio.instructions.move_2)
+        label2 = gtk.Label(Audio.instructions.move_3)
         text1 = gtk.Entry()
         text2 = gtk.Entry()
 
@@ -289,8 +304,54 @@ class Window:
         global pos0, pos1
         return inv_change_position(pos0), inv_change_position(pos1)
 
+    def sort_of_detection(self):
+        def type_1(w):
+            global sort
+            sort = 'manual'
+            win.hide()
+            gtk.main_quit()
+
+        def type_2(w):
+            global sort
+            sort = 'semi-automatic'
+            win.hide()
+            gtk.main_quit()
+
+        def type_3(w):
+            global sort
+            sort = 'automatic'
+            win.hide()
+            gtk.main_quit()
+
+        win = gtk.Window()
+        win.set_size_request(500, 40)
+        win.set_position(gtk.WIN_POS_CENTER)
+        win.set_title(Audio.instructions.sort_of_detection)
+
+        box = gtk.HBox()
+
+        manual = self.make_button(Audio.instructions.sort_of_detection_1, type_1, box)
+        semi_automatic = self.make_button(Audio.instructions.sort_of_detection_2, type_2, box)
+        automatic = self.make_button(Audio.instructions.sort_of_detection_3, type_3, box)
+
+        manual.set_tooltip_text(Audio.instructions.detection_description_1)
+        semi_automatic.set_tooltip_text(Audio.instructions.detection_description_2)
+        automatic.set_tooltip_text(Audio.instructions.detection_description_3)
+
+        win.add(box)
+        win.show_all()
+        gtk.main()
+
+        global sort
+        return sort
+
 
 def OpenCV(winName, x, y, width, height):
         cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
         cv2.moveWindow(winName, x, y)
         cv2.resizeWindow(winName, width, height)
+
+if __name__ == '__main__':
+    ventana = Window()
+    ventana.main()
+    print ventana.sort_of_detection()
