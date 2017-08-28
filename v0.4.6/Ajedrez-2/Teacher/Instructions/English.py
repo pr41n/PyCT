@@ -34,7 +34,7 @@ sort_of_detection_2 = "Semi-Automatic"
 sort_of_detection_3 = "Automatic"
 detection_description_1 = "The most accurate one.\nYou must press space before and\nafter doing the play."
 detection_description_2 = "Less accurate than manual.\nYou must press space after\ndoing the play."
-detection_description_3 = "The less accurate one.\nThe detection is making automatically\nafter doing the play."
+detection_description_3 = "The less accurate one.\nThe detection is being made automatically\nafter doing the play."
 
 
 turn = "Turn"
