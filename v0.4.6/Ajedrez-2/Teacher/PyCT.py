@@ -290,7 +290,6 @@ class PyCT:
                         return pos0, pos1
 
                 if n > 20:
-                    print n
                     moving = True
 
         except (cv2.error, IndexError):

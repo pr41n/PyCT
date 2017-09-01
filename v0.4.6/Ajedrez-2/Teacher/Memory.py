@@ -15,8 +15,8 @@ def _VmB(VmKey):
         v = t.read()
         t.close()
 
-    except OSError:
-        return 0.0      # non Linux?
+    except (OSError, IOError):
+        return 0.0      # non Linux
 
     i = v.index(VmKey)
     v = v[i:].split(None, 3)

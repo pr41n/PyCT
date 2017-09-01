@@ -1,6 +1,11 @@
 # -*- coding: cp1252 -*-
 
-import gtk
+try:
+    import gtk
+except ImportError:
+    import pygtk
+    pygtk.require(2.0)
+    import gtk
 import re
 
 import cv2
