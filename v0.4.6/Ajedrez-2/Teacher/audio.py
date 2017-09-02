@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from synth import Sts
-from languages import Spanish as Sp, english as En, Italian as It
+from languages import Spanish as Sp, English as En, Italian as It
 from func import prevent_auido_error, give_values
 
 language = 'spanish'

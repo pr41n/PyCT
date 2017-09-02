@@ -3,9 +3,10 @@
 import threading
 import time
 
+from cleaner import Clean
+
 import lists
 import memory
-from cleaner import Clean
 
 
 def change_piece(a):
