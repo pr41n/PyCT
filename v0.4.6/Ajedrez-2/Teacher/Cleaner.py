@@ -9,14 +9,14 @@ class Clean:
     @staticmethod
     def images():
         """Delete all temporal images"""
-        images = glob('PythonCache/*.jpg')
+        images = glob('tmp/*.jpg')
         for image in images:
             remove(image)
 
     @staticmethod
     def pyc():
         """Delete all binary python files"""
-        pyc_files = glob('*.pyc') + glob('Instructions/*.pyc')
+        pyc_files = glob('*.pyc') + glob('languages/*.pyc') + glob('../*.pyc')
         for pyc in pyc_files:
             remove(pyc)
 

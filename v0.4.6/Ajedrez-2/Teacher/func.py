@@ -3,9 +3,9 @@
 import threading
 import time
 
-import Lists
-import Memory
-from Cleaner import Clean
+import lists
+import memory
+from cleaner import Clean
 
 
 def change_piece(a):
@@ -51,7 +51,6 @@ def change_position(coordinates):
 
     column = columns[coordinates[0] - 1]
     row = str(coordinates[1])
-
     return column + row
 
 
@@ -60,7 +59,6 @@ def inv_change_position(position):
 
     x = columns.index(position[0].upper()) + 1
     y = eval(position[1])
-
     return tuple([x, y])
 
 
@@ -73,27 +71,27 @@ def change_lists(which, e0, ef, player, p):
     #
 
     if player == 1:
-        list_1 = Lists.OccupiedSquares['White']
-        list_2 = Lists.OccupiedSquares['Black']
+        list_1 = lists.OccupiedSquares['White']
+        list_2 = lists.OccupiedSquares['Black']
 
-        high_1 = Lists.WhiteHighPieces
-        low_1 = Lists.WhiteLowPieces
+        high_1 = lists.WhiteHighPieces
+        low_1 = lists.WhiteLowPieces
 
-        high_2 = Lists.BlackHighPieces
-        low_2 = Lists.BlackLowPieces
+        high_2 = lists.BlackHighPieces
+        low_2 = lists.BlackLowPieces
 
         compar_1 = "ef[0] <= 4"
         compar_2 = "ef[0] > 4"
 
     elif player == 2:
-        list_1 = Lists.OccupiedSquares['Black']
-        list_2 = Lists.OccupiedSquares['White']
+        list_1 = lists.OccupiedSquares['Black']
+        list_2 = lists.OccupiedSquares['White']
 
-        high_1 = Lists.BlackHighPieces
-        low_1 = Lists.BlackLowPieces
+        high_1 = lists.BlackHighPieces
+        low_1 = lists.BlackLowPieces
 
-        high_2 = Lists.WhiteHighPieces
-        low_2 = Lists.WhiteLowPieces
+        high_2 = lists.WhiteHighPieces
+        low_2 = lists.WhiteLowPieces
 
         compar_1 = "ef[0] >= 4"
         compar_2 = "ef[0] < 4"
@@ -182,7 +180,7 @@ def video_exit(k):
     """Add different options during video streams."""
 
     if k == ord('m'):       # Print used memory
-        Memory.main()
+        memory.main()
 
     elif k == 227:          # Close the program cleaning cache
         Clean.images()
@@ -196,7 +194,7 @@ def video_exit(k):
 def prevent_auido_error(text):
     """Start a loop if an audio is being said."""
 
-    from Audio import sts       # Imported here to prevent ImportError between Audio and Functions modules
+    from audio import sts       # Imported here to prevent ImportError between Audio and Functions modules
 
     try:
         sts.say(text)
@@ -207,7 +205,7 @@ def prevent_auido_error(text):
 
 
 def give_values(value, n):
-    """Give n values of the recieved value."""
+    """Give n times the recieved value."""
     A = []
     for x in range(n):
         A.append(value)

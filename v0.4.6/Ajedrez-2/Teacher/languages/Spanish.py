@@ -42,3 +42,10 @@ detection_description_3 = u"La menos segura.\nLa detección se realiza automáti
 
 turn = "Turno"
 player = "Jugador"
+
+pawn = u"Peon"
+rook = u"Torre"
+knight = u"Caballo"
+bishop = u"Alfil"
+queen = u"Reina"
+king = u"Rey"

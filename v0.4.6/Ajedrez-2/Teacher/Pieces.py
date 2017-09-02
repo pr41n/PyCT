@@ -2,7 +2,7 @@
 
 from time import sleep
 
-import Lists
+import lists
 
 player = int
 answer = str
@@ -19,7 +19,7 @@ class Piece:
 
     @staticmethod
     def jump(Ax, Ay, Bx, By):
-        occupied_squares = Lists.occupied_squares()
+        occupied_squares = lists.occupied_squares()
     
         if abs(Bx - Ax) == 1 or abs(By - Ay) == 1:
             return False
@@ -68,8 +68,8 @@ class Pawn(Piece):
     def correct_move(self, Ax, Ay, Bx, By):
         ahora = (Bx, By)
 
-        lista_b = Lists.OccupiedSquares['White']
-        lista_n = Lists.OccupiedSquares['Black']
+        lista_b = lists.OccupiedSquares['White']
+        lista_n = lists.OccupiedSquares['Black']
 
         avance_x = Bx-Ax
         avance_y = By-Ay
@@ -197,29 +197,29 @@ class King(Piece):
 
                 if player == 1:
 
-                    if Bx == 7 and Lists.OccupiedSquares['White'][(8, 1)] == "Rook":
+                    if Bx == 7 and lists.OccupiedSquares['White'][(8, 1)] == "Rook":
 
-                        del Lists.OccupiedSquares['White'][(8, 1)]
-                        Lists.OccupiedSquares['White'][(6, 1)] = "Rook"
+                        del lists.OccupiedSquares['White'][(8, 1)]
+                        lists.OccupiedSquares['White'][(6, 1)] = "Rook"
 
-                    elif Bx == 3 and Lists.OccupiedSquares['White'][(1, 1)] == "Rook":
+                    elif Bx == 3 and lists.OccupiedSquares['White'][(1, 1)] == "Rook":
 
-                        del Lists.OccupiedSquares['White'][(1, 1)]
-                        Lists.OccupiedSquares['White'][(4, 1)] = "Rook"
+                        del lists.OccupiedSquares['White'][(1, 1)]
+                        lists.OccupiedSquares['White'][(4, 1)] = "Rook"
 
                 #
 
                 elif player == 2:
 
-                    if Bx == 7 and Lists.OccupiedSquares['Black'][(8, 8)] == "Rook":
+                    if Bx == 7 and lists.OccupiedSquares['Black'][(8, 8)] == "Rook":
 
-                        del Lists.OccupiedSquares['Black'][(8, 8)]
-                        Lists.OccupiedSquares['Black'][(6, 8)] = "Rook"
+                        del lists.OccupiedSquares['Black'][(8, 8)]
+                        lists.OccupiedSquares['Black'][(6, 8)] = "Rook"
 
-                    elif Bx == 3 and Lists.OccupiedSquares['Black'][(1, 8)] == "Rook":
+                    elif Bx == 3 and lists.OccupiedSquares['Black'][(1, 8)] == "Rook":
 
-                        del Lists.OccupiedSquares['Black'][(1, 8)]
-                        Lists.OccupiedSquares['Black'][(4, 8)] = "Rook"
+                        del lists.OccupiedSquares['Black'][(1, 8)]
+                        lists.OccupiedSquares['Black'][(4, 8)] = "Rook"
 
                 sleep(2)
 

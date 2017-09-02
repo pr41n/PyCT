@@ -36,10 +36,25 @@ sort_of_detection = u"Scegli il tipo di rilevazione che preferisci"
 sort_of_detection_1 = "Manuale"
 sort_of_detection_2 = u"Semi-Automatico"
 sort_of_detection_3 = u"Automatico"
-detection_description_1 = u"La più sicura.\nDevi premere spazio prima e\ndopo realizzare il movimento."
-detection_description_2 = u"Meno sicura che manuale.\nDevi premere spazio dopo aver\nrealizzato il movimento."
-detection_description_3 = u"La meno sicura.\nLa rivelazione si realizza automaticamente\ndopo aver realizzato il movimento."
 
+detection_description_1 = u"La più sicura.\n" \
+                          u"Devi premere spazio prima e\n" \
+                          u"dopo realizzare il movimento."
+
+detection_description_2 = u"Meno sicura che manuale.\n" \
+                          u"Devi premere spazio dopo aver\n" \
+                          u"realizzato il movimento."
+
+detection_description_3 = u"La meno sicura.\n" \
+                          u"La rivelazione si realizza automaticamente\n" \
+                          u"dopo aver realizzato il movimento."
 
 turn = "Turno"
 player = "Giocatore"
+
+pawn = "Pedone"
+rook = "Torre"
+knight = "Cavallo"
+bishop = "Alfiere"
+queen = "Regina"
+king = "Re"
