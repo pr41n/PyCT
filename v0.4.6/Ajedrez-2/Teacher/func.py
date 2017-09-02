@@ -3,7 +3,7 @@
 import threading
 import time
 
-from cleaner import Clean
+from tmp import cleaner
 
 import lists
 import memory
@@ -184,8 +184,8 @@ def video_exit(k):
         memory.main()
 
     elif k == 227:          # Close the program cleaning cache
-        Clean.images()
-        Clean.pyc()
+        cleaner.Clean.images()
+        cleaner.Clean.pyc()
         exit(11)
 
     elif k == ord('t'):     # Print the count of active threads

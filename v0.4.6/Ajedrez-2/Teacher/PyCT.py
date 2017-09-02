@@ -1,15 +1,21 @@
 # -*- coding: cp1252 -*-
 
+import time
+
 import cv2
 import numpy as np
 
 import audio
 import pieces
-from func import *
+from tmp import cleaner
+import lists
+from func import thread_starter, prevent_auido_error, give_values, \
+                 video_exit, change_piece, change_position, change_lists
+
 from window import OpenCV, Window
 from video import Detection, Calibration, Camera
 
-clean = Clean()
+clean = cleaner.Clean()
 calibration, pos0, pos1, arduino = give_values(None, 4)
 rectified = False
 z = True

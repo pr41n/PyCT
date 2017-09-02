@@ -16,7 +16,7 @@ class Clean:
     @staticmethod
     def pyc():
         """Delete all binary python files"""
-        pyc_files = glob('*.pyc') + glob('../languages/*.pyc') + glob('../*.pyc')
+        pyc_files = glob('*.pyc') + glob('languages/*.pyc') + glob('tmp/*.pyc')
         for pyc in pyc_files:
             remove(pyc)
 

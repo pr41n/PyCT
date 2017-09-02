@@ -3,9 +3,12 @@
 import cv2
 import numpy as np
 
-from func import *
+from func import thread_starter, inv_change_position, give_values, \
+                 prevent_auido_error, video_exit
+
 from window import OpenCV
 import audio
+import lists
 
 sts = audio.sts
 
