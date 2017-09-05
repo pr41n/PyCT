@@ -177,7 +177,7 @@ class Italian(Language):
     aud_016 = "Non usare sempre i pedoni, cerca di muovere altre figure."
     aud_017 = u"Cerca di muovere di più i pedoni."
     aud_018 = u"Per avere più mobilità con i cavalli, cerca di non posizionarli ai lati."
-    aud_019 = "Errore rilevato. Premi qualsiasi tasto dopo aver riposto tutte le figure."  # no seguro
+    aud_019 = "Errore rilevato. Premi qualsiasi tasto dopo aver riposto tutte le figure."
     aud_020 = "Se preferisci introdurre il movimento manualmente, premi esc."
     aud_021 = "Errore rilevato. Inserisci manualmente il movimento."
     aud_022 = "Scacco matto, %s vince nel turno %s. Congratulazioni!."

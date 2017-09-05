@@ -3,6 +3,7 @@
 from time import sleep
 
 import lists
+import audio
 
 player = int
 answer = str
@@ -15,7 +16,7 @@ class Piece:
     @staticmethod
     def incorrect(ans):
         global answer
-        answer = "Jugada incorrect:\n    " + ans + "\n\n"
+        answer = audio.instructions.incorrect_move_000 + ans + "\n\n"
 
     @staticmethod
     def jump(Ax, Ay, Bx, By):
@@ -84,9 +85,7 @@ class Pawn(Piece):
         move_1 = (avance_y == 1 or avance_y == 2 and Ay == 2) and player == 1
         move_2 = (avance_y == -1 or avance_y == -2 and Ay == 7) and player == 2
 
-        ans = u"El peón avanza en línea recta y come en diagonal. Siempre \n" \
-              u"avanzando una fila. Si es la primera vez que lo mueves, \n" \
-              u"puede avanzar dos casillas en línea recta"
+        ans = audio.instructions.incorrect_move_002
 
         if move_1 or move_2:
             if not self.jump(Ax, Ay, Bx, By):
@@ -98,7 +97,7 @@ class Pawn(Piece):
                     self.incorrect(ans)
                     return False
             else:
-                self.incorrect(u"La única pieza que puede saltar a otras es el caballo")
+                self.incorrect(audio.instructions.incorrect_move_001)
         else:
             if self.jump(Ax, Ay, Bx, By):
                 pass
@@ -117,10 +116,10 @@ class Rook(Piece):
 
                 return True
             else:
-                self.incorrect(u"La única pieza que puede saltar a otras es el caballo.")
+                self.incorrect(audio.instructions.incorrect_move_001)
 
         else:
-            ans = u"La torre se mueve en línea recta."
+            ans = audio.instructions.incorrect_move_003
             self.incorrect(ans)
             return False
 
@@ -135,8 +134,7 @@ class Knight(Piece):
 
             return True
         else:
-            ans = u"El caballo se mueve dos casillas horizontalmente y una vertical\n" \
-                        u"    o viceversa, de modo que forme una L."
+            ans = audio.instructions.incorrect_move_004
             self.incorrect(ans)
             return False
 
@@ -150,10 +148,10 @@ class Bishop(Piece):
 
                 return True
             else:
-                self.incorrect(u"La única pieza que puede saltar a otras es el caballo.")
+                self.incorrect(audio.instructions.incorrect_move_001)
 
         else:
-            ans = u"El alfil se mueve en diagonal."
+            ans = audio.instructions.incorrect_move_005
             self.incorrect(ans)
             return False
 
@@ -169,21 +167,17 @@ class Queen(Piece):
 
                 return True
             else:
-                self.incorrect(u"La única pieza que puede saltar a otras es el caballo.")
+                self.incorrect(audio.instructions.incorrect_move_001)
 
         else:
-            ans = u"La reina se mueve como un alfil y una torre a la vez, es decir,\n" \
-                        u"recto o en diagonal."
+            ans = audio.instructions.incorrect_move_006
             self.incorrect(ans)
             return False
 
 
 class King(Piece):
     def correct_move(self, Ax, Ay, Bx, By):
-        """
-        El enroque solo toma el movimiento del rey,
-        el programa se duerme un tiempo para permitir al player mover la torre
-        """
+        """"""
         move_1 = abs(Bx-Ax)
         move_2 = abs(By-Ay)
 
@@ -226,12 +220,7 @@ class King(Piece):
                 return True
 
             else:
-                ans = u"El rey solo puede enrocar si ni él ni la torre del lado en el\n" \
-                            u"que se va a enrocar se han movido antes,\npor lo que es en la\n" \
-                            u"misma fila. Además, no debe haber ninguna pieza entre la torre\n" \
-                            u" y el rey. Existen dos enroques:\n" \
-                            u"   Enroque corto: el rey se mueve a la columna G y la torre a la F.\n" \
-                            u"   Enroque largo: el rey se mueve a la columna C y la torre a la D."
+                ans = audio.instructions.incorrect_move_008
                 if self.jump(Ax, Ay, Bx, By):
                     pass
                 else:
@@ -239,6 +228,6 @@ class King(Piece):
                 return False
 
         else:
-            ans = u"El rey solo puede avanzar una casilla en todas direcciones."
+            ans = audio.instructions.incorrect_move_007
             self.incorrect(ans)
             return False
