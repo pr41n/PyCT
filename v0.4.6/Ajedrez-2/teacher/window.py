@@ -1,17 +1,19 @@
 # -*- coding: cp1252 -*-
 
+import re
+
 try:
     import gtk
 except ImportError:
     import pygtk
     pygtk.require(2.0)
     import gtk
-import re
 
 import cv2
 
+from func import give_values, change_piece, inv_change_piece, inv_change_position
+import lists
 import pieces
-from func import *
 import audio
 
 pos0, pos1, who_promote = give_values(None, 3)
@@ -101,9 +103,10 @@ class Window:
         self.box2.set_homogeneous(10)
 
         self.playing_w = gtk.Label(self.playing(audio.instructions.player_1,
-                                                [lists.WhiteHighPieces, lists.WhiteLowPieces]))
+                                  [lists.WhiteHighPieces, lists.WhiteLowPieces]))
+
         self.playing_b = gtk.Label(self.playing(audio.instructions.player_2,
-                                                [lists.BlackHighPieces, lists.BlackLowPieces]))
+                                  [lists.BlackHighPieces, lists.BlackLowPieces]))
         self.label = gtk.Label()
 
         self.image = gtk.Image()
@@ -127,7 +130,7 @@ class Window:
         self.english = self.make_button('English', lambda (widget): self.change_idiom('english'), self.box8)
         self.italian = self.make_button('Italiano', lambda (widget): self.change_idiom('italian'), self.box8)
 
-        self.record = self.make_button('Salvar partida', lambda (widget): None, self.box5)
+        self.record = self.make_button('Grabar partida', lambda (widget): None, self.box5)
 
         self.exit = self.make_button('Salir', lambda (widget): exit(11), self.box5)
 
@@ -253,10 +256,10 @@ class Window:
         win = gtk.Window()
         win.set_size_request(500, 40)
         win.set_position(gtk.WIN_POS_CENTER)
-        win.set_title(audio.instructions.promote_1())
+        win.set_title(audio.instructions.promote_1)
 
         box = gtk.HBox()
-        label = gtk.Label(audio.instructions.promote_2())
+        label = gtk.Label(audio.instructions.promote_2)
         text = gtk.Entry()
 
         button = gtk.Button('OK')

@@ -79,7 +79,6 @@ class PyCT:
         global pos0, pos1, rectified
 
         while self.match:
-            error = False, None
             if self.sort_of_detection == 'automatic':
                 pos0, pos1 = self.detect_move_automatically()
             else:
@@ -90,10 +89,6 @@ class PyCT:
                 self.check_move(piece, move)
 
             except (KeyError, AttributeError, TypeError) as err:
-                error = True, err
-
-            if error[0]:
-                err = error[1]
                 print "Detection Error: {}".format(err)
                 thread_starter(self.audio.error_1)
                 if cv2.waitKey(0) & 0xFF == 27:

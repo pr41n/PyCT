@@ -108,33 +108,29 @@ class ChessBoard:
         return H
 
     def rectify_crop(self, img_src, corners):
-        #
+
         status, trf = cv2.invert(self.transform)
-        #
         img_dst = cv2.warpPerspective(img_src, trf, (800, 800))
-        #
+
         corners_hom = np.ones((4, 3))
         corners_hom[:, 0:2] = corners
-        #
         corners_transformed = np.matmul(trf, corners_hom.transpose())
-        #
         corners_result = np.zeros((2, 4))
-        #
+
         corners_result[0, :] = corners_transformed[0, :] / corners_transformed[2, :]
         corners_result[1, :] = corners_transformed[1, :] / corners_transformed[2, :]
-        #
+
         corners_result[corners_result < 0] = 0
-        #
         corners_result = np.rint(corners_result)
-        #
+
         r0 = (corners_result[0, 0] + corners_result[0, 2])/2
         r1 = (corners_result[0, 1] + corners_result[0, 3])/2
         c0 = (corners_result[1, 0] + corners_result[1, 1])/2
         c1 = (corners_result[1, 2] + corners_result[1, 3])/2
-        #
+
         patchSize = (int(r1-r0), int(c1-c0))
         center = (int((r1+r0)/2), int((c1+c0)/2))
-        #
+
         return cv2.getRectSubPix(img_dst, patchSize, center)
 
     #
@@ -430,23 +426,23 @@ class Camera:
 
     def choose(self):
         while True:
-            if self.choosing:
-                if self.second_camera:
-                    ret_1, frame_1 = self.cam_1.read()
-                    ret_2, frame_2 = self.cam_2.read()
+            if self.second_camera:
+                ret_1, frame_1 = self.cam_1.read()
+                ret_2, frame_2 = self.cam_2.read()
 
-                    cv2.imshow('cam 1', frame_1)
-                    cv2.imshow('cam 2', frame_2)
+                cv2.imshow('cam 1', frame_1)
+                cv2.imshow('cam 2', frame_2)
 
-                    cv2.setMouseCallback('cam 1', self.election_1)
-                    cv2.setMouseCallback('cam 2', self.election_2)
+                cv2.setMouseCallback('cam 1', self.election_1)
+                cv2.setMouseCallback('cam 2', self.election_2)
 
-                    k = cv2.waitKey(1) & 0xFF
-                    video_exit(k)
+                k = cv2.waitKey(1) & 0xFF
+                video_exit(k)
 
-                else:
-                    self.choosing = False
             else:
+                self.choosing = False
+
+            if not self.choosing:
                 cv2.destroyAllWindows()
                 self.cam_1.release()
                 return self.election
