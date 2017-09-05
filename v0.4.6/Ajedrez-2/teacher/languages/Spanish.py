@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 calibration_1 = u"Marca los puntos siguiendo este orden y desde el punto\n" \
                 u"de vista del jugador blanco:\n\n" \
                 u"     1- Casilla A1: esquina inferior izquierda\n" \
@@ -10,7 +9,6 @@ calibration_1 = u"Marca los puntos siguiendo este orden y desde el punto\n" \
                 u"Mi recomendación es que marques las esquinas interiores en\n" \
                 u"vez de las líneas. Al acabar, pulsa enter y aparecerán el resto\n" \
                 u"de puntos del tablero."
-
 
 calibration_2 = u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'
 camera_choosing = u'Selecciona la cámara que vayas a usar.'
@@ -36,9 +34,18 @@ sort_of_detection = u"Escoge el tipo de detección que prefieras"
 sort_of_detection_1 = "Manual"
 sort_of_detection_2 = u"Semi-Automática"
 sort_of_detection_3 = u"Automática"
-detection_description_1 = u"La más segura.\nDebes pulsar espacio antes y\ndespues de realizar la jugada."
-detection_description_2 = u"Menos segura que manual.\nDebes pulsar espacio despues\nde realizar la jugada."
-detection_description_3 = u"La menos segura.\nLa detección se realiza automáticamente\ndespues de realizar la jugada."
+
+detection_description_1 = u"La más segura.\n" \
+                          u"Debes pulsar espacio antes y\n" \
+                          u"despues de realizar la jugada."
+
+detection_description_2 = u"Menos segura que manual.\n" \
+                          u"Debes pulsar espacio despues\n" \
+                          u"de realizar la jugada."
+
+detection_description_3 = u"La menos segura.\n" \
+                          u"La detección se realiza automáticamente\n" \
+                          u"despues de realizar la jugada."
 
 turn = "Turno"
 player = "Jugador"
@@ -49,3 +56,29 @@ knight = u"Caballo"
 bishop = u"Alfil"
 queen = u"Reina"
 king = u"Rey"
+
+incorrect_move_000 = u"Jugada incorrecta: \n"
+incorrect_move_001 = u"     La única pieza que puede saltar a otras es el caballo."
+
+incorrect_move_002 = u"     El peón avanza en línea recta y come en diagonal. Siempre\n" \
+                     u"   avanzando una fila. Si es la primera vez que lo mueves,\n" \
+                     u"   puede avanzar dos casillas en línea recta."
+
+incorrect_move_003 = u"     La torre se mueve en línea recta."
+
+incorrect_move_004 = u"     El caballo se mueve dos casillas horizontalmente y una vertical\n" \
+                     u"   o viceversa, de modo que forme una L."
+
+incorrect_move_005 = u"     El alfil se mueve en diagonal."
+
+incorrect_move_006 = u"     La reina se mueve como un alfil y una torre a la vez, es decir,\n" \
+                     u"   recto o en diagonal."
+
+incorrect_move_007 = u"     El rey solo puede avanzar una casilla en todas direcciones."
+
+incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del lado en el\n" \
+                     u"   que se va a enrocar se han movido antes, por lo que es en la\n" \
+                     u"   misma fila. Además, no debe haber ninguna pieza entre la\n" \
+                     u"   torre y el rey. Existen dos enroques:\n" \
+                     u"       Enroque corto: el rey se mueve a la columna G y la torre a la F.\n" \
+                     u"       Enroque largo: el rey se mueve a la columna C y la torre a la D."
