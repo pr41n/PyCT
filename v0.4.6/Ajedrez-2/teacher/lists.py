@@ -1,8 +1,8 @@
-WhiteHighPieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "Rook_1", "Rook_2"]
-WhiteLowPieces = ["Pawn_1", "Pawn_2", "Pawn_3", "Pawn_4", "Pawn_5", "Pawn_6", "Pawn_7", "Pawn_8"]
+WhitePieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "Rook_1", "Rook_2",
+               "Pawn_1", "Pawn_2", "Pawn_3", "Pawn_4", "Pawn_5", "Pawn_6", "Pawn_7", "Pawn_8"]
 
-BlackHighPieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "Rook_1", "Rook_2"]
-BlackLowPieces = ["Pawn_1", "Pawn_2", "Pawn_3", "Pawn_4", "Pawn_5", "Pawn_6", "Pawn_7", "Pawn_8"]
+BlackPieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "Rook_1", "Rook_2",
+               "Pawn_1", "Pawn_2", "Pawn_3", "Pawn_4", "Pawn_5", "Pawn_6", "Pawn_7", "Pawn_8"]
 
 OccupiedSquares = {
 
@@ -22,9 +22,9 @@ squares = {}
 corners = []
 points = []
 
-rectify_squares = {}
-rectify_corners = []
-rectify_points = []
+rectified_squares = {}
+rectified_corners = []
+rectified_points = []
 
 
 def occupied_squares():

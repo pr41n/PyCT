@@ -3,15 +3,14 @@
 import cv2
 import numpy as np
 
+import audio
+import lists
+from window import OpenCV
 from func import thread_starter, inv_change_position, give_values, \
                  prevent_auido_error, video_exit
 
-from window import OpenCV
-import audio
-import lists
 
 sts = audio.sts
-
 calibrated = False
 
 
@@ -32,7 +31,7 @@ class ChessBoard:
             self.transform = self.compute_warp(self.points_roi)
 
         else:
-            win_name = audio.instructions.open_cv_2
+            win_name = audio.language.open_cv_2
             cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
             cv2.moveWindow(win_name, 1100, -100)
             cv2.resizeWindow(win_name, 600, 500)
@@ -62,7 +61,7 @@ class ChessBoard:
             #
 
             cv2.imshow(win_name, self.image)
-            thread_starter(sts.say, [audio.instructions.calibration_2])
+            thread_starter(sts.say, [audio.language.calibration_2])
 
             k = cv2.waitKey(0) & 0xFF
 
@@ -89,7 +88,7 @@ class ChessBoard:
             lists.corners.append((float(x), float(y)))
 
             cv2.circle(self.image, (x, y), 5, (255, 0, 0), -1)
-            cv2.imshow(audio.instructions.open_cv_2, self.image)
+            cv2.imshow(audio.language.open_cv_2, self.image)
 
     def compute_warp(self, points_roi):
 
@@ -158,7 +157,7 @@ class ChessBoard:
         # n = 0
         for point in points_image:
             cv2.circle(image, tuple(point.astype(int)), 5, (0, 255, 0), -1)
-            lists.rectify_points.append(point)
+            lists.rectified_points.append(point)
             # cv2.putText(image, str(n), tuple(point.astype(int)),
             #            fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=0.5)
             # n += 1
@@ -167,10 +166,10 @@ class ChessBoard:
         n = 0
         for y in range(1, 9):
             for x in range(1, 9):
-                lists.rectify_squares[(x, y)] = [list(lists.rectify_points[n].astype(int)),
-                                                 list(lists.rectify_points[n + 1].astype(int)),
-                                                 list(lists.rectify_points[n + 9].astype(int)),
-                                                 list(lists.rectify_points[n + 10].astype(int))]
+                lists.rectified_squares[(x, y)] = [list(lists.rectified_points[n].astype(int)),
+                                                   list(lists.rectified_points[n + 1].astype(int)),
+                                                   list(lists.rectified_points[n + 9].astype(int)),
+                                                   list(lists.rectified_points[n + 10].astype(int))]
                 n += 1
             n += 1
 
@@ -201,7 +200,7 @@ class ChessBoard:
             if k == ord('c'):
                 square = inv_change_position(raw_input("Casilla: "))
 
-                for j in lists.rectify_squares[square]:
+                for j in lists.rectified_squares[square]:
                     cv2.circle(sub_img, tuple(j), 5, (0, 0, 255), -1)
 
             cv2.namedWindow('select',  cv2.WINDOW_NORMAL)
@@ -291,8 +290,8 @@ class Detection:
                 exit(11)
 
             for p in pts:
-                for i in lists.rectify_squares:
-                    j = lists.rectify_squares[i]
+                for i in lists.rectified_squares:
+                    j = lists.rectified_squares[i]
 
                     left_bottom = tuple(j[2])
                     right_top = tuple(j[1])
@@ -416,7 +415,7 @@ class Camera:
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
 
-            thread_starter(prevent_auido_error, [audio.instructions.camera_choosing])
+            thread_starter(prevent_auido_error, [sts.say, audio.language.camera_choosing])
 
             OpenCV('cam 1', 200, 100, 500, 500)
             OpenCV('cam 2', 700, 100, 500, 500)

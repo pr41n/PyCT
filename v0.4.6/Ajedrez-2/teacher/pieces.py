@@ -16,7 +16,7 @@ class Piece:
     @staticmethod
     def incorrect(ans):
         global answer
-        answer = audio.instructions.incorrect_move_000 + ans + "\n\n"
+        answer = audio.language.incorrect_move_000 + ans + "\n\n"
 
     @staticmethod
     def jump(Ax, Ay, Bx, By):
@@ -85,7 +85,7 @@ class Pawn(Piece):
         move_1 = (avance_y == 1 or avance_y == 2 and Ay == 2) and player == 1
         move_2 = (avance_y == -1 or avance_y == -2 and Ay == 7) and player == 2
 
-        ans = audio.instructions.incorrect_move_002
+        ans = audio.language.incorrect_move_002
 
         if move_1 or move_2:
             if not self.jump(Ax, Ay, Bx, By):
@@ -97,7 +97,7 @@ class Pawn(Piece):
                     self.incorrect(ans)
                     return False
             else:
-                self.incorrect(audio.instructions.incorrect_move_001)
+                self.incorrect(audio.language.incorrect_move_001)
         else:
             if self.jump(Ax, Ay, Bx, By):
                 pass
@@ -116,10 +116,10 @@ class Rook(Piece):
 
                 return True
             else:
-                self.incorrect(audio.instructions.incorrect_move_001)
+                self.incorrect(audio.language.incorrect_move_001)
 
         else:
-            ans = audio.instructions.incorrect_move_003
+            ans = audio.language.incorrect_move_003
             self.incorrect(ans)
             return False
 
@@ -134,7 +134,7 @@ class Knight(Piece):
 
             return True
         else:
-            ans = audio.instructions.incorrect_move_004
+            ans = audio.language.incorrect_move_004
             self.incorrect(ans)
             return False
 
@@ -148,10 +148,10 @@ class Bishop(Piece):
 
                 return True
             else:
-                self.incorrect(audio.instructions.incorrect_move_001)
+                self.incorrect(audio.language.incorrect_move_001)
 
         else:
-            ans = audio.instructions.incorrect_move_005
+            ans = audio.language.incorrect_move_005
             self.incorrect(ans)
             return False
 
@@ -167,10 +167,10 @@ class Queen(Piece):
 
                 return True
             else:
-                self.incorrect(audio.instructions.incorrect_move_001)
+                self.incorrect(audio.language.incorrect_move_001)
 
         else:
-            ans = audio.instructions.incorrect_move_006
+            ans = audio.language.incorrect_move_006
             self.incorrect(ans)
             return False
 
@@ -188,39 +188,43 @@ class King(Piece):
         elif move_1 == 2 and move_2 == 0:
 
             if Ax == 5 and not self.jump(Ax, Ay, Bx, By):
+                try:
 
-                if player == 1:
+                    if player == 1:
 
-                    if Bx == 7 and lists.OccupiedSquares['White'][(8, 1)] == "Rook":
+                        if Bx == 7 and lists.OccupiedSquares['White'][(8, 1)] == "Rook":
 
-                        del lists.OccupiedSquares['White'][(8, 1)]
-                        lists.OccupiedSquares['White'][(6, 1)] = "Rook"
+                            del lists.OccupiedSquares['White'][(8, 1)]
+                            lists.OccupiedSquares['White'][(6, 1)] = "Rook"
 
-                    elif Bx == 3 and lists.OccupiedSquares['White'][(1, 1)] == "Rook":
+                        elif Bx == 3 and lists.OccupiedSquares['White'][(1, 1)] == "Rook":
 
-                        del lists.OccupiedSquares['White'][(1, 1)]
-                        lists.OccupiedSquares['White'][(4, 1)] = "Rook"
+                            del lists.OccupiedSquares['White'][(1, 1)]
+                            lists.OccupiedSquares['White'][(4, 1)] = "Rook"
 
-                #
+                    #
 
-                elif player == 2:
+                    elif player == 2:
 
-                    if Bx == 7 and lists.OccupiedSquares['Black'][(8, 8)] == "Rook":
+                        if Bx == 7 and lists.OccupiedSquares['Black'][(8, 8)] == "Rook":
 
-                        del lists.OccupiedSquares['Black'][(8, 8)]
-                        lists.OccupiedSquares['Black'][(6, 8)] = "Rook"
+                            del lists.OccupiedSquares['Black'][(8, 8)]
+                            lists.OccupiedSquares['Black'][(6, 8)] = "Rook"
 
-                    elif Bx == 3 and lists.OccupiedSquares['Black'][(1, 8)] == "Rook":
+                        elif Bx == 3 and lists.OccupiedSquares['Black'][(1, 8)] == "Rook":
 
-                        del lists.OccupiedSquares['Black'][(1, 8)]
-                        lists.OccupiedSquares['Black'][(4, 8)] = "Rook"
+                            del lists.OccupiedSquares['Black'][(1, 8)]
+                            lists.OccupiedSquares['Black'][(4, 8)] = "Rook"
 
-                sleep(2)
+                except KeyError:
+                    return False
+
+                sleep(4)
 
                 return True
 
             else:
-                ans = audio.instructions.incorrect_move_008
+                ans = audio.language.incorrect_move_008
                 if self.jump(Ax, Ay, Bx, By):
                     pass
                 else:
@@ -228,6 +232,6 @@ class King(Piece):
                 return False
 
         else:
-            ans = audio.instructions.incorrect_move_007
+            ans = audio.language.incorrect_move_007
             self.incorrect(ans)
             return False

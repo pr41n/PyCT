@@ -6,16 +6,15 @@ import cv2
 import numpy as np
 
 import audio
-import pieces
-from tmp import cleaner
 import lists
-from func import thread_starter, prevent_auido_error, give_values, \
-                 video_exit, change_piece, change_position, change_lists
+import pieces
+from func import thread_starter, prevent_auido_error, give_values, video_exit, \
+                 change_position, change_lists
 
-from window import OpenCV, Window
 from video import Detection, Calibration, Camera
+from window import OpenCV, Window
+from scripts import connection
 
-clean = cleaner.Clean()
 calibration, pos0, pos1, arduino = give_values(None, 4)
 rectified = False
 z = True
@@ -31,9 +30,9 @@ class PyCT:
             self.test()
             exit(12)
 
-        self.audio = audio.selected_idiom
+        self.audio = audio.Language()
 
-        self.language = audio.language
+        self.language = audio.language.babel
 
         self.advices = audio.Advice()
         self.advices.main()
@@ -57,8 +56,6 @@ class PyCT:
 
         self.win.label.set_text("")
 
-        clean.images()
-
         self.good, self.bad, self.checkmate = self.arduino_conection()
 
         self.sort_of_detection = self.win.sort_of_detection()
@@ -79,6 +76,7 @@ class PyCT:
         global pos0, pos1, rectified
 
         while self.match:
+            time.sleep(0.1)
             if self.sort_of_detection == 'automatic':
                 pos0, pos1 = self.detect_move_automatically()
             else:
@@ -97,37 +95,37 @@ class PyCT:
                     piece, move = self.detect_piece()
                     self.check_move(piece, move)
 
-        player = 'blancas' if self.player == 1 else 'negras'
+        player = audio.language.player_1 if self.player == 1 else audio.language.player_2
 
         eval(self.checkmate)
 
         thread_starter(self.audio.check_mate, [player, self.turn - 1])
         time.sleep(2)
-        prevent_auido_error(" ")
+        prevent_auido_error(self.audio.say, " ")
 
         video_exit(227)
 
     def calibrated(self, first_attempt):
         global calibration
-        OpenCV(audio.instructions.open_cv_1, 1100, -100, 440, 350)
+        OpenCV(audio.language.open_cv_1, 1100, -100, 440, 350)
 
         while True:
             k = cv2.waitKey(1) & 0xFF
 
             ret, frame = self.cam.read()
-            cv2.imshow(audio.instructions.open_cv_1, frame)
+            cv2.imshow(audio.language.open_cv_1, frame)
             cv2.imwrite('tmp/frame.jpg', frame)
             self.win.video('tmp/frame.jpg')
 
             if k == 10:
-                cv2.destroyWindow(audio.instructions.open_cv_1)
+                cv2.destroyWindow(audio.language.open_cv_1)
                 if first_attempt:
                     thread_starter(self.audio.calibration, [2])
                     self.win.calibration_instructions()
 
                 cv2.imwrite('tmp/ChessBoard.jpg', frame)
                 calibration = Calibration('tmp/ChessBoard.jpg')
-                cv2.destroyWindow(audio.instructions.open_cv_2)
+                cv2.destroyWindow(audio.language.open_cv_2)
                 break
 
             video_exit(k)
@@ -137,8 +135,7 @@ class PyCT:
     def arduino_conection(self):
         global arduino
         try:
-            from connection import Arduino
-            arduino = Arduino(2)
+            arduino = connection.Arduino(2)
 
             thread_starter(self.audio.arduino, [True])
             delay = 0
@@ -157,10 +154,10 @@ class PyCT:
         is press the space bar once or twice"""
 
         global pos0, pos1, calibration, rectified
-        instructions = cv2.imread('languages/Video.png')
+        language = cv2.imread('languages/Video.png')
         try:
             move = False
-            OpenCV(audio.instructions.open_cv_3, 490, 485, 435, 170)
+            OpenCV(audio.language.open_cv_3, 490, 485, 435, 170)
             original = None
             while True:
                 k = cv2.waitKey(1)
@@ -177,7 +174,7 @@ class PyCT:
                 else:
                     img = frame
 
-                cv2.imshow(audio.instructions.open_cv_3, instructions)
+                cv2.imshow(audio.language.open_cv_3, language)
                 cv2.imwrite('tmp/frame.jpg', img)
                 self.win.video('tmp/frame.jpg')
 
@@ -208,12 +205,12 @@ class PyCT:
             return pos0, pos1
 
     def detect_move_automatically(self):
-        """Detects the move automatically using histograms"""
+        """Detects the move automatically using histograms."""
 
         global pos0, pos1, calibration, rectified
         instructions = cv2.imread('languages/Video.png')
         try:
-            OpenCV(audio.instructions.open_cv_3, 490, 485, 435, 170)
+            OpenCV(audio.language.open_cv_3, 490, 485, 435, 170)
             first_frame = True
             moving, moved, show_diff = give_values(False, 3)
             origin = None
@@ -233,7 +230,7 @@ class PyCT:
                 else:
                     img = frame
 
-                cv2.imshow(audio.instructions.open_cv_3, instructions)
+                cv2.imshow(audio.language.open_cv_3, instructions)
                 cv2.imwrite('tmp/frame.jpg', img)
                 self.win.video('tmp/frame.jpg')
 
@@ -327,7 +324,7 @@ class PyCT:
 
             if pos1[0] == 1 or pos1[0] == 8or pos1[1] == 1 or pos1[1] == 8:
                 self.n_knight += 1
-                if self.n_knight < 3:
+                if self.n_knight < 2:
                     self.lets_advice = True
                     self.advice = self.advices.knight
 
@@ -363,32 +360,36 @@ class PyCT:
 
         if who.correct_move(pos0[0], pos0[1], pos1[0], pos1[1]):
 
-            H = "%s %d" % (audio.instructions.turn, self.turn), "%s %d" % (audio.instructions.player, self.player)
+            H = "%s %d" % (audio.language.turn, self.turn), "%s %d" % (audio.language.player, self.player)
             J = int
             K = None
 
             if which == "King" and pos0[0] == 5 and pos1[1] - pos0[1] == 0 and abs(pos1[0] - pos0[0]) == 2:
                 if pos1[0] == 3:
                     J = thread_starter(self.audio.castling, ['QueenSide'])
-                    H = H, u"Enroque largo"
+                    H = H, audio.language.aud_025
 
                 elif pos1[0] == 7:
                     J = thread_starter(self.audio.castling, ['KingSide'])
-                    H = H, u"Enroque corto"
+                    H = H, audio.language.aud_024
 
             elif which == "Pawn" and (pos1[1] == 8 or pos1[1] == 1):
                 K = self.win.promote()
                 K = K.capitalize()
-                J = thread_starter(self.audio.promotion, [change_piece(K)])
-                H = H, u"%s corona" % change_piece(K)
+                J = thread_starter(self.audio.promotion, [self.win.translate(K, audio.language)])
+                H = H, audio.language.aud_023 % self.win.translate(K, audio.language)
 
             elif pos1 in occupied_squares:
-                J = thread_starter(self.audio.play, [change_piece(which), change_position(pos1), True])
-                H = H, u"%s por %s" % (change_piece(which), change_position(pos1))
+                J = thread_starter(self.audio.play, [self.win.translate(which, audio.language),
+                                                     change_position(pos1), True])
+
+                H = H, audio.language.aud_014 % (self.win.translate(which, audio.language), change_position(pos1))
 
             else:
-                J = thread_starter(self.audio.play, [change_piece(which), change_position(pos1), False])
-                H = H, u"%s a %s" % (change_piece(which), change_position(pos1))
+                J = thread_starter(self.audio.play, [self.win.translate(which, audio.language),
+                                                     change_position(pos1), False])
+
+                H = H, audio.language.aud_015 % (self.win.translate(which, audio.language), change_position(pos1))
 
             self.win.print_move(H[0][0], H[0][1], H[1])
 
@@ -401,21 +402,20 @@ class PyCT:
 
             change_lists(which, pos0, pos1, self.player, K)
             self.win.refresh_playing(K, self.player)
-            self.turn += 1
 
             #
 
             if self.player == 1:
-                if "King" not in lists.BlackHighPieces:
+                if "King" not in lists.BlackPieces:
                     self.match = False
                 else:
                     self.player = 2
-
             elif self.player == 2:
-                if "King" not in lists.WhiteHighPieces:
+                if "King" not in lists.WhitePieces:
                     self.match = False
                 else:
                     self.player = 1
+                    self.turn += 1
 
             eval(self.good)
 
