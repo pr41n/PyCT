@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-babel = 'spanish'
-name_of_the_button = u'Español'
+babel = 'personalizado'
+sound = 'spanish'
+name_of_the_button = u'Personalizado'
 
 
 calibration_1 = u"Marca los puntos siguiendo este orden y desde el punto\n" \
@@ -14,7 +15,7 @@ calibration_1 = u"Marca los puntos siguiendo este orden y desde el punto\n" \
                 u"vez de las líneas. Al acabar, pulsa enter y aparecerán el resto\n" \
                 u"de puntos del tablero."
 
-calibration_2 = u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'
+calibration_2 = u' '
 camera_choosing = u'Selecciona la cámara que vayas a usar.'
 
 player_1 = "Blancas"
@@ -89,17 +90,17 @@ incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del 
 
 aud_001 = u"Hola, soy Pict."
 aud_002 = u"Lo siento por mi voz."
-aud_003 = u"Empecemos calibrando la cámara."
-aud_004 = u"Coloca el tablero de modo que pueda ver las cuatro esquinas interiores."
-aud_005 = u"Te recomiendo mover hacia delante las torres más alejadas."
-aud_006 = u"Cuando lo hayas hecho, pulsa énter."
-aud_007 = u"Ahora, haz click en las cuatro esquinas siguiendo las instrucciones."
-aud_008 = u"Puedes ampliar la ventana si lo necesitas."
+aud_003 = u" "
+aud_004 = u" "
+aud_005 = u" "
+aud_006 = u" "
+aud_007 = u" "
+aud_008 = u" "
 aud_009 = u"Hay conexión con Arduino."
 aud_010 = u"No hay conexión con Arduino."
-aud_011 = u"El orden es torre, caballo y alfil."
-aud_012 = u"Recuerda que los reyes van en la columna E."
-aud_013 = u"Empiezan las blancas."
+aud_011 = u" "
+aud_012 = u" "
+aud_013 = u" "
 aud_014 = u"%s por %s"
 aud_015 = u"%s a %s"
 aud_016 = u"No muevas tanto los peones."
@@ -113,4 +114,4 @@ aud_023 = u"%s corona."
 aud_024 = u"Enroque corto."
 aud_025 = u"Enroque largo."
 aud_026 = u"Repite el movimiento."
-aud_027 = u"Cuando hayas devuelto las piezas a su posición inicial, pulsa cualquier tecla para continuar."
+aud_027 = u"Devuelve las piezas y pulsa cualquier tecla."

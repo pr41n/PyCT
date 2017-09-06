@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+babel = 'english'
+name_of_the_button = 'English'
+
 calibration_1 = "Click on the corners following the next instructions and \n" \
                 "from the point of view of the white player:\n\n" \
                 "     1- Square A1: left bottom corner\n" \
@@ -78,5 +83,33 @@ incorrect_move_008 = "     The king can castle only if nor him nor the rook of t
                      "   has been moved before, so the castling can only been done when both\n" \
                      "   are at the same row. Furthermore, no piece can be between the\n" \
                      "   king and the rook. You can do two castles:\n" \
-                     "       Knigside castle: king is moving to the G column and tower to the F column.\n" \
+                     "       Kingside castle: king is moving to the G column and tower to the F column.\n" \
                      "       Queenside castle: king is moving to the C column and tower to the D column"
+
+aud_001 = "Hello, I'm Pyct."
+aud_002 = "I apologise for my voice."
+aud_003 = "Let's start calibrating the camera."
+aud_004 = "Set the chessboard in a way I can see the four inside corners."
+aud_005 = "I recommend you to move forward the furthest rooks."
+aud_006 = "When you have done it, press enter."
+aud_007 = "Now, click on the four corners following the instructions."
+aud_008 = "You can enlarge the window if you need to."
+aud_009 = "There is connection with Arduino."
+aud_010 = "There is no connection with Arduino."
+aud_011 = "The order is rook, knight and bishop."
+aud_012 = "Remember kings must be in the E column."
+aud_013 = "Whites start."
+aud_014 = "%s by %s"
+aud_015 = "%s to %s"
+aud_016 = "Don't move too many times the pawns, try moving other pieces."
+aud_017 = "Try using more the pawns."
+aud_018 = "To achieve a better mobility of the knights, try placing them in the center of the chessboard."
+aud_019 = "Detection error. Press any key when you have placed again the pieces."
+aud_020 = "If you prefer to input manually the move, press escape."
+aud_021 = "Detection error. Input the move manually."
+aud_022 = "Checkmate, %s has won at turn %s, congratulations!."
+aud_023 = "%s promotes."
+aud_024 = "Kingside castling."
+aud_025 = "Queenside castling."
+aud_026 = "Repeat the move."
+aud_027 = "When you have placed again the pieces, press any key."

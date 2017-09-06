@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+babel = 'italian'
+name_of_the_button = 'Italiano'
+
 calibration_1 = u"Premi i punti seguendo quest'ordine e dal punto\n" \
                 u"di vista del giocatore bianco:\n\n" \
                 u"     1- Casella A1: angolo inferiore sinistro\n" \
@@ -82,3 +85,31 @@ incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del 
                      u"   y el rey. Existen dos enroques:\n" \
                      u"       Enroque corto: el rey se mueve a la columna G y la torre a la F.\n" \
                      u"       Enroque largo: el rey se mueve a la columna C y la torre a la D."
+
+aud_001 = "Ciao, sono Pyct."
+aud_002 = "Chiedo scusa per la mia voce."
+aud_003 = "Cominciamo a calibrare la camera."
+aud_004 = "Posiziona la scacchiera in tal modo che possa vedere i quattro angoli interni."
+aud_005 = "Ti consiglio di muovere le torri in avanti."
+aud_006 = "Una volta finito, premi enter."
+aud_007 = "Ora, fai click nei quattro angoli interni seguendo le instruzioni."
+aud_008 = "Se preferisci puoi ingrandire la finestra."
+aud_009 = u"C'è connessione con Arduino."
+aud_010 = u"Non c'è connessione con Arduino."
+aud_011 = u"L'ordine è torre, cavallo e alfiere."
+aud_012 = "Ricorda, il re si trova nella colonna E."
+aud_013 = "Cominciano i bianchi."
+aud_014 = "%s per %s"
+aud_015 = "%s a %s"
+aud_016 = "Non usare sempre i pedoni, cerca di muovere altre figure."
+aud_017 = u"Cerca di muovere di più i pedoni."
+aud_018 = u"Per avere più mobilità con i cavalli, cerca di non posizionarli ai lati."
+aud_019 = "Errore rilevato. Premi qualsiasi tasto dopo aver riposto tutte le figure."
+aud_020 = "Se preferisci introdurre il movimento manualmente, premi esc."
+aud_021 = "Errore rilevato. Inserisci manualmente il movimento."
+aud_022 = "Scacco matto, %s vince nel turno %s. Congratulazioni!."
+aud_023 = "%s promossi."
+aud_024 = "Arrocco corto."
+aud_025 = "Arrocco lungo."
+aud_026 = "Ripeti il movimento."
+aud_027 = "Dopo aver riposto tutte le figure, premi qualsiasi tasto."
