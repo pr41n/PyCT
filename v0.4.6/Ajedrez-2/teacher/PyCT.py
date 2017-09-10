@@ -1,6 +1,6 @@
 # -*- coding: cp1252 -*-
 
-import time
+from time import sleep
 
 import cv2
 import numpy as np
@@ -22,7 +22,6 @@ z = True
 
 class PyCT:
     def __init__(self, testing=False):
-
         self.win = Window()
         self.win.main()
 
@@ -39,8 +38,7 @@ class PyCT:
 
         self.sts = audio.sts
 
-        intro = thread_starter(self.audio.intro)
-        intro.join()
+        thread_starter(self.audio.intro).join()
 
         camera = Camera()
         cam_chosen = camera.choose()
@@ -58,6 +56,7 @@ class PyCT:
 
         self.good, self.bad, self.checkmate = self.arduino_conection()
 
+        thread_starter(self.audio.detection).join()
         self.sort_of_detection = self.win.sort_of_detection()
         print self.sort_of_detection
 
@@ -76,15 +75,19 @@ class PyCT:
         global pos0, pos1, rectified
 
         while self.match:
-            time.sleep(0.1)
-            if self.sort_of_detection == 'automatic':
-                pos0, pos1 = self.detect_move_automatically()
-            else:
-                pos0, pos1 = self.detect_move()
+            try:
+                sleep(0.1)
+                if self.sort_of_detection == 'automatic':
+                    pos0, pos1 = self.detect_move_automatically()
+                else:
+                    pos0, pos1 = self.detect_move()
+
+            except EnvironmentError:
+                continue
 
             try:
-                piece, move = self.detect_piece()
-                self.check_move(piece, move)
+                piece = self.detect_piece()
+                self.check_move(piece)
 
             except (KeyError, AttributeError, TypeError) as err:
                 print "Detection Error: {}".format(err)
@@ -93,14 +96,14 @@ class PyCT:
                     pos0, pos1 = self.win.movement(None)
 
                     piece, move = self.detect_piece()
-                    self.check_move(piece, move)
+                    self.check_move(piece)
 
         player = audio.language.player_1 if self.player == 1 else audio.language.player_2
 
         eval(self.checkmate)
 
         thread_starter(self.audio.check_mate, [player, self.turn - 1])
-        time.sleep(2)
+        sleep(2)
         prevent_auido_error(self.audio.say, " ")
 
         video_exit(227)
@@ -140,9 +143,9 @@ class PyCT:
             thread_starter(self.audio.arduino, [True])
             delay = 0
 
-            return 'arduino.write(\'a\', %s)' % delay, \
-                   'arduino.write(\'b\', %s)' % delay, \
-                   'arduino.write(\'c\', %s)' % delay
+            return "arduino.write('a', %s)" % delay, \
+                   "arduino.write('b', %s)" % delay, \
+                   "arduino.write('c', %s)" % delay
 
         except OSError:
             thread_starter(self.audio.arduino, [False])
@@ -272,13 +275,15 @@ class PyCT:
                         n += 1
 
                 if moving and n < 15:
-                        time.sleep(1)
+                        sleep(1)
                         now = 'tmp/now.jpg'
                         cv2.imwrite(now, frame)
                         """
                         cv2.imshow('frame', frame)
                         cv2.imshow('origin', origin)
                         cv2.waitKey(0)
+                        cv2.destroyWindow('origin')
+                        cv2.destroyWindow('frame')
                         """
                         detection = Detection(original, now, self.player)
                         pos0, pos1 = detection.Board()
@@ -296,30 +301,18 @@ class PyCT:
             return pos0, pos1
 
     def detect_piece(self):
-        who, which = give_values(None, 2)
-
         occupied_squares = lists.occupied_squares()
 
         if occupied_squares[pos0] == "Pawn":
-            from pieces import Pawn
-            who = Pawn()
-            which = "Pawn"
-
             self.n_pawns_1 += 1
             if self.turn <= 15 and self.n_pawns_1 == 9:
                 self.lets_advice = True
                 self.advice = self.advices.pawn_1
 
         elif occupied_squares[pos0] == "Rook":
-            from pieces import Rook
-            who = Rook()
-            which = "Rook"
             self.n_pawns_2 += 1
 
         elif occupied_squares[pos0] == "Knight":
-            from pieces import Knight
-            who = Knight()
-            which = "Knight"
             self.n_pawns_2 += 1
 
             if pos1[0] == 1 or pos1[0] == 8or pos1[1] == 1 or pos1[1] == 8:
@@ -329,34 +322,27 @@ class PyCT:
                     self.advice = self.advices.knight
 
         elif occupied_squares[pos0] == "Bishop":
-            from pieces import Bishop
-            who = Bishop()
-            which = "Bishop"
             self.n_pawns_2 += 1
 
         elif occupied_squares[pos0] == "Queen":
-            from pieces import Queen
-            who = Queen()
-            which = "Queen"
             self.n_pawns_2 += 1
 
         elif occupied_squares[pos0] == "King":
-            from pieces import King
-            who = King()
-            which = "King"
             self.n_pawns_2 += 1
 
         if self.n_pawns_2 == 6:
             self.advice = self.advices.pawn_2
             self.n_pawns_2 += 1
 
-        return which, who
+        who = eval('pieces.%s()' % occupied_squares[pos0])
+        return who
         
-    def check_move(self, which, who):
+    def check_move(self, who):
         global pos0, pos1, arduino
 
         pieces.player = self.player
         occupied_squares = lists.occupied_squares()
+        which = occupied_squares[pos0]
 
         if who.correct_move(pos0[0], pos0[1], pos1[0], pos1[1]):
 
@@ -436,6 +422,7 @@ class PyCT:
             pieces.answer = "Prueba\n\n"
             self.win.print_incorrect_move()
             self.win.main()
+
 
 if __name__ == '__main__':
     pyct = PyCT()
