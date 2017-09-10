@@ -1,7 +1,7 @@
 # -*- coding: cp1252 -*-
 
 import threading
-import time
+from time import sleep
 
 import lists
 from scripts import memory
@@ -138,7 +138,7 @@ def video_exit(k):
     if k == ord('m'):       # Print used memory
         memory.main()
 
-    elif k == 227:          # Close the program cleaning cache
+    elif k == 227:          # Close the program after cleaning tmp files
         cleaner.Clean.images()
         cleaner.Clean.pyc()
         exit(11)
@@ -153,7 +153,7 @@ def prevent_auido_error(audio, args):
         audio(args)
 
     except RuntimeError:
-        time.sleep(0.1)
+        sleep(0.1)
         prevent_auido_error(audio, args)
 
 

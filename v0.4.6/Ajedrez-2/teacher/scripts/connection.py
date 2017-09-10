@@ -1,6 +1,6 @@
 import os
+from serial import Serial
 from time import sleep
-import serial
 
 
 class Arduino:
@@ -18,7 +18,7 @@ class Arduino:
             for port in ports:
                 if os.path.exists(port):
                     # os.chmod(port, 777)
-                    self.arduino = serial.Serial(port, 9600)
+                    self.arduino = Serial(port, 9600)
                     break
 
             sleep(time)
