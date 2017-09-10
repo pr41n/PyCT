@@ -3,7 +3,7 @@
 babel = 'english'
 name_of_the_button = 'English'
 
-calibration_1 = "Click on the corners following the next instructions and \n" \
+calibration = "Click on the corners following the next instructions and \n" \
                 "from the point of view of the white player:\n\n" \
                 "     1- Square A1: left bottom corner\n" \
                 "     2- Square H1: right bottom corner\n" \
@@ -11,10 +11,6 @@ calibration_1 = "Click on the corners following the next instructions and \n" \
                 "     4- Square A8: left top corner\n\n" \
                 "When you have finished, press enter and the rest\n" \
                 "of the chessboard's points."
-
-
-calibration_2 = 'If you agree with the points, press enter. Otherwise, escape.'
-camera_choosing = 'Select the camera you are going to use.'
 
 player_1 = "Whites"
 player_2 = "Blacks"
@@ -101,9 +97,9 @@ aud_012 = "Remember kings must be in the E column."
 aud_013 = "Whites start."
 aud_014 = "%s by %s"
 aud_015 = "%s to %s"
-aud_016 = "Don't move too many times the pawns, try moving other pieces."
-aud_017 = "Try using more the pawns."
-aud_018 = "To achieve a better mobility of the knights, try placing them in the center of the chessboard."
+aud_016 = 'If you agree with the points, press enter. Otherwise, escape.'
+aud_017 = 'Select the camera you are going to use.'
+aud_018 = 'By the way, select the type of detection.'
 aud_019 = "Detection error. Press any key when you have placed again the pieces."
 aud_020 = "If you prefer to input manually the move, press escape."
 aud_021 = "Detection error. Input the move manually."
@@ -113,3 +109,7 @@ aud_024 = "Kingside castling."
 aud_025 = "Queenside castling."
 aud_026 = "Repeat the move."
 aud_027 = "When you have placed again the pieces, press any key."
+
+aud_A01 = "Don't move too many times the pawns, try moving other pieces."
+aud_A02 = "Try using more the pawns."
+aud_A03 = "To achieve a better mobility of the knights, try placing them in the center of the chessboard."

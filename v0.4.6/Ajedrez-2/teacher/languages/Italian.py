@@ -3,7 +3,7 @@
 babel = 'italian'
 name_of_the_button = 'Italiano'
 
-calibration_1 = u"Premi i punti seguendo quest'ordine e dal punto\n" \
+calibration = u"Premi i punti seguendo quest'ordine e dal punto\n" \
                 u"di vista del giocatore bianco:\n\n" \
                 u"     1- Casella A1: angolo inferiore sinistro\n" \
                 u"     2- Casella H1: angolo inferiore destro\n" \
@@ -12,9 +12,6 @@ calibration_1 = u"Premi i punti seguendo quest'ordine e dal punto\n" \
                 u"Il mio consiglio è che segnali gli angoli inferiori invece delle \n" \
                 u"linee. Una volta finito, premi enter e appariranno il resto\n" \
                 u"dei punti della scacchiera."
-
-calibration_2 = u"Se sei d'accordo con i punti, premi enter. Altrimenti, premi esc"
-camera_choosing = u'Seleziona la camera che vuoi usare.'
 
 player_1 = "Bianchi"
 player_2 = "Neri"
@@ -101,9 +98,9 @@ aud_012 = "Ricorda, il re si trova nella colonna E."
 aud_013 = "Cominciano i bianchi."
 aud_014 = "%s per %s"
 aud_015 = "%s a %s"
-aud_016 = "Non usare sempre i pedoni, cerca di muovere altre figure."
-aud_017 = u"Cerca di muovere di più i pedoni."
-aud_018 = u"Per avere più mobilità con i cavalli, cerca di non posizionarli ai lati."
+aud_016 = u"Se sei d'accordo con i punti, premi enter. Altrimenti, premi esc"
+aud_017 = u'Seleziona la camera che vuoi usare.'
+aud_018 = u'Por cierto, escoge el tipo de detección'
 aud_019 = "Errore rilevato. Premi qualsiasi tasto dopo aver riposto tutte le figure."
 aud_020 = "Se preferisci introdurre il movimento manualmente, premi esc."
 aud_021 = "Errore rilevato. Inserisci manualmente il movimento."
@@ -113,3 +110,7 @@ aud_024 = "Arrocco corto."
 aud_025 = "Arrocco lungo."
 aud_026 = "Ripeti il movimento."
 aud_027 = "Dopo aver riposto tutte le figure, premi qualsiasi tasto."
+
+aud_A01 = "Non usare sempre i pedoni, cerca di muovere altre figure."
+aud_A02 = u"Cerca di muovere di più i pedoni."
+aud_A03 = u"Per avere più mobilità con i cavalli, cerca di non posizionarli ai lati."

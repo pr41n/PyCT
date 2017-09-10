@@ -6,12 +6,22 @@ from func import prevent_auido_error, give_values
 from languages import Spanish, English, Italian, Personalizado
 
 languages = [Spanish, Italian, Personalizado, English]
-language = Spanish
+language = [i for i in languages if i.babel == 'spanish'][0]
 
 sts = synth.Sts(language.babel)
 
 
+def refresh_sts():
+    global language, sts
+    try:
+        sts = synth.Sts(language.sound)
+
+    except AttributeError:
+        sts = synth.Sts(language.babel)
+
+
 class Language:
+
     def __init__(self):
         global language
         self.say = sts.say
@@ -29,6 +39,9 @@ class Language:
         elif moment == 2:
             self.say(language.aud_007)
             self.say(language.aud_008)
+
+    def detection(self):
+        prevent_auido_error(self.say, language.aud_018)
 
     def arduino(self, signal):
         if signal:
@@ -69,7 +82,6 @@ class Language:
 
     def repeat_move(self, first_time):
         self.say(language.aud_026)
-
         if first_time:
             self.say(language.aud_027)
 
@@ -78,39 +90,6 @@ class Advice(Language):
     pawn_1, pawn_2, knight = give_values(None, 3)
 
     def main(self):
-        self.pawn_1 = language.aud_016
-        self.pawn_2 = language.aud_017
-        self.knight = language.aud_018
-
-
-def _refresh_sts():
-    global language, sts
-    try:
-        sts = synth.Sts(language.sound)
-
-    except AttributeError:
-        sts = synth.Sts(language.babel)
-
-
-def english():
-    global language
-    language = English
-    _refresh_sts()
-
-
-def spanish():
-    global language
-    language = Spanish
-    _refresh_sts()
-
-
-def italian():
-    global language
-    language = Italian
-    _refresh_sts()
-
-
-def personalizado():
-    global language
-    language = Personalizado
-    _refresh_sts()
+        self.pawn_1 = language.aud_A01
+        self.pawn_2 = language.aud_A02
+        self.knight = language.aud_A03

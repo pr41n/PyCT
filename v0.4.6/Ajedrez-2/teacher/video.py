@@ -61,7 +61,7 @@ class ChessBoard:
             #
 
             cv2.imshow(win_name, self.image)
-            thread_starter(sts.say, [audio.language.calibration_2])
+            thread_starter(sts.say, [audio.language.aud_016])
 
             k = cv2.waitKey(0) & 0xFF
 
@@ -137,9 +137,6 @@ class ChessBoard:
     #
 
     def rectify_chessboard(self, img):          # Image is not a file
-
-        image = img
-
         points_image = np.zeros((2, self.patternSize * self.patternSize))
 
         points_roi = [(0, 800), (800, 800), (800, 0), (0, 0)]
@@ -156,7 +153,7 @@ class ChessBoard:
 
         # n = 0
         for point in points_image:
-            cv2.circle(image, tuple(point.astype(int)), 5, (0, 255, 0), -1)
+            cv2.circle(img, tuple(point.astype(int)), 5, (0, 255, 0), -1)
             lists.rectified_points.append(point)
             # cv2.putText(image, str(n), tuple(point.astype(int)),
             #            fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=0.5)
@@ -258,7 +255,10 @@ class Detection:
         if len(areas) == 2:
             max_areas = areas
 
-        elif len(areas) < 2:
+        elif len(areas) == 0:
+            raise EnvironmentError
+
+        elif len(areas) == 1:
             return self.Squares()
 
         else:
@@ -279,7 +279,7 @@ class Detection:
 
             cv2.rectangle(img_2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            center = ((2 * x + w) / 2, (2 * y + h) / 2)
+            center = ((2*x + w)/2, (2*y + h)/2)
 
             pts.append(center)
             cv2.circle(img_2, center, 3, (255, 0, 0))
@@ -293,11 +293,11 @@ class Detection:
                 for i in lists.rectified_squares:
                     j = lists.rectified_squares[i]
 
-                    left_bottom = tuple(j[2])
-                    right_top = tuple(j[1])
+                    right_bottom = tuple(j[2])      # The 0, 0 point is at the top-left window's corner
+                    left_top = tuple(j[1])
 
-                    if left_bottom[0] < p[0] and left_bottom[1] < p[1] and \
-                       right_top[0] > p[0] and right_top[1] > p[1]:
+                    if right_bottom[0] < p[0] and right_bottom[1] < p[1] and \
+                       left_top[0] > p[0] and left_top[1] > p[1]:
 
                         if i not in squares:
                             squares.append(i)
@@ -306,9 +306,7 @@ class Detection:
         cv2.imshow('threshold', threshold)
         cv2.imshow('diff', diff)
 
-        k = cv2.waitKey(0)
-
-        if k == 27:
+        if cv2.waitKey(0) & 0xFF == 27:
             cv2.destroyAllWindows()
             exit(11)
 
@@ -326,7 +324,7 @@ class Detection:
                     pos1 = square
 
             try:
-                print pos0[0], pos0[1], pos1[0], pos1[1]
+                print pos0[0], pos0[1], ">>", pos1[0], pos1[1]
                 return pos0, pos1
 
             except TypeError:
@@ -336,18 +334,15 @@ class Detection:
             return self.Squares()
 
     def Squares(self):
-        print "casillas"
+        print "squares"
         squares = {}
-        for y in range(1, 9):
-            for x in range(1, 9):
+        for y in xrange(1, 9):
+            for x in xrange(1, 9):
                 thread = thread_starter(self.__squareProcess, [x, y, squares])
-
                 if (x, y) == (8, 8):
                     thread.join()
-        areas = []
-        for square in squares:
-            areas.append(squares[square])
 
+        areas = squares.values()
         areas.sort()
         max_areas = [areas[len(areas) - 1], areas[len(areas) - 2]]
 
@@ -361,7 +356,7 @@ class Detection:
                     pos1 = square
 
         try:
-            print pos0[0], pos0[1], pos1[0], pos1[1]
+            print pos0[0], pos0[1], ">>", pos1[0], pos1[1]
             return pos0, pos1
 
         except TypeError:
@@ -400,7 +395,7 @@ class Detection:
         threshold = cv2.morphologyEx(threshold, cv2.MORPH_CLOSE, kernel)
 
         img_contour = threshold.copy()
-        im, contours, hierarchy = cv2.findContours(img_contour, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = cv2.findContours(img_contour, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
         return contours, threshold, diff
 
@@ -415,7 +410,7 @@ class Camera:
         self.second_camera = False
         if cv2.VideoCapture(1).isOpened():
 
-            thread_starter(prevent_auido_error, [sts.say, audio.language.camera_choosing])
+            thread_starter(prevent_auido_error, [sts.say, audio.language.aud_017])
 
             OpenCV('cam 1', 200, 100, 500, 500)
             OpenCV('cam 2', 700, 100, 500, 500)

@@ -4,18 +4,15 @@ babel = 'spanish'
 name_of_the_button = u'Español'
 
 
-calibration_1 = u"Marca los puntos siguiendo este orden y desde el punto\n" \
-                u"de vista del jugador blanco:\n\n" \
-                u"     1- Casilla A1: esquina inferior izquierda\n" \
-                u"     2- Casilla H1: esquina inferior derecha\n" \
-                u"     3- Casilla H8: esquina superior derecha\n" \
-                u"     4- Casilla A8: esquina superior izquierda\n\n" \
-                u"Mi recomendación es que marques las esquinas interiores en\n" \
-                u"vez de las líneas. Al acabar, pulsa enter y aparecerán el resto\n" \
-                u"de puntos del tablero."
-
-calibration_2 = u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'
-camera_choosing = u'Selecciona la cámara que vayas a usar.'
+calibration = u"Marca los puntos siguiendo este orden y desde el punto\n" \
+              u"de vista del jugador blanco:\n\n" \
+              u"     1- Casilla A1: esquina inferior izquierda\n" \
+              u"     2- Casilla H1: esquina inferior derecha\n" \
+              u"     3- Casilla H8: esquina superior derecha\n" \
+              u"     4- Casilla A8: esquina superior izquierda\n\n" \
+              u"Mi recomendación es que marques las esquinas interiores en\n" \
+              u"vez de las líneas. Al acabar, pulsa enter y aparecerán el resto\n" \
+              u"de puntos del tablero."
 
 player_1 = "Blancas"
 player_2 = "Negras"
@@ -102,9 +99,9 @@ aud_012 = u"Recuerda que los reyes van en la columna E."
 aud_013 = u"Empiezan las blancas."
 aud_014 = u"%s por %s"
 aud_015 = u"%s a %s"
-aud_016 = u"No muevas tanto los peones."
-aud_017 = u"Usa más los peones."
-aud_018 = u"Para conseguir una mejor movilidad de los caballos, evita llevarlos a los lados."
+aud_016 = u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'
+aud_017 = u'Selecciona la cámara que vayas a usar.'
+aud_018 = u'Por cierto, escoge el tipo de detección'
 aud_019 = u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas."
 aud_020 = u"Si prefieres introducir el movimiento manualmente, pulsa escape."
 aud_021 = u"Error de detección, introduzca el movimiento manulamente."
@@ -114,3 +111,7 @@ aud_024 = u"Enroque corto."
 aud_025 = u"Enroque largo."
 aud_026 = u"Repite el movimiento."
 aud_027 = u"Cuando hayas devuelto las piezas a su posición inicial, pulsa cualquier tecla para continuar."
+
+aud_A01 = u"No muevas tanto los peones."
+aud_A02 = u"Usa más los peones."
+aud_A03 = u"Para conseguir una mejor movilidad de los caballos, evita llevarlos a los lados."

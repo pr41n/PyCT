@@ -1,7 +1,6 @@
 # -*- coding: cp1252 -*-
 
 import re
-import cv2
 
 try:
     import gtk
@@ -9,7 +8,8 @@ except ImportError:
     import pygtk
     pygtk.require(2.0)
     import gtk
-
+finally:
+    import cv2
 
 import lists
 import pieces
@@ -64,9 +64,10 @@ class Window:
         idiom_index = audio.languages.index(audio.language)
         new_idiom = audio.languages[idiom_index - 1]
 
+        audio.language = new_idiom
         self.idiom_button.set_label(new_idiom.name_of_the_button)
-        eval('audio.%s()' % new_idiom.babel)
 
+        audio.refresh_sts()
         self.refresh_gui()
 
     def __init__(self):
@@ -194,7 +195,7 @@ class Window:
         self.window.show_all()
 
     def calibration_instructions(self):
-        self.label.set_text(audio.language.calibration_1)
+        self.label.set_text(audio.language.calibration)
         self.label.set_justify(0)
         self.box1.pack_start(self.label)
         self.label.set_alignment(0.5, 0.04)
