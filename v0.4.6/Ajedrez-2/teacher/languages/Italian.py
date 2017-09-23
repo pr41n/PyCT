@@ -57,31 +57,30 @@ bishop = "Alfiere"
 queen = "Regina"
 king = "Re"
 
-incorrect_move_000 = u"Jugada incorrecta: \n"
-incorrect_move_001 = u"     La única pieza que puede saltar a otras es el caballo."
+incorrect_move_000 = u"Mossa scorretta: \n"
+incorrect_move_001 = u"     L'unico pezzo che può saltare altri è cavallo."
 
-incorrect_move_002 = u"     El peón avanza en línea recta y come en diagonal. Siempre \n" \
-                     u"   avanzando una fila. Si es la primera vez que lo mueves, \n" \
-                     u"   puede avanzar dos casillas en línea recta."
+incorrect_move_002 = u"     Il pedone avanza in linea retta e mangia in diagonale. Sempre \n" \
+                     u"   avanzando di una fila. Se è la prima volta che lo muovi, \n" \
+                     u"   puoi avanzare di due caselle in linea retta."
 
-incorrect_move_003 = u"     La torre se mueve en línea recta."
+incorrect_move_003 = u"     La torre si muove in linea retta."
 
-incorrect_move_004 = u"     El caballo se mueve dos casillas horizontalmente y una vertical\n" \
-                     u"   o viceversa, de modo que forme una L."
+incorrect_move_004 = u"     Il cavallo si muove due caselle orizzontali e una verticale\n" \
+                     u"   o viceversa, in modo da formare una L."
 
-incorrect_move_005 = u"     El alfil se mueve en diagonal."
+incorrect_move_005 = u"     L'alfiere si muove in diagonale."
 
-incorrect_move_006 = u"     La reina se mueve como un alfil y una torre a la vez, es decir,\n" \
-                     u"   recto o en diagonal."
+incorrect_move_006 = u"     La regina si muove come l'alfiere e la torre allo stesso tempo\n" \
+                     u"   , cioè, dritto o in diagonale."
 
-incorrect_move_007 = u"     El rey solo puede avanzar una casilla en todas direcciones."
+incorrect_move_007 = u"     Il re può soltanto avanzare una casella alla volta in tutte le direzioni."
 
-incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del lado en el\n" \
-                     u"   que se va a enrocar se han movido antes,\npor lo que es en la\n" \
-                     u"   misma fila. Además, no debe haber ninguna pieza entre la torre\n" \
-                     u"   y el rey. Existen dos enroques:\n" \
-                     u"       Enroque corto: el rey se mueve a la columna G y la torre a la F.\n" \
-                     u"       Enroque largo: el rey se mueve a la columna C y la torre a la D."
+incorrect_move_008 = u"     Il re può soltanto arrocare se non hai mosso ne lui ne la torre prima.\n" \
+                     u"   Fra l'altro non ci deve essere nessun pezzo fra il re e la torre." \
+                     u"   Ci sono due tipi di arroco:\n" \
+                     u"       Arroco corto: il re si muove alla colonna G e la torre alla F.\n" \
+                     u"       Arroco lungo: il re si muove alla colonna C e la torre alla D."
 
 aud_001 = "Ciao, sono Pyct."
 aud_002 = "Chiedo scusa per la mia voce."
@@ -99,8 +98,8 @@ aud_013 = "Cominciano i bianchi."
 aud_014 = "%s per %s"
 aud_015 = "%s a %s"
 aud_016 = u"Se sei d'accordo con i punti, premi enter. Altrimenti, premi esc"
-aud_017 = u'Seleziona la camera che vuoi usare.'
-aud_018 = u'Por cierto, escoge el tipo de detección'
+aud_017 = u"Seleziona la camera che vuoi usare."
+aud_018 = u"A proposito, scegli il tipo di rivelazione"
 aud_019 = "Errore rilevato. Premi qualsiasi tasto dopo aver riposto tutte le figure."
 aud_020 = "Se preferisci introdurre il movimento manualmente, premi esc."
 aud_021 = "Errore rilevato. Inserisci manualmente il movimento."
