@@ -13,3 +13,8 @@ class Sts:
         self.engine.say(' ')
         self.engine.runAndWait()
         self.engine.runAndWait()
+
+
+if __name__ == '__main__':
+    sts = Sts('english')
+    sts.say('Have you tried turning it off and on again?')
