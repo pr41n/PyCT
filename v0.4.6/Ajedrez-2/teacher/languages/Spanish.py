@@ -106,9 +106,9 @@ aud_019 = u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a 
 aud_020 = u"Si prefieres introducir el movimiento manualmente, pulsa escape."
 aud_021 = u"Error de detección, introduzca el movimiento manulamente."
 aud_022 = u"Jaque mate, ganan %s en el turno %s, ¡felicidades!."
-aud_023 = u"%s corona."
-aud_024 = u"Enroque corto."
-aud_025 = u"Enroque largo."
+aud_023 = u"%s corona"
+aud_024 = u"Enroque corto"
+aud_025 = u"Enroque largo"
 aud_026 = u"Repite el movimiento."
 aud_027 = u"Cuando hayas devuelto las piezas a su posición inicial, pulsa cualquier tecla para continuar."
 

@@ -59,7 +59,7 @@ bishop = u"Alfil"
 queen = u"Reina"
 king = u"Rey"
 
-incorrect_move_000 = u"Jugada incorrecta: \n"
+incorrect_move_000 = u"Os habés comido un garrón de la gran flauta: \n"
 incorrect_move_001 = u"     La única pieza que puede saltar a otras es el caballo."
 
 incorrect_move_002 = u"     El peón avanza en línea recta y come en diagonal. Siempre \n" \
@@ -106,7 +106,7 @@ aud_018 = u' '
 aud_019 = u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas."
 aud_020 = u"Si prefieres introducir el movimiento manualmente, pulsa escape."
 aud_021 = u"Error de detección, introduzca el movimiento manulamente."
-aud_022 = u"Jaque mate, ganan %s en el turno %s, ¡felicidades!."
+aud_022 = u"Jaque mate, ganan %s en el turno %s. Sos inimputable, hermano, en diez días salís."
 aud_023 = u"%s corona."
 aud_024 = u"Enroque corto."
 aud_025 = u"Enroque largo."
