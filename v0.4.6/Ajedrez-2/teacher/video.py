@@ -35,14 +35,15 @@ class ChessBoard:
             cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
             cv2.moveWindow(win_name, 1100, -100)
             cv2.resizeWindow(win_name, 600, 500)
+
             self.points_roi = []
+
             cv2.setMouseCallback(win_name, self.mouse_click, self)
             cv2.imshow(win_name, self.image)
 
             cv2.waitKey(0)
 
             self.transform = self.compute_warp(self.points_roi)
-
             points_image = np.matmul(self.transform, self.points_chessboard.transpose())
 
             self.points_image[0, :] = points_image[0, :] / points_image[2, :]
@@ -55,7 +56,7 @@ class ChessBoard:
                 cv2.circle(self.image, tuple(point.astype(int)), 5, (0, 255, 0), -1)
                 lists.points.append(point)
                 # cv2.putText(self.image, str(n), tuple(point.astype(int)),
-                #             fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=1)
+                #             fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255), fontScale=0.5)
                 # n += 1
 
             #
@@ -206,12 +207,12 @@ class ChessBoard:
 
 class Calibration:
     def __init__(self, img):        # Image is a file
-        self.chessboard = ChessBoard(img)
-        self.rectified_image = self.chessboard.rectify_image(cv2.imread(img))
-        self.chessboard.rectify_chessboard(self.rectified_image)
+        self._chessboard = ChessBoard(img)
+        self.rectified_image = self._chessboard.rectify_image(cv2.imread(img))
+        self._chessboard.rectify_chessboard(self.rectified_image)
 
     def rectify_image(self, img):       # Image is not a file
-        self.rectified_image = self.chessboard.rectify_image(img)
+        self.rectified_image = self._chessboard.rectify_image(img)
         return self.rectified_image
 
     @staticmethod
@@ -263,7 +264,7 @@ class Detection:
 
         else:
             areas.sort()
-            max_areas = [areas[len(areas) - 1], areas[len(areas) - 2]]
+            max_areas = [areas[-1], areas[-2]]
 
         max_contours = []
         for c in contours:

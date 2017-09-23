@@ -30,10 +30,7 @@ rectified_points = []
 def occupied_squares():
     """Return black and white occupied squares."""
 
-    dic = {}
-
-    for i in OccupiedSquares:
-        for j in OccupiedSquares[i]:
-            dic[j] = OccupiedSquares[i][j]
-
-    return dic
+    t_dic = {}
+    for dic in OccupiedSquares.values():
+        t_dic.update(dic)
+    return t_dic

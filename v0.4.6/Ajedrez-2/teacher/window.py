@@ -210,9 +210,7 @@ class Window:
         text_2 = self.player.get_text()
         text_3 = self.move.get_text()
 
-        a = text_1.split("\n")
-
-        if len(a) >= 21:
+        if len(text_1.split("\n")) >= 21:
             text_1 = ""
             text_2 = ""
             text_3 = ""
@@ -353,10 +351,3 @@ def OpenCV(winName, x, y, width, height):
         cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
         cv2.moveWindow(winName, x, y)
         cv2.resizeWindow(winName, width, height)
-
-if __name__ == '__main__':
-    ventana = Window()
-    ventana.main()
-    lists.WhitePieces.remove("King")
-    ventana.refresh_playing(None, None)
-    ventana.main()

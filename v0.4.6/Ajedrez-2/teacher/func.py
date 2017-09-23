@@ -7,6 +7,7 @@ import lists
 from scripts import memory
 from tmp import cleaner
 
+local_memory = memory.Memory()
 columns = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
 
@@ -136,7 +137,7 @@ def video_exit(k):
     """Add different options during video streams."""
 
     if k == ord('m'):       # Print used memory
-        memory.main()
+        local_memory.print_used_memory()
 
     elif k == 227:          # Close the program after cleaning tmp files
         cleaner.Clean.images()

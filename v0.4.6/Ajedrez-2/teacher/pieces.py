@@ -29,7 +29,7 @@ class Piece:
             a = min(Ay, By) + 1
             b = max(Ay, By)
     
-            for i in range(a, b):
+            for i in xrange(a, b):
                 j = (Ax, i)
                 if j in occupied_squares:
                     return True
@@ -38,29 +38,29 @@ class Piece:
             a = min(Ax, Bx) + 1
             b = max(Ax, Bx)
     
-            for i in range(a, b):
+            for i in xrange(a, b):
                 j = (i, Ay)
                 if j in occupied_squares:
                     return True
     
         elif abs(Bx-Ax) == abs(By-Ay):
-            h = abs(Bx-Ax)
+            b = abs(Bx-Ax)
     
             if Ax < Bx and Ay > By or Ax > Bx and Ay < By:
-                a = max(Ax, Bx)
-                b = min(Ay, By)
+                n = max(Ax, Bx)
+                m = min(Ay, By)
     
-                for i in range(1, h):
-                    j = (a-i, b+i)
+                for i in xrange(1, b):
+                    j = (n-i, m+i)
                     if j in occupied_squares:
                         return True
     
             else:
-                a = min(Ax, Bx)
-                b = min(Ay, By)
+                n = min(Ax, Bx)
+                m = min(Ay, By)
     
-                for i in range(1, h):
-                    j = (a+i, b+i)
+                for i in xrange(1, b):
+                    j = (n+i, m+i)
                     if j in occupied_squares:
                         return True
 
