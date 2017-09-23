@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 
+from glob import glob
+
 from scripts import synth
 from func import prevent_auido_error, give_values
 
-from languages import Spanish, English, Italian, Personalizado
+importable = glob('languages/[A-Z]*.py')
 
-languages = [Spanish, Italian, Personalizado, English]
+languages = []
+for love in importable:
+    magic = love.split("/")[1].split(".")[0]
+
+    exec "from languages import {}".format(magic)
+    languages.append(eval(magic))
+
 language = [i for i in languages if i.babel == 'spanish'][0]
 
 sts = synth.Sts(language.babel)
