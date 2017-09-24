@@ -3,7 +3,6 @@ const int Verde_2 = 3;
 const int Rojo_1 = 4;
 const int Rojo_2 = 5;
 
-int i=0;
 int h=0;
 int reset(){
   digitalWrite(Verde_1,LOW);
@@ -15,16 +14,14 @@ int reset(){
 }
 int win(int Verde,int Rojo)
 {
-  while (i <= 3){
+  for (int i = 0; i <= 7; i++){
     digitalWrite(Verde, HIGH);
     digitalWrite(Rojo, HIGH);
     delay(500);
     digitalWrite(Verde, LOW);
     digitalWrite(Rojo, LOW);
     delay(500);
-    i++;
   }
-  i=0;
 }
 int option_a()
 {
