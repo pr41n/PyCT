@@ -1,21 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from glob import glob
+import os
 
 from scripts import synth
 from func import prevent_auido_error, give_values
 
-importable = glob('languages/[A-Z]*.py')
-
 languages = []
-for love in importable:
-    magic = love.split("/")[1].split(".")[0]
+if os.name == 'posix':
+    importable = glob('languages/[A-Z]*.py')
 
-    exec "from languages import {}".format(magic)
-    languages.append(eval(magic))
+    for love in importable:
+        magic = love.split("/")[1].split(".")[0]
+        exec "from languages import {}".format(magic)
+        languages.append(eval(magic))
+
+elif os.name == 'nt':
+    importable = [a for a in os.listdir('languages') if a.endswith('.py')]
+    importable.remove('add.py'); importable.remove('__init__.py')
+
+    for love in importable:
+        magic = love.split(".")[0]
+        exec "from languages import {}".format(magic)
+        languages.append(eval(magic))
 
 language = [i for i in languages if i.babel == 'spanish'][0]
-
 sts = synth.Sts(language.babel)
 
 
