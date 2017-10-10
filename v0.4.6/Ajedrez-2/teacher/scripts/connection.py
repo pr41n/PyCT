@@ -23,11 +23,9 @@ class Arduino:
 
             sleep(time)
             self.write('s', 0)
+            print "llega"
 
         except:
-            raise OSError
-
-        else:
             raise OSError
 
     def write(self, write, time):
