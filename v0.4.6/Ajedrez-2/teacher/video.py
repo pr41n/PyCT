@@ -380,6 +380,7 @@ class Detection:
 
                 elif cv2.contourArea(c) > dic[(x, y)]:
                     dic[(x, y)] = cv2.contourArea(c)
+        return
 
     @staticmethod
     def Diff(img_1, img_2):
