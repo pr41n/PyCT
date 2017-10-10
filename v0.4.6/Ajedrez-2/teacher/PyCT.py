@@ -105,7 +105,8 @@ class PyCT:
         thread_starter(self.audio.check_mate, [player, self.turn - 1])
         sleep(2)
         prevent_auido_error(self.audio.say, " ")
-
+        global arduino
+        arduino.write('r')
         video_exit(227)
 
     def calibrated(self, first_attempt):
@@ -214,7 +215,7 @@ class PyCT:
         instructions = cv2.imread('languages/Video.png')
         try:
             OpenCV(audio.language.open_cv_3, 490, 485, 435, 170)
-            first_frame = True
+            first_frame = 10
             moving, moved, show_diff = give_values(False, 3)
             origin = None
             original = None
@@ -251,13 +252,14 @@ class PyCT:
                         cv2.destroyWindow('diff')
                         cv2.destroyWindow('histogram')
 
-                if first_frame:
+                if first_frame > 0:
                     origin = frame
                     original = 'tmp/origin.jpg'
                     cv2.imwrite(original, frame)
-                    first_frame = False
+                    first_frame -= 1
 
-                diff = cv2.absdiff(frame, origin)
+                diff = cv2.absdiff(calibration.rectify_image(frame),
+                                   calibration.rectify_image(origin))
                 im = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
 
                 histogram = cv2.calcHist([im], [0], None, [256], [0, 256])
@@ -266,7 +268,7 @@ class PyCT:
                 hist[:] = histogram
 
                 if show_diff:
-                    cv2.imshow('diff', diff)
+                    cv2.imshow('diff', im)
                     cv2.imshow('histogram', hist)
 
                 n = 0
@@ -274,7 +276,7 @@ class PyCT:
                     if i > 1000:
                         n += 1
 
-                if moving and n < 15:
+                if moving and n < 21:
                         sleep(1)
                         now = 'tmp/now.jpg'
                         cv2.imwrite(now, frame)
@@ -292,7 +294,7 @@ class PyCT:
                             cv2.destroyWindow('histogram')
                         return pos0, pos1
 
-                if n > 20:
+                if n > 30:
                     moving = True
 
         except (cv2.error, IndexError):
@@ -396,14 +398,16 @@ class PyCT:
                     self.match = False
                 else:
                     self.player = 2
+                    eval(self.good)
+
             elif self.player == 2:
                 if "King" not in lists.WhitePieces:
                     self.match = False
                 else:
                     self.player = 1
                     self.turn += 1
+                    eval(self.good)
 
-            eval(self.good)
 
         else:
             global z
@@ -413,8 +417,8 @@ class PyCT:
             if z:
                 z = False
                 
-            cv2.waitKey(0)
             eval(self.bad)
+            cv2.waitKey(0)
 
     def test(self):
         import pieces
