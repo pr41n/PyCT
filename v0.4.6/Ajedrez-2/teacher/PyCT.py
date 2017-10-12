@@ -56,7 +56,7 @@ class PyCT:
 
         self.good, self.bad, self.checkmate = self.arduino_conection()
 
-        thread_starter(self.audio.detection).join()
+        thread_starter(self.audio.detection)
         self.sort_of_detection = self.win.sort_of_detection()
         print self.sort_of_detection
 
@@ -141,7 +141,7 @@ class PyCT:
         try:
             arduino = connection.Arduino(2)
 
-            thread_starter(self.audio.arduino, [True])
+            thread_starter(self.audio.arduino, [True]).join()
             delay = 0
 
             return "arduino.write('a', %s)" % delay, \
@@ -149,7 +149,7 @@ class PyCT:
                    "arduino.write('c', %s)" % delay
 
         except OSError:
-            thread_starter(self.audio.arduino, [False])
+            thread_starter(self.audio.arduino, [False]).join()
             return 'None', 'None', 'None'
 
     def detect_move(self):
@@ -421,11 +421,12 @@ class PyCT:
             cv2.waitKey(0)
 
     def test(self):
-        import pieces
-        for i in range(4):
-            pieces.answer = "Prueba\n\n"
-            self.win.print_incorrect_move()
-            self.win.main()
+        global audio
+        self.audio = audio.Language()
+        good, bad, checkmate = self.arduino_conection()
+
+        thread_starter(self.audio.detection).join()
+        self.sort_of_detection = self.win.sort_of_detection()
 
 
 if __name__ == '__main__':

@@ -57,7 +57,7 @@ queen = "Queen"
 king = "King"
 
 incorrect_move_000 = "Incorrect move: \n"
-incorrect_move_001 = "     The only piece can jump over other pieces is th knight."
+incorrect_move_001 = "     The only piece can jump over other pieces is the knight."
 
 incorrect_move_002 = "     The pawn must move straight and eat in diagonal. Ever\n" \
                      "   advancing one line. If it's the first time you move it,\n" \
@@ -103,7 +103,7 @@ aud_018 = 'By the way, select the type of detection.'
 aud_019 = "Detection error. Press any key when you have placed again the pieces."
 aud_020 = "If you prefer to input manually the move, press escape."
 aud_021 = "Detection error. Input the move manually."
-aud_022 = "Checkmate, %s has won at turn %s, congratulations!."
+aud_022 = "Checkmate, %s has won at turn %d, congratulations!."
 aud_023 = "%s promotes."
 aud_024 = "Kingside castling."
 aud_025 = "Queenside castling."
