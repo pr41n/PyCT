@@ -1,2 +1,14 @@
 
 \.idea/
+
+venv/Include/
+
+venv/Lib/
+
+venv/Scripts/
+
+venv/tcl/tcl8\.5/
+
+venv/tcl/tk8\.5/
+
+venv/
