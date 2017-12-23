@@ -1,4 +1,5 @@
-# -*- coding: cp1252 -*-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from time import sleep
 
@@ -178,9 +179,7 @@ class King(Piece):
             return True
 
         elif move_1 == 2 and move_2 == 0:
-            ans = audio.language.incorrect_move_008
-
-            if Ax == 5 and not self.jump(Ax, Ay, Bx, By):
+            if Ax == 5 and not self.jump(Ax, Ay, Bx, By) and (Bx, By) not in lists.occupied_squares():
                 try:
                     y = 1 if player == 1 else 8
                     dic = 'White' if player == 1 else 'Black'
@@ -194,17 +193,14 @@ class King(Piece):
                         lists.OccupiedSquares[dic][(4, y)] = "Rook"
 
                 except KeyError:
-                    self.incorrect(ans)
+                    self.incorrect(audio.language.incorrect_move_008)
                     return False
 
                 sleep(4)
                 return True
 
             else:
-                if self.jump(Ax, Ay, Bx, By):
-                    pass
-                else:
-                    self.incorrect(ans)
+                self.incorrect(audio.language.incorrect_move_008)
                 return False
 
         else:

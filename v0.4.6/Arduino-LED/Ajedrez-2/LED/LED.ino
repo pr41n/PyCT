@@ -76,8 +76,8 @@ void loop()
     }
     if (option == 'c')
     {
-      if (h==1){reset(); win(2, 4);}
-      if (h==2){reset(); win(3, 5);}
+      if (h==1){reset(); win(2, 4); reset();}
+      if (h==2){reset(); win(3, 5); reset();}
     }
   }
 }

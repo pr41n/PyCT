@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 WhitePieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "Rook_1", "Rook_2",
                "Pawn_1", "Pawn_2", "Pawn_3", "Pawn_4", "Pawn_5", "Pawn_6", "Pawn_7", "Pawn_8"]
 

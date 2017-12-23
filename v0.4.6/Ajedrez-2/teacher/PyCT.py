@@ -1,4 +1,5 @@
-# -*- coding: cp1252 -*-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from time import sleep
 
@@ -127,8 +128,7 @@ class PyCT:
                     thread_starter(self.audio.calibration, [2])
                     self.win.calibration_instructions()
 
-                cv2.imwrite('tmp/ChessBoard.jpg', frame)
-                calibration = Calibration('tmp/ChessBoard.jpg')
+                calibration = Calibration(frame)
                 cv2.destroyWindow(audio.language.open_cv_2)
                 break
 
@@ -332,8 +332,9 @@ class PyCT:
         elif occupied_squares[pos0] == "King":
             self.n_pawns_2 += 1
 
-        if self.n_pawns_2 == 6:
+        if self.n_pawns_2 == 6 and self.turn == 15:
             self.advice = self.advices.pawn_2
+            self.lets_advice = True
             self.n_pawns_2 += 1
 
         who = eval('pieces.%s()' % occupied_squares[pos0])
@@ -414,8 +415,7 @@ class PyCT:
             self.win.print_incorrect_move()
             thread_starter(self.audio.repeat_move, [z])
             
-            if z:
-                z = False
+            if z: z = False
                 
             eval(self.bad)
             cv2.waitKey(0)

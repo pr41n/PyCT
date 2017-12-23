@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from os import remove
 from glob import glob
 
@@ -24,6 +26,7 @@ class Clean:
 
         for pyc in pyc_files:
             remove(pyc)
+
 
 if __name__ == '__main__':
     Clean.images()

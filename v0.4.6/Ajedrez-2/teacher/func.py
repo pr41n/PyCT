@@ -1,4 +1,5 @@
-# -*- coding: cp1252 -*-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import threading
 from time import sleep
@@ -34,6 +35,7 @@ def change_lists(which, e0, ef, player, p):
     compar_1, compar_2 = give_values(str, 2)
 
     #
+    # Selecting containers based in the player
 
     if player == 1:
         dic_1 = lists.OccupiedSquares['White']
@@ -59,7 +61,7 @@ def change_lists(which, e0, ef, player, p):
 
     del dic_1[e0]
 
-    if which == "Pawn" and (ef[1] == 1 or ef[1] == 8):
+    if which == "Pawn" and (ef[1] == 1 or ef[1] == 8):      # Pawn case
         dic_1[ef] = p
         list_1.append(p)
 
@@ -75,10 +77,10 @@ def change_lists(which, e0, ef, player, p):
                     list_1.remove(j)
                     break
 
-    else:
+    else:       # Another piece case
         dic_1[ef] = which
 
-    if ef in dic_2:                   # A piece has been eaten.
+    if ef in dic_2:     # Piece eaten
         eaten = dic_2[ef]
         del dic_2[ef]
 
@@ -134,7 +136,7 @@ def thread_starter(to_thread, args=()):
 
 
 def video_exit(k):
-    """Add different options during video streams."""
+    """Different options during video streams."""
 
     if k == ord('m'):       # Print used memory
         local_memory.print_used_memory()
@@ -160,7 +162,4 @@ def prevent_auido_error(audio, args):
 
 def give_values(value, n):
     """Give n times the recieved value."""
-    A = []
-    for x in range(n):
-        A.append(value)
-    return A
+    return [value for i in range(n)]

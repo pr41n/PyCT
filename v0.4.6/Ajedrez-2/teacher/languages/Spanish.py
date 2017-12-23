@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 babel = 'spanish'
@@ -67,8 +68,8 @@ incorrect_move_002 = u"     El peón avanza en línea recta y come en diagonal. 
 
 incorrect_move_003 = u"     La torre se mueve en línea recta."
 
-incorrect_move_004 = u"     El caballo se mueve dos casillas horizontalmente y una vertical\n" \
-                     u"   o viceversa, de modo que forme una L."
+incorrect_move_004 = u"     El caballo se mueve dos casillas horizontalmente y una\n" \
+                     u"   vertical o viceversa, de modo que forme una L."
 
 incorrect_move_005 = u"     El alfil se mueve en diagonal."
 

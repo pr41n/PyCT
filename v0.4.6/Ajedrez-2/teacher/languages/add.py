@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
 WARNING: Before doing anything, copy this file in the same directory
