@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import cv2
@@ -17,12 +18,11 @@ calibrated = False
 class ChessBoard:
     def __init__(self, img, calibrate=True, esq=list, size=8):
         global calibrated
-        self.patternSize = size + 1
+        self.image = img
 
+        self.patternSize = size + 1
         self.points_chessboard = np.ones((self.patternSize * self.patternSize, 3))
         self.points_chessboard[:, :2] = np.mgrid[0:self.patternSize, 0:self.patternSize].T.reshape(-1, 2)*100
-
-        self.image = cv2.imread(img)
 
         self.points_image = np.zeros((2, self.patternSize * self.patternSize))
 
@@ -137,7 +137,7 @@ class ChessBoard:
     #
     #
 
-    def rectify_chessboard(self, img):          # Image is not a file
+    def rectify_chessboard(self, img):
         points_image = np.zeros((2, self.patternSize * self.patternSize))
 
         points_roi = [(0, 800), (800, 800), (800, 0), (0, 0)]
@@ -208,10 +208,10 @@ class ChessBoard:
 class Calibration:
     def __init__(self, img):        # Image is a file
         self._chessboard = ChessBoard(img)
-        self.rectified_image = self._chessboard.rectify_image(cv2.imread(img))
+        self.rectified_image = self._chessboard.rectify_image(img)
         self._chessboard.rectify_chessboard(self.rectified_image)
 
-    def rectify_image(self, img):       # Image is not a file
+    def rectify_image(self, img):
         self.rectified_image = self._chessboard.rectify_image(img)
         return self.rectified_image
 

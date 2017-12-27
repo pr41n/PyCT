@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from os import getpid
 
 
@@ -7,9 +9,9 @@ class Memory:
         self.__scale = {'kB': 1024.0, 'mB': 1024.0 * 1024.0,
                         'KB': 1024.0, 'MB': 1024.0 * 1024.0}
 
-        self.since_memory = self._memory()
-        self.since_resident = self._resident()
-        self.since_stackSize = self._stackSize()
+        self.since_memory = self._check('VmSize:')
+        self.since_resident = self._check('VmRSS:')
+        self.since_stackSize = self._check('VmStk:')
 
     def _VmB(self, VmKey):
         try:
@@ -27,20 +29,15 @@ class Memory:
 
         return float(v[1]) * self.__scale[v[2]]
 
-    def _memory(self, since=0.0):
-        return self._VmB('VmSize:') - since
-
-    def _resident(self, since=0.0):
-        return self._VmB('VmRSS:') - since
-
-    def _stackSize(self, since=0.0):
-        return self._VmB('VmStk:') - since
+    def _check(self, place, since=0.0):
+        return self._VmB(place) - since
 
     def print_used_memory(self):
-        print 'Memory: {} Mb'.format(self._memory(self.since_memory)/1000000)
-        print 'Resident memory: {} Mb'.format(self._resident(self.since_resident)/1000000)
-        print 'Stack size: {} Mb'.format(self._stackSize(self.since_stackSize)/1000000)
+        print 'Memory: {} Mb'.format(self._check('VmSize:', self.since_memory)/1000000)
+        print 'Resident memory: {} Mb'.format(self._check('VmRSS:', self.since_resident)/1000000)
+        print 'Stack size: {} Mb'.format(self._check('VmStk:', self.since_stackSize)/1000000)
         print
+
 
 if __name__ == '__main__':
     memory = Memory()

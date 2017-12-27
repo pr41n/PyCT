@@ -24,8 +24,14 @@ int reset()
 }
 int win(int Verde,int Rojo)
 {
-  reset();
-  
+  for (int i = 1;  i <= 7; i++){
+    digitalWrite(Verde, HIGH);
+    digitalWrite(Rojo, HIGH);
+    delay(500);
+    digitalWrite(Verde, HIGH);
+    digitalWrite(Rojo, HIGH);
+    delay(500);
+  }  
 }
 int option_a()
 {
@@ -36,7 +42,7 @@ int option_a()
         digitalWrite(Rojo_1,LOW);
         if      (Jugador_2)  {digitalWrite(Verde_2,HIGH); h=2;}
         else if (Jugador_3)  {digitalWrite(Verde_3,HIGH); h=3;}
-        else                 {win(2,5);}
+        else                 {win(Verde_1, Rojo_1); reset();}
       }
   else if (h==2)
       {
@@ -45,7 +51,7 @@ int option_a()
         digitalWrite(Rojo_2,LOW);
         if      (Jugador_3) {digitalWrite(Verde_3,HIGH); h=3;}
         else if (Jugador_1) {digitalWrite(Verde_1,HIGH); h=1;}
-        else                {win(3,6);}
+        else                {win(Verde_2, Rojo_2); reset();}
       }
   else if (h==3)
       {
@@ -54,7 +60,7 @@ int option_a()
         digitalWrite(Rojo_3,LOW);
         if      (Jugador_1) {digitalWrite(Verde_1,HIGH); h=1;}
         else if (Jugador_2) {digitalWrite(Verde_2,HIGH); h=2;}
-        else                {win(4,7);}
+        else                {win(Verde_3, Rojo_3); reset();}
       }
   else{ Serial.println("Error");}
 }

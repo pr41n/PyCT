@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os
 from serial import Serial
 from time import sleep
@@ -23,7 +25,6 @@ class Arduino:
 
             sleep(time)
             self.write('s', 0)
-            print "llega"
 
         except:
             raise OSError
@@ -31,6 +32,7 @@ class Arduino:
     def write(self, write, time):
         self.arduino.write(write)
         sleep(time)
+
 
 if __name__ == '__main__':
     arduino = Arduino(1)

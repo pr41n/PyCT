@@ -1,4 +1,5 @@
-# -*- coding: cp1252 -*-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import re
 
