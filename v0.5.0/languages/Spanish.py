@@ -87,7 +87,7 @@ incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del 
 
 aud_001 = u"Hola, soy Pict."
 aud_002 = u"Lo siento por mi voz."
-aud_003 = u"Empecemos calibrando la cámara."
+aud_003 = u"Empecemos calibrando la cámara, presiona espacio para iterar y énter para seleccionar."
 aud_004 = u"Coloca el tablero de modo que pueda ver las cuatro esquinas interiores."
 aud_005 = u"Te recomiendo mover hacia delante las torres más alejadas."
 aud_006 = u"Cuando lo hayas hecho, pulsa énter."
