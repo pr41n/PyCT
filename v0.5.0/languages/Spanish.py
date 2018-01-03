@@ -87,7 +87,7 @@ incorrect_move_008 = u"     El rey solo puede enrocar si ni él ni la torre del 
 
 aud_001 = u"Hola, soy Pict."
 aud_002 = u"Lo siento por mi voz."
-aud_003 = u"Empecemos calibrando la cámara, presiona espacio para iterar y énter para seleccionar."
+aud_003 = u"Empecemos calibrando la cámara"
 aud_004 = u"Coloca el tablero de modo que pueda ver las cuatro esquinas interiores."
 aud_005 = u"Te recomiendo mover hacia delante las torres más alejadas."
 aud_006 = u"Cuando lo hayas hecho, pulsa énter."
@@ -101,7 +101,7 @@ aud_013 = u"Empiezan las blancas."
 aud_014 = u"%s por %s"
 aud_015 = u"%s a %s"
 aud_016 = u'Si estás de acuerdo con los puntos, pulsa énter. Si no, escape'
-aud_017 = u'Selecciona la cámara que vayas a usar.'
+aud_017 = u'Selecciona la cámara que vayas a usar, presiona espacio para iterar y énter para seleccionar.'
 aud_018 = u'Por cierto, escoge el tipo de detección'
 aud_019 = u"Error en la detección. Pulse cualquier tecla cuando haya  vuelto a colocar las piezas."
 aud_020 = u"Si prefieres introducir el movimiento manualmente, pulsa escape."

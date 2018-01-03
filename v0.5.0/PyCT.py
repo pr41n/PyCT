@@ -49,7 +49,7 @@ class PyCT:
 
         # Choose camera
         camera = video.Camera()
-        self.cam = camera.choose()
+        self.cam = camera.chosen
         del camera
 
         # Calibration
@@ -72,6 +72,7 @@ class PyCT:
         self.turn = 1
         self.match = True
         self.win.show_logo()
+        thread_starter(self.audio.match)
 
         while self.match:
             self.occupied_squares = lists.occupied_squares()

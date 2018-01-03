@@ -21,22 +21,20 @@ look the similarity between self.points and self.points_image
 class Camera:
     def __init__(self):
         self.cameras = self._seek_cameras()
+        _cams_num = len(self.cameras)
 
-    class CameraError(Exception):
-        pass
-
-    def choose(self):
-        if len(self.cameras) == 0:
+        if _cams_num == 0:
             raise self.CameraError
 
-        elif len(self.cameras) == 1:
-            cam = self.cameras[0]
+        elif _cams_num == 1:
+            self.chosen = self.cameras[0]
 
         else:
             thread_starter(sts.say, [audio.language.aud_017])
-            cam = self._select_cam(self.cameras)
+            self.chosen = self._select_cam(self.cameras)
 
-        return cam
+    class CameraError(Exception):
+        pass
 
     def _select_cam(self, cams):
         new_cams = []
