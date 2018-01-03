@@ -40,13 +40,3 @@ def video_exit(k):
 
     elif k == ord('t'):     # Print the count of active threads
         print threading.activeCount()
-
-
-def prevent_auido_error(audio, args):
-    """Start a loop if an audio is being said."""
-    try:
-        audio(args)
-
-    except RuntimeError:
-        sleep(0.1)
-        prevent_auido_error(audio, args)

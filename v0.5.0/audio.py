@@ -5,7 +5,6 @@ from glob import glob
 import os
 
 from scripts import synth
-from func import prevent_auido_error
 
 languages = []
 
@@ -28,8 +27,8 @@ elif os.name == 'nt':
         exec "from languages import {}".format(magic)
         languages.append(eval(magic))
 
-language = [i for i in languages if i.babel == 'personalizado'][0]
-sts = synth.Sts(language.sound)
+language = [i for i in languages if i.babel == 'spanish'][0]
+sts = synth.Sts(language.babel)
 
 
 def refresh_sts():
@@ -61,7 +60,7 @@ class Language:
             self.say(language.aud_008)
 
     def detection(self):
-        prevent_auido_error(self.say, language.aud_018)
+        self.say(language.aud_018)
 
     def arduino(self, signal):
         if signal:
@@ -70,15 +69,15 @@ class Language:
             self.say(language.aud_010)
 
     def match(self):
-        prevent_auido_error(self.say, language.aud_011)
-        prevent_auido_error(self.say, language.aud_012)
-        prevent_auido_error(self.say, language.aud_013)
+        self.say(language.aud_011)
+        self.say(language.aud_012)
+        self.say(language.aud_013)
 
     def play(self, piece, position, eaten):
         if eaten:
-            prevent_auido_error(self.say, language.aud_014 % (piece, position))
+            self.say(language.aud_014 % (piece, position))
         else:
-            prevent_auido_error(self.say, language.aud_015 % (piece, position))
+            self.say(language.aud_015 % (piece, position))
 
     def error_1(self):
         self.say(language.aud_019)
@@ -88,7 +87,7 @@ class Language:
         self.say(language.aud_021)
 
     def check_mate(self, player, turn):
-        prevent_auido_error(self.say, language.aud_022 % (player, turn - 1))
+        self.say(language.aud_022 % (player, turn - 1))
 
     def promotion(self, piece):
         self.say(language.aud_023 % piece)

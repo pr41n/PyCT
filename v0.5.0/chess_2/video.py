@@ -8,8 +8,8 @@ from time import sleep
 
 import lists
 sys.path.append('..')
-from func import thread_starter, prevent_auido_error, video_exit, opencv_win
 import audio
+from func import thread_starter, video_exit, opencv_win
 
 sts = audio.sts
 """
@@ -33,7 +33,7 @@ class Camera:
             cam = self.cameras[0]
 
         else:
-            thread_starter(prevent_auido_error, [sts.say, audio.language.aud_017])
+            thread_starter(sts.say, [audio.language.aud_017])
             cam = self._select_cam(self.cameras)
 
         return cam

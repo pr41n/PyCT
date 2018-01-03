@@ -10,7 +10,7 @@ import audio
 import window
 from scripts import connection
 from chess_2 import lists, pieces, video
-from func import thread_starter, prevent_auido_error, video_exit, opencv_win
+from func import thread_starter, video_exit, opencv_win
 
 """
 Delete c argument at PyCT when window.py will be finished (celdas gtk2)
@@ -99,9 +99,7 @@ class PyCT:
 
         eval(self.checkmate)
         winner = audio.language.player_2 if self.player == 'White' else audio.language.player_1
-        thread_starter(self.audio.check_mate, [winner, self.turn - 1])
-        sleep(2)
-        prevent_auido_error(self.audio.say, " ")
+        thread_starter(self.audio.check_mate, [winner, self.turn - 1]).join()
         try:
             self.arduino.write('r', 0)
         except AttributeError:
