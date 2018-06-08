@@ -10,26 +10,27 @@ RedPieces = ["King", "Queen", "Bishop_1", "Bishop_2", "Knight_1", "Knight_2", "R
 
 OccupiedSquares = {
 
-        'White': {(1, 2, 0): "Pawn",   (2, 2, 0): "Pawn",   (3, 2, 0): "Pawn",   (4, 2, 0): "Pawn",
-                  (5, 2, 0): "Pawn",   (6, 2, 0): "Pawn",   (7, 2, 0): "Pawn",
-                  (1, 1, 0): "Rook",   (8, 1, 0): "Rook",   (2, 1, 0): "Knight", (7, 1, 0): "Knight",
-                  (3, 1, 0): "Bishop", (6, 1, 0): "Bishop", (4, 1, 0): "Queen",  (5, 1, 0): "King"},
+        'White': {(1, 1, 5): "Pawn",   (1, 4, 8): "Pawn",   (2, 2, 5): "Pawn",   (2, 4, 7): "Pawn",
+                  (3, 3, 0): "Pawn",   (3, 4, 5): "Pawn",   (3, 4, 6): "Pawn",
+                  (1, 2, 6): "Rook",   (1, 3, 7): "Rook",   (1, 2, 5): "Knight", (1, 4, 7): "Knight",
+                  (2, 3, 5): "Bishop", (2, 4, 6): "Bishop", (2, 3, 6): "Queen",  (1, 3, 6): "King"},
 
-        'Black': {(1, 7, 0): "Pawn",   (2, 7, 0): "Pawn",   (3, 7, 0): "Pawn",   (4, 7, 0): "Pawn",
-                  (5, 7, 0): "Pawn",   (6, 7, 0): "Pawn",   (7, 7, 0): "Pawn",
-                  (1, 8, 0): "Rook",   (8, 8, 0): "Rook",   (2, 8, 0): "Knight", (7, 8, 0): "Knight",
-                  (3, 8, 0): "Bishop", (6, 8, 0): "Bishop", (4, 8, 0): "Queen",  (5, 8, 0): "King"},
+        'Black': {(5, 6, 5): "Pawn",   (5, 6, 6): "Pawn",   (5, 7, 7): "Pawn",   (5, 8, 8): "Pawn",
+                  (6, 6, 5): "Pawn",   (7, 7, 5): "Pawn",   (8, 8, 5): "Pawn",
+                  (6, 8, 6): "Rook",   (7, 8, 7): "Rook",   (7, 8, 5): "Knight", (5, 8, 7): "Knight",
+                  (5, 7, 5): "Bishop", (6, 7, 5): "Bishop", (6, 7, 6): "Queen",  (6, 8, 6): "King"},
 
-        'Red':   {(1, 7, 0): "Pawn",   (2, 7, 0): "Pawn",   (3, 7, 0): "Pawn",   (4, 7, 0): "Pawn",
-                  (5, 7, 0): "Pawn",   (6, 7, 0): "Pawn",   (7, 7, 0): "Pawn",
-                  (1, 8, 0): "Rook",   (8, 8, 0): "Rook",   (2, 8, 0): "Knight", (7, 8, 0): "Knight",
-                  (3, 8, 0): "Bishop", (6, 8, 0): "Bishop", (4, 8, 0): "Queen",  (5, 8, 0): "King"}
+        'Red':   {(5, 1, 1): "Pawn",   (5, 2, 2): "Pawn",   (5, 3, 3): "Pawn",   (5, 4, 3): "Pawn",
+                  (6, 4, 1): "Pawn",   (7, 4, 2): "Pawn",   (8, 4, 3): "Pawn",
+                  (6, 2, 1): "Rook",   (7, 3, 1): "Rook",   (7, 2, 1): "Knight", (5, 4, 1): "Knight",
+                  (5, 3, 2): "Bishop", (6, 4, 2): "Bishop", (6, 3, 2): "Queen",  (6, 3, 1): "King"}
                    }
 
 
 def occupied_squares():
     """Return black and white occupied squares."""
+
     dic = {}
-    for i in OccupiedSquares:
+    for i in OccupiedSquares.values():
         dic.update(i)
     return dic

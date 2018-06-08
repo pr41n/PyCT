@@ -23,19 +23,19 @@ class Piece:
 
         self.ad_pawn = 0
 
-    def inv_change_position(self, position):
-        """String --> Tuple"""
-
-        x = self.columns.index(position[0].upper()) + 1
-        y = eval(position[1])
-        return tuple([x, y])
-
     def change_position(self, coordinates):
         """Tuple --> String"""
 
         column = self.columns[coordinates[0] - 1]
         row = str(coordinates[1])
         return column + row
+
+    def inv_change_position(self, position):
+        """String --> Tuple"""
+
+        x = self.columns.index(position[0].upper()) + 1
+        y = eval(position[1])
+        return tuple([x, y])
 
     def change_lists(self, e0, ef, promotion):
         other_player = 'White' if self.player == 'Black' else 'Black'
@@ -141,7 +141,7 @@ class Piece:
         self.ax, self.ay, self.bx, self.by = ax, ay, bx, by
 
     def _incorrect(self, ans):
-        self.answer = self.audio.language.incorrect_move_000 + ans + "\n"
+        self.answer = self.audio.language.incorrect_move_000 + ans + "\n\n"
 
     def _general_advices(self, turn):
         self.lets_advice = False
@@ -162,7 +162,7 @@ class Rook(Piece):
     def correct_move(self, a_x, a_y, b_x, b_y):
         self._refresh(a_x, a_y, b_x, b_y)
 
-        move_1 = abs(b_x - a_x) > 0 and b_x - a_x == 0
+        move_1 = abs(b_y - a_y) > 0 and b_x - a_x == 0
         move_2 = abs(b_x - a_x) > 0 and b_y - a_y == 0
 
         return self._check_move([move_1, move_2],

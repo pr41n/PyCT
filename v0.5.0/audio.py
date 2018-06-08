@@ -6,6 +6,10 @@ import os
 
 from scripts import synth
 
+"""
+Convert all audio functions in threads with a class
+"""
+
 languages = []
 
 if os.name == 'posix':
@@ -48,6 +52,7 @@ class Language:
     def intro(self):
         self.say(language.aud_001)
         # self.say(language.aud_002)
+        return
 
     def calibration(self, moment):
         if moment == 1:
@@ -61,12 +66,14 @@ class Language:
 
     def detection(self):
         self.say(language.aud_018)
+        return
 
     def arduino(self, signal):
         if signal:
             self.say(language.aud_009)
         else:
             self.say(language.aud_010)
+        return
 
     def match(self):
         self.say(language.aud_011)
@@ -78,19 +85,24 @@ class Language:
             self.say(language.aud_014 % (piece, position))
         else:
             self.say(language.aud_015 % (piece, position))
+        return
 
     def error_1(self):
         self.say(language.aud_019)
         self.say(language.aud_020)
+        return
 
     def error_2(self):
         self.say(language.aud_021)
+        return
 
     def check_mate(self, player, turn):
         self.say(language.aud_022 % (player, turn - 1))
+        return
 
     def promotion(self, piece):
         self.say(language.aud_023 % piece)
+        return
 
     def castling(self, side):
         if side.lower() == 'kingside':
@@ -98,8 +110,10 @@ class Language:
 
         elif side.lower() == 'queenside':
             self.say(language.aud_025)
+        return
 
     def repeat_move(self, first_time):
         self.say(language.aud_026)
         if first_time:
             self.say(language.aud_027)
+        return

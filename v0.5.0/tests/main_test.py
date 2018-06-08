@@ -143,5 +143,12 @@ class Pieces(unittest.TestCase):
         knight.player = 'Black'
         self.assertFalse(knight.correct_move(3, 8, 1, 6))
 
+
+class Arduino(unittest.TestCase):
+    def test_A(self):
+        arduino = connection.Arduino(1)
+        self.assertTrue(isinstance(arduino, connection.Arduino))
+
+
 if __name__ == '__main__':
     unittest.main()

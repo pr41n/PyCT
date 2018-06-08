@@ -142,7 +142,6 @@ class Calibration:
 
         if event == cv2.EVENT_LBUTTONDOWN:
             self.corners.append((float(x), float(y)))
-
             cv2.circle(self.image, (x, y), 5, (255, 0, 0), -1)
             cv2.imshow(self.win_name, self.image)
 

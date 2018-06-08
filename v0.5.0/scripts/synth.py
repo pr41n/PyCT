@@ -17,8 +17,8 @@ class Sts:
             if self._unlocked:
                 self.engine.say(text)
                 self.engine.say(' ')
-
                 self._unlocked = False
+
                 self.engine.runAndWait()
                 self.engine.runAndWait()
                 self._unlocked = True

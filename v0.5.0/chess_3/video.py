@@ -3,12 +3,13 @@
 
 import cv2
 import numpy as np
+import sys
 from time import sleep
 
-import audio
 import lists
-from func import thread_starter, prevent_auido_error, video_exit, opencv_win
-
+sys.path.append('..')
+import audio
+from func import thread_starter, video_exit, opencv_win
 
 sts = audio.sts
 
@@ -39,6 +40,12 @@ class Calibration:
 
     def rectify_crop(self, img, corners):       # img is not rectified
         pass
+
+    @staticmethod
+    def generate_board():
+        board = np.zeros((2, 9, 9))
+        board[1] = board[1] * np.sqrt(3)
+        board = board.T.reshape(-1, 2)*100
 
     @staticmethod
     def allocate_squares(dic, points):
@@ -98,3 +105,6 @@ class Detection:
         cv2.destroyWindow('%s' % img)
         cv2.destroyWindow('threshold')
         cv2.destroyWindow('diff')
+
+if __name__ == '__main__':
+    Calibration.generate_board()

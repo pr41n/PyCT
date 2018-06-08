@@ -13,8 +13,6 @@ from chess_2 import lists, pieces, video
 from func import thread_starter, video_exit, opencv_win
 
 """
-Delete c argument at PyCT when window.py will be finished (celdas gtk2)
-Take control of advices (property)
 Do auds optional and configurable at subclasses
 """
 
@@ -22,7 +20,7 @@ Do auds optional and configurable at subclasses
 class PyCT:
     def __init__(self):
         self.first_incorrect = True
-        self.rectified = False
+        self.rectified, self.show_hist = [False]*2
 
         # Pieces
         self.pawn = pieces.Pawn(audio)
@@ -101,12 +99,7 @@ class PyCT:
         eval(self.checkmate)
         winner = audio.language.player_2 if self.player == 'White' else audio.language.player_1
         thread_starter(self.audio.check_mate, [winner, self.turn - 1]).join()
-        try:
-            self.arduino.write('r', 0)
-        except AttributeError:
-            pass
-        finally:
-            video_exit(227)
+        video_exit(227, self.arduino)
 
     def calibration(self):
         opencv_win(audio.language.open_cv_1, 1100, -100, 440, 350)
@@ -147,7 +140,7 @@ class PyCT:
 
     def detect_move(self):
         initial_pos, final_pos = [None]*2
-        moving, show_hist = [False]*2
+        moving = False
         frame_num = 0
 
         img = cv2.imread('languages/Video.png')
@@ -157,7 +150,7 @@ class PyCT:
         while True:
             frame = self.cam.read()[1]
             k = cv2.waitKey(1) & 0xFF
-            video_exit(k)
+            video_exit(k, self.arduino)
 
             if k == 27:
                 return self.manual_move()
@@ -188,28 +181,40 @@ class PyCT:
                 rectified_init = self.chessboard.rectify_image(initial_pos)
                 rectified_frame = self.chessboard.rectify_image(frame)
 
-                img_1 = cv2.cvtColor(rectified_init, cv2.COLOR_BGR2GRAY)
-                img_2 = cv2.cvtColor(rectified_frame, cv2.COLOR_BGR2GRAY)
+                grey_1 = cv2.cvtColor(rectified_init, cv2.COLOR_BGR2GRAY)
+                grey_2 = cv2.cvtColor(rectified_frame, cv2.COLOR_BGR2GRAY)
 
-                hist1 = cv2.calcHist([img_1], [0], None, [256], [0, 256])
-                hist2 = cv2.calcHist([img_2], [0], None, [256], [0, 256])
+                hist = cv2.calcHist([cv2.absdiff(grey_1, grey_2)], [0], None, [256], [0, 256])
 
-                n = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
-                if n < 0.97:
+                n = 0
+                for i in hist:
+                    if i > 1000:
+                        n += 1
+
+                if n > 30:
                     moving = True
-                elif n > 0.98 and moving:
+
+                elif n < 21 and moving:
                     sleep(1)
                     final_pos = self.cam.read()[1]
 
                 if k == ord('s'):
-                    show_hist = True
+                    self.show_hist = False if self.show_hist else True
 
-                if show_hist:
+                if self.show_hist:
+                    cv2.namedWindow('histogram value', cv2.WINDOW_NORMAL)
+                    cv2.namedWindow('diff', cv2.WINDOW_NORMAL)
+
                     hist_frame = rectified_frame.copy()
+                    diff = cv2.absdiff(grey_1, grey_2)
                     cv2.putText(hist_frame, str(n), (300, 30), fontFace=cv2.FONT_HERSHEY_SIMPLEX, color=(0, 0, 255),
                                 fontScale=1, thickness=2)
 
                     cv2.imshow('histogram value', hist_frame)
+                    cv2.imshow('diff', diff)
+                else:
+                    cv2.destroyWindow('histogram value')
+                    cv2.destroyWindow('diff')
 
             # Detect the movement
             if type(initial_pos) == np.ndarray and type(final_pos) == np.ndarray:
