@@ -33,10 +33,10 @@ class Memory:
         return self._VmB(place) - since
 
     def print_used_memory(self):
-        print 'Memory: {} Mb'.format(self._check('VmSize:', self.since_memory)/1000000)
-        print 'Resident memory: {} Mb'.format(self._check('VmRSS:', self.since_resident)/1000000)
-        print 'Stack size: {} Mb'.format(self._check('VmStk:', self.since_stackSize)/1000000)
-        print
+        print('Memory: {} Mb'.format(self._check('VmSize:', self.since_memory)/1000000))
+        print('Resident memory: {} Mb'.format(self._check('VmRSS:', self.since_resident)/1000000))
+        print('Stack size: {} Mb'.format(self._check('VmStk:', self.since_stackSize)/1000000))
+        print()
 
 
 if __name__ == '__main__':
